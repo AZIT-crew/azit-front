@@ -12,6 +12,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout
@@ -35,16 +36,16 @@ jobs:
       - name: Build Web
         run: pnpm --filter web build
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL_PROD }}
-          VITE_KAKAO_JS_SDK_KEY: ${{ secrets.VITE_KAKAO_JS_SDK_KEY_PROD }}
-          VITE_KAKAO_AUTHORIZE_URL: ${{ secrets.VITE_KAKAO_AUTHORIZE_URL_PROD }}
-          VITE_APPLE_AUTHORIZE_URL: ${{ secrets.VITE_APPLE_AUTHORIZE_URL_PROD }}
-          VITE_NCP_MAP_CLIENT_ID: ${{ secrets.VITE_NCP_MAP_CLIENT_ID_PROD }}
-          VITE_NAVER_MAP_MARKER_ICON_URL: ${{ secrets.VITE_NAVER_MAP_MARKER_ICON_URL_PROD }}
-          VITE_KAKAO_REST_API_KEY: ${{ secrets.VITE_KAKAO_REST_API_KEY_PROD }}
-          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN_PROD }}
-          VITE_DEFAULT_CREW_IMAGE_URL: ${{ secrets.VITE_DEFAULT_CREW_IMAGE_URL_PROD }}
-          VITE_DEFAULT_PROFILE_IMAGE_BASE_URL: ${{ secrets.VITE_DEFAULT_PROFILE_IMAGE_BASE_URL_PROD }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_KAKAO_JS_SDK_KEY: ${{ secrets.VITE_KAKAO_JS_SDK_KEY }}
+          VITE_KAKAO_AUTHORIZE_URL: ${{ secrets.VITE_KAKAO_AUTHORIZE_URL }}
+          VITE_APPLE_AUTHORIZE_URL: ${{ secrets.VITE_APPLE_AUTHORIZE_URL }}
+          VITE_NCP_MAP_CLIENT_ID: ${{ secrets.VITE_NCP_MAP_CLIENT_ID }}
+          VITE_NAVER_MAP_MARKER_ICON_URL: ${{ secrets.VITE_NAVER_MAP_MARKER_ICON_URL }}
+          VITE_KAKAO_REST_API_KEY: ${{ secrets.VITE_KAKAO_REST_API_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_DEFAULT_CREW_IMAGE_URL: ${{ secrets.VITE_DEFAULT_CREW_IMAGE_URL }}
+          VITE_DEFAULT_PROFILE_IMAGE_BASE_URL: ${{ secrets.VITE_DEFAULT_PROFILE_IMAGE_BASE_URL }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -58,31 +59,30 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync apps/web/dist s3://${{ secrets.AWS_S3_PROD_BUCKET }} --delete
+          aws s3 sync apps/web/dist s3://${{ secrets.AWS_S3_BUCKET }} --delete
 
       - name: Fix content-type for apple-app-site-association
         run: |
           aws s3 cp apps/web/dist/.well-known/apple-app-site-association \
-            s3://${{ secrets.AWS_S3_PROD_BUCKET }}/.well-known/apple-app-site-association \
+            s3://${{ secrets.AWS_S3_BUCKET }}/.well-known/apple-app-site-association \
             --content-type "application/json"
 
       - name: Set no-cache for index.html
         run: |
           aws s3 cp apps/web/dist/index.html \
-            s3://${{ secrets.AWS_S3_PROD_BUCKET }}/index.html \
+            s3://${{ secrets.AWS_S3_BUCKET }}/index.html \
             --cache-control "no-cache"
 
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.AWS_CF_PROD_DISTRIBUTION_ID }} \
+            --distribution-id ${{ secrets.AWS_CF_DISTRIBUTION_ID }} \
             --paths "/*"
 
       - name: Notify Discord
         if: always()
         continue-on-error: true
         run: |
-          STATUS_TITLE="🚀 Prod 배포 결과"
           STATUS_BODY="✅ Prod 배포 성공"
           if [ "${{ job.status }}" != "success" ]; then
             STATUS_BODY="❌ Prod 배포 실패"
@@ -90,6 +90,6 @@ jobs:
 
           curl -H "Content-Type: application/json" \
             -d "{
-              \"content\": \"${STATUS_TITLE}\n${STATUS_BODY}\n\n🔗 ${{ secrets.PRODUCTION_URL }}\"
+              \"content\": \"🚀 Prod 배포 결과\n${STATUS_BODY}\n\n🔗 https://${{ secrets.WEB_URL }}\"
             }" \
-            ${{ secrets.DISCORD_WEBHOOK_URL_PROD }}
+            ${{ secrets.DISCORD_WEBHOOK_URL }}

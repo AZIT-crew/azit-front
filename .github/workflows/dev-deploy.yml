@@ -1,8 +1,4 @@
-name: Deploy Develop Branch With Vercel
-
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+name: Deploy Develop Branch With AWS S3, CloudFront
 
 on:
   push:
@@ -14,55 +10,80 @@ on:
       - 'tooling/**'
 
 jobs:
-  preview-deploy:
+  deploy:
     runs-on: ubuntu-latest
+    environment: development
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.26.0
           run_install: false
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy, Alias & Notify Discord
+          cache: 'pnpm'
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Web
+        run: pnpm --filter web build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_KAKAO_JS_SDK_KEY: ${{ secrets.VITE_KAKAO_JS_SDK_KEY }}
+          VITE_KAKAO_AUTHORIZE_URL: ${{ secrets.VITE_KAKAO_AUTHORIZE_URL }}
+          VITE_APPLE_AUTHORIZE_URL: ${{ secrets.VITE_APPLE_AUTHORIZE_URL }}
+          VITE_NCP_MAP_CLIENT_ID: ${{ secrets.VITE_NCP_MAP_CLIENT_ID }}
+          VITE_NAVER_MAP_MARKER_ICON_URL: ${{ secrets.VITE_NAVER_MAP_MARKER_ICON_URL }}
+          VITE_KAKAO_REST_API_KEY: ${{ secrets.VITE_KAKAO_REST_API_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_DEFAULT_CREW_IMAGE_URL: ${{ secrets.VITE_DEFAULT_CREW_IMAGE_URL }}
+          VITE_DEFAULT_PROFILE_IMAGE_BASE_URL: ${{ secrets.VITE_DEFAULT_PROFILE_IMAGE_BASE_URL }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3
         run: |
-          set +e
-          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} \
-            > deployment-url.txt 2> error.txt
-          code=$?
-          set -e
+          aws s3 sync apps/web/dist s3://${{ secrets.AWS_S3_BUCKET }} --delete
 
-          if [ $code -eq 0 ]; then
-            deploymentUrl=$(cat deployment-url.txt)
+      - name: Set no-cache for index.html
+        run: |
+          aws s3 cp apps/web/dist/index.html \
+            s3://${{ secrets.AWS_S3_BUCKET }}/index.html \
+            --cache-control "no-cache"
 
-            vercel alias $deploymentUrl ${{ secrets.DEVELOPMENT_URL }} \
-              --token=${{ secrets.VERCEL_TOKEN }} > /dev/null 2>alias-error.txt
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_CF_DISTRIBUTION_ID }} \
+            --paths "/*"
 
-            if [ $? -eq 0 ]; then
-              echo "Deploy & Set Alias Successfully"
-            else
-              echo "Deploy & Set Alias Failed"
-              cat alias-error.txt
-              exit 1
-            fi
-
-            curl -H "Content-Type: application/json" \
-              -d '{
-                "content": "🚀 Develop 배포 완료! 아래 URL로 테스트 해주세요.\n🔗 https://${{ secrets.DEVELOPMENT_URL }}"
-              }' \
-              ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-          else
-            echo "Develop deployment failed"
-            cat error.txt
-            exit 1
+      - name: Notify Discord
+        if: always()
+        continue-on-error: true
+        run: |
+          STATUS_BODY="✅ Dev 배포 성공"
+          if [ "${{ job.status }}" != "success" ]; then
+            STATUS_BODY="❌ Dev 배포 실패"
           fi
+
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"content\": \"🚀 Dev 배포 결과\n${STATUS_BODY}\n\n🔗 https://${{ secrets.WEB_URL }}\"
+            }" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
