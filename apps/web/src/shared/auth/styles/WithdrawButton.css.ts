@@ -1,7 +1,6 @@
 import { vars, typography } from '@azit/design-system';
 import { style } from '@vanilla-extract/css';
 
-// 주석
 export const withdrawButton = style([
   typography.body.b3,
   {
