@@ -5,6 +5,7 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useEffect, useState } from 'react';
 
+import { userQueries } from '@/entities/User/api/queries';
 
 import { BusinessError } from '@/shared/api/apiHandler';
 import { useWithdraw } from '@/shared/auth/model';
@@ -16,8 +17,6 @@ import { MenuItem, MenuSection, menuSectionStyles } from '@/shared/ui/menu';
 
 import * as styles from './index.css';
 import { getSettingsMenu } from './menu';
-
-import { userQueries } from '@/entities/User/api/queries';
 
 const PROVIDER_LABEL: Record<string, string> = {
   KAKAO: '카카오 연동',
@@ -108,7 +107,7 @@ export function SettingsPage() {
                         />
                       }
                       title="정말로 탈퇴하시겠습니까?"
-                      description="탈퇴 후 30일이 지나면 계정 복구가 불가능해요"
+                      description="탈퇴 후 30일이 지나면 계정 복구가 불가능해요."
                       actionText="탈퇴하기"
                       cancelText="취소하기"
                       onAction={handleWithdrawWithErrorHandling}
