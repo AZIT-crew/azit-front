@@ -44,12 +44,6 @@ function useMypageMenu(): MenuGroup[] {
           type: 'navigation',
           onNavigate: () => push('AddressSettingPage', {}, { animate: true }),
         },
-        {
-          id: 'inquiry',
-          label: '1:1 문의하기',
-          type: 'navigation',
-          onNavigate: () => openExternalUrl(KAKAO_INQUIRY_CHAT_URL),
-        },
       ],
     },
     {
