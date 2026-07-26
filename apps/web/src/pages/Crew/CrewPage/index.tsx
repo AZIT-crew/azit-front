@@ -201,7 +201,7 @@ function CrewPageContent({ params }: { params?: { id?: string } }) {
                   </button>
                 }
                 title="정말 크루를 나가시겠어요?"
-                description={`크루를 나가면 출석 로그와 활동 내역이\n모두 삭제되며 복구할 수 없어요.`}
+                description={`크루 탈퇴 시 24시간 동안은\n동일한 크루에 다시 가입할 수 없어요.`}
                 cancelText="취소하기"
                 actionText="나가기"
                 onAction={() => exitCrew({ crewId })}
