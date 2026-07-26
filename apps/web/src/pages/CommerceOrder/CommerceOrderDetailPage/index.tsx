@@ -1,3 +1,4 @@
+import { vars } from '@azit/design-system';
 import { Button } from '@azit/design-system/button';
 import { Divider } from '@azit/design-system/divider';
 import { Header } from '@azit/design-system/header';
@@ -116,7 +117,7 @@ function OrderDetailContent() {
 
 export function CommerceOrderDetailPage() {
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={vars.colors.background_sub}>
       <AppLayout>
         <DomainErrorBoundary
           fallback={({ error, reset }) => (

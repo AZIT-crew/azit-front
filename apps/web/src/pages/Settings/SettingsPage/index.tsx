@@ -65,7 +65,7 @@ export function SettingsPage() {
     <AppScreen backgroundColor={vars.colors.background_sub}>
       <AppLayout>
         <div className={styles.headerWrapper}>
-          <Header left={<BackButton />} center="설정" color="sub" />
+          <Header left={<BackButton />} center="설정" />
         </div>
         <div className={styles.mainContainer}>
           <div className={styles.menuSectionWrapper}>

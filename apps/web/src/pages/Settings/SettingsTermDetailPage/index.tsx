@@ -1,3 +1,4 @@
+import { vars } from '@azit/design-system';
 import { Header } from '@azit/design-system/header';
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { useActivityParams } from '@stackflow/react';
@@ -37,7 +38,7 @@ export function SettingsTermDetailPage() {
   const { termType } = useActivityParams<{ termType: string }>();
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={vars.colors.background}>
       <AppLayout>
         <div className={styles.headerWrapper}>
           <Header

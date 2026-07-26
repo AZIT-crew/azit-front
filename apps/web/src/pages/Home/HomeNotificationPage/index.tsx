@@ -20,7 +20,7 @@ export function HomeNotificationPage() {
   return (
     <AppScreen backgroundColor={vars.colors.background_sub}>
       <AppLayout>
-        <Header color="sub" sticky left={<BackButton />} center="알림" />
+        <Header sticky left={<BackButton />} center="알림" />
         <div className={styles.pageContainer}>
           {notificationList.length === 0 ? (
             <div className={styles.emptyContainer}>

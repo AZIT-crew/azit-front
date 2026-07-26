@@ -1,3 +1,4 @@
+import { vars } from '@azit/design-system';
 import { Button } from '@azit/design-system/button';
 import { Divider } from '@azit/design-system/divider';
 import { Header } from '@azit/design-system/header';
@@ -53,7 +54,7 @@ export function CommerceOrderCompletePage({
 
   if (!orderResult) {
     return (
-      <AppScreen>
+      <AppScreen backgroundColor={vars.colors.background}>
         <AppLayout>
           <div className={styles.headerWrapper}>
             <Header
@@ -87,7 +88,7 @@ export function CommerceOrderCompletePage({
     : '';
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={vars.colors.background}>
       <AppLayout>
         <div className={styles.headerWrapper}>
           <Header

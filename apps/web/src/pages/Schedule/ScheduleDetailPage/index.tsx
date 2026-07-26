@@ -1,3 +1,4 @@
+import { vars } from '@azit/design-system';
 import { AlertDialog } from '@azit/design-system/alert-dialog';
 import { Button } from '@azit/design-system/button';
 import { Header } from '@azit/design-system/header';
@@ -281,7 +282,7 @@ export function ScheduleDetailPage({ params }: ScheduleDetailPageProps) {
   const handleBack = () => pop('SchedulePage');
 
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={vars.colors.background}>
       <AppLayout>
         <DomainErrorBoundary
           fallback={({ error, reset }) => (

@@ -1,3 +1,4 @@
+import { vars } from '@azit/design-system';
 import { Button } from '@azit/design-system/button';
 import { Divider } from '@azit/design-system/divider';
 import { Header } from '@azit/design-system/header';
@@ -84,7 +85,7 @@ function CommerceCartPageContent() {
 
 export function CommerceCartPage() {
   return (
-    <AppScreen>
+    <AppScreen backgroundColor={vars.colors.background}>
       <AppLayout>
         <div className={styles.headerWrapper}>
           <Header left={<BackButton />} center="장바구니" />

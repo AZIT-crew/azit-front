@@ -95,7 +95,7 @@ function CrewPageContent({ params }: { params?: { id?: string } }) {
     <AppScreen backgroundColor={vars.colors.background_sub}>
       <AppLayout>
         <div className={styles.headerWrapper}>
-          <Header left={<BackButton />} center="나의 크루" color="sub" />
+          <Header left={<BackButton />} center="나의 크루" />
         </div>
         <div className={styles.mainContainer}>
           <div className={styles.contentWrapper}>

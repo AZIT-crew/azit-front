@@ -33,7 +33,7 @@ export function AddressRegisterPage() {
     <AppScreen backgroundColor={vars.colors.background_sub}>
       <AppLayout>
         <div className={styles.headerWrapper}>
-          <Header color="sub" left={<BackButton />} center="배송지 등록" />
+          <Header left={<BackButton />} center="배송지 등록" />
         </div>
         <div className={styles.mainContainer}>
           <div className={styles.formWrapper}>

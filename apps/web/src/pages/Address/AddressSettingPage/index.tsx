@@ -80,7 +80,6 @@ export function AddressSettingPage() {
       <AppLayout>
         <div className={styles.headerWrapper}>
           <Header
-            color="sub"
             left={<BackButton />}
             center="배송지 설정"
             right={

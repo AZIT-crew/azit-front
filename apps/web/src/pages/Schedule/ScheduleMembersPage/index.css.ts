@@ -1,4 +1,3 @@
-import { vars } from '@azit/design-system';
 import { style } from '@vanilla-extract/css';
 
 export const contentWrapper = style({
@@ -11,11 +10,9 @@ export const contentWrapper = style({
   padding: '12px 20px',
   width: '100%',
   boxSizing: 'border-box',
-  backgroundColor: vars.colors.background_sub,
 });
 
 export const headerSection = style({
-  backgroundColor: vars.colors.background_sub,
   flexShrink: 0,
   width: '100%',
 });
