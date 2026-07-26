@@ -11,7 +11,6 @@ export const mainContainer = style([
     gap: '20px',
     padding: '16px',
     boxSizing: 'border-box',
-    paddingBottom: '120px',
   },
 ]);
 
