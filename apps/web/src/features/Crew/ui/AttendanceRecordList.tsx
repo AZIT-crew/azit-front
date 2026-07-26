@@ -1,5 +1,7 @@
 import { Button } from '@azit/design-system/button';
 
+import { useFlow } from '@/app/routes/stackflow';
+
 import * as styles from '@/features/Crew/styles/AttendanceRecordList.css';
 
 import type { AttendanceRecord } from '@/entities/User/model';
@@ -11,6 +13,8 @@ interface AttendanceRecordListProps {
 }
 
 export function AttendanceRecordList({ records }: AttendanceRecordListProps) {
+  const { push } = useFlow();
+
   if (records.length === 0) {
     return (
       <div className={styles.emptyContainer}>
@@ -19,7 +23,11 @@ export function AttendanceRecordList({ records }: AttendanceRecordListProps) {
           <br />
           일정에 참여하여 로그를 쌓아보세요!
         </p>
-        <Button size="medium" className={styles.joinButton}>
+        <Button
+          size="medium"
+          className={styles.joinButton}
+          onClick={() => push('SchedulePage', {}, { animate: false })}
+        >
           일정 참여하기
         </Button>
       </div>
