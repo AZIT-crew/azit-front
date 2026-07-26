@@ -18,7 +18,6 @@ import {
   OrderPolicyFooter,
   StoreDetailImageSlider,
   StoreDetailInfo,
-  StoreDetailBanner,
   StoreDetailShipping,
   StoreDetailRefund,
   StoreDetailDescription,
@@ -105,7 +104,6 @@ function StoreDetailContent({ id }: { id: string }) {
           <StoreDetailInfo product={product} />
           <Divider />
           <div className={styles.detailsSection}>
-            <StoreDetailBanner />
             <StoreDetailShipping
               shippingFee={product.shippingFee}
               expectedShippingDate={product.expectedShippingDate}
