@@ -71,9 +71,17 @@ export const crewCard = style({
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
+  width: '100%',
   padding: '16px 20px 16px 16px',
   backgroundColor: vars.colors.white,
+  border: 'none',
   borderRadius: 16,
+  cursor: 'pointer',
+  selectors: {
+    '&:disabled': {
+      opacity: 0.5,
+    },
+  },
 });
 
 export const crewCardLeft = style({
@@ -96,9 +104,9 @@ export const crewAvatar = style({
 
 export const crewInfo = style({
   display: 'flex',
-  gap: 6,
+  flexDirection: 'column',
+  gap: 4,
   minWidth: 0,
-  alignItems: 'center',
 });
 
 export const crewName = style([
@@ -143,26 +151,12 @@ export const pendingBadge = style([
   },
 ]);
 
-export const iconButton = style({
-  backgroundColor: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  padding: 0,
-  flexShrink: 0,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  selectors: {
-    '&:disabled': {
-      opacity: 0.5,
-    },
-  },
-});
-
 export const chevronIcon = style({
   color: vars.colors.gray60,
+  flexShrink: 0,
 });
 
 export const closeIcon = style({
   color: vars.colors.gray60,
+  flexShrink: 0,
 });

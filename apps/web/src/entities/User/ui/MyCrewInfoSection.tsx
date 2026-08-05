@@ -3,7 +3,6 @@ import { Chip } from '@azit/design-system/chip';
 import { ChevronRightIcon, PlusIcon, XIcon } from '@azit/design-system/icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-
 import { crewQueries } from '@/features/Crew/api/queries';
 
 import { userQueries } from '@/entities/User/api/queries';
@@ -56,8 +55,8 @@ export function MyCrewInfoSection({
 
             if (!isJoined && !isRequested) return null;
 
-            return (
-              <div key={crew.crewId} className={styles.crewCard}>
+            const cardContent = (
+              <>
                 <div className={styles.crewCardLeft}>
                   {crew.crewImageUrl ? (
                     <img
@@ -69,6 +68,13 @@ export function MyCrewInfoSection({
                     <div className={styles.crewAvatar} />
                   )}
                   <div className={styles.crewInfo}>
+                    <span
+                      className={
+                        isJoined ? styles.crewName : styles.crewNamePending
+                      }
+                    >
+                      {crew.crewName}
+                    </span>
                     {isJoined && crew.memberRole ? (
                       <Chip
                         className={styles.roleChip}
@@ -83,50 +89,58 @@ export function MyCrewInfoSection({
                         승인 대기중
                       </Chip>
                     )}
-                    <span
-                      className={
-                        isJoined ? styles.crewName : styles.crewNamePending
-                      }
-                    >
-                      {crew.crewName}
-                    </span>
                   </div>
                 </div>
 
                 {isJoined ? (
-                  <button
-                    type="button"
-                    className={styles.iconButton}
-                    onClick={() => onNavigateToCrew(crew.crewId)}
-                    aria-label={`${crew.crewName} 크루 페이지로 이동`}
-                  >
-                    <ChevronRightIcon
-                      size={20}
-                      className={styles.chevronIcon}
-                    />
-                  </button>
+                  <ChevronRightIcon
+                    size={20}
+                    className={styles.chevronIcon}
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <AlertDialog
-                    trigger={
-                      <button
-                        type="button"
-                        className={styles.iconButton}
-                        disabled={deleteMutation.isPending}
-                        aria-label={`${crew.crewName} 가입 신청 취소`}
-                      >
-                        <XIcon size={20} className={styles.closeIcon} />
-                      </button>
-                    }
-                    title="크루 가입 신청을 취소하시겠습니까?"
-                    description={`취소 시 대기 상태가 해제되며,\n가입을 원하실 경우 다시 신청해야 해요.`}
-                    cancelText="닫기"
-                    actionText="취소하기"
-                    onAction={() =>
-                      deleteMutation.mutate({ crewId: crew.crewId })
-                    }
+                  <XIcon
+                    size={20}
+                    className={styles.closeIcon}
+                    aria-hidden="true"
                   />
                 )}
-              </div>
+              </>
+            );
+
+            if (isJoined) {
+              return (
+                <button
+                  key={crew.crewId}
+                  type="button"
+                  className={styles.crewCard}
+                  onClick={() => onNavigateToCrew(crew.crewId)}
+                  aria-label={`${crew.crewName} 크루 페이지로 이동`}
+                >
+                  {cardContent}
+                </button>
+              );
+            }
+
+            return (
+              <AlertDialog
+                key={crew.crewId}
+                trigger={
+                  <button
+                    type="button"
+                    className={styles.crewCard}
+                    disabled={deleteMutation.isPending}
+                    aria-label={`${crew.crewName} 가입 신청 취소`}
+                  >
+                    {cardContent}
+                  </button>
+                }
+                title="크루 가입 신청을 취소하시겠습니까?"
+                description={`취소 시 대기 상태가 해제되며,\n가입을 원하실 경우 다시 신청해야 해요.`}
+                cancelText="닫기"
+                actionText="취소하기"
+                onAction={() => deleteMutation.mutate({ crewId: crew.crewId })}
+              />
             );
           })}
         </div>
