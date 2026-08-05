@@ -34,7 +34,7 @@ export function OnboardingCrewJoin({
   onNext,
   onPrev,
 }: OnboardingCrewJoinProps) {
-  const [hasValidationError, setHasValidationError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [inviteCode, setInviteCode] = useState(defaultValue);
   const [crewInfo, setCrewInfo] = useState<CrewInfoResult | null>(null);
   const isActive = inviteCode.length === INVITE_CODE_LENGTH;
@@ -42,8 +42,8 @@ export function OnboardingCrewJoin({
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const handleInviteCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (hasValidationError) {
-      setHasValidationError(false);
+    if (errorMessage) {
+      setErrorMessage(null);
     }
     setInviteCode(
       e.target.value
@@ -59,11 +59,15 @@ export function OnboardingCrewJoin({
       setCrewInfo(response.result);
       setIsBottomSheetOpen(true);
     } catch (error) {
-      if (
-        error instanceof BusinessError &&
-        error.code === 'INVALID_INVITATION_CODE'
-      ) {
-        setHasValidationError(true);
+      if (error instanceof BusinessError) {
+        if (error.code === 'INVALID_INVITATION_CODE') {
+          setErrorMessage('유효하지 않거나 이미 만료된 초대 코드입니다');
+        } else if (
+          error.code === 'EXIT_REJOINING_COOLDOWN' ||
+          error.code === 'EXPELLED_REJOINING_COOLDOWN'
+        ) {
+          setErrorMessage(error.message);
+        }
       }
     }
   };
@@ -81,18 +85,16 @@ export function OnboardingCrewJoin({
         <div className={styles.inputContainer}>
           <Input
             className={styles.inputField}
-            state={hasValidationError ? 'error' : 'default'}
+            state={errorMessage ? 'error' : 'default'}
             value={inviteCode}
             onChange={handleInviteCodeChange}
             onRemove={() => {
               setInviteCode('');
-              setHasValidationError(false);
+              setErrorMessage(null);
             }}
             placeholder="초대 코드 6자리"
           >
-            {hasValidationError && (
-              <Input.Description left="유효하지 않거나 이미 만료된 초대 코드입니다" />
-            )}
+            {errorMessage && <Input.Description left={errorMessage} />}
           </Input>
         </div>
       </div>
