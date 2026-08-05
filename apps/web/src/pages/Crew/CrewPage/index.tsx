@@ -174,7 +174,7 @@ function CrewPageContent({ params }: { params?: { id?: string } }) {
                   </button>
                 }
                 title="정말 크루를 해산하시겠어요?"
-                description={`모든 멤버가 퇴장되며, 지금까지의 출석 로그와\n데이터가 삭제되어 절대 복구할 수 없어요.`}
+                description={`크루 정보 및 일정 데이터가 삭제되며\n절대 복구할 수 없어요.`}
                 cancelText="취소하기"
                 actionText="해산하기"
                 actionVariant="danger"
