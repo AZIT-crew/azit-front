@@ -23,7 +23,6 @@ import * as styles from './index.css';
 import { MAX_NICKNAME_LENGTH, nicknameSchema } from './profileEditForm';
 import { ProfileImagePickerBottomSheet } from './ProfileImagePickerBottomSheet';
 
-
 const DEFAULT_PROFILE_IMAGE_COUNT = 6;
 
 const getRandomDefaultProfileImageUrl = () => {
@@ -39,6 +38,7 @@ export function UserProfileEditPage() {
   const { pop } = useStack();
 
   const [nickname, setNickname] = useState<string | null>(null);
+  const [nicknameError, setNicknameError] = useState<string | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isPickerLoading, setIsPickerLoading] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -55,23 +55,20 @@ export function UserProfileEditPage() {
   });
 
   const currentNickname = nickname ?? myInfo?.nickname ?? '';
-  const nicknameValidation =
-    nickname !== null ? nicknameSchema.safeParse(nickname) : null;
-  const nicknameError =
-    nicknameValidation && !nicknameValidation.success
-      ? nicknameValidation.error.issues[0].message
-      : null;
-  const isNicknameChanged =
-    currentNickname !== myInfo?.nickname && currentNickname.length > 0;
-  const isChanged =
-    (isNicknameChanged || profileImageUrl !== null) && !nicknameError;
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
+    const value = e.target.value;
+    setNickname(
+      value.length > MAX_NICKNAME_LENGTH
+        ? value.substring(0, MAX_NICKNAME_LENGTH)
+        : value
+    );
+    if (nicknameError) setNicknameError(null);
   };
 
   const handleNicknameRemove = () => {
     setNickname('');
+    setNicknameError(null);
   };
 
   const handleProfileImageBadgeClick = () => {
@@ -113,7 +110,14 @@ export function UserProfileEditPage() {
   };
 
   const handleSubmit = () => {
-    if (!isChanged) return;
+    if (isPending) return;
+
+    const validation = nicknameSchema.safeParse(currentNickname);
+    if (!validation.success) {
+      setNicknameError(validation.error.issues[0].message);
+      return;
+    }
+
     updateProfile({
       nickname: currentNickname,
       imageUrl: profileImageUrl ?? myInfo?.profileImageUrl ?? '',
@@ -157,17 +161,14 @@ export function UserProfileEditPage() {
               state={nicknameError ? 'error' : undefined}
             >
               <Input.Description
-                left={nicknameError ?? nicknameError}
+                left={nicknameError}
                 right={`${currentNickname.length}/${MAX_NICKNAME_LENGTH}`}
               />
             </Input>
           </div>
         </div>
         <div className={styles.footerWrapper}>
-          <Button
-            state={isChanged && !isPending ? 'active' : 'disabled'}
-            onClick={handleSubmit}
-          >
+          <Button state="active" onClick={handleSubmit}>
             수정하기
           </Button>
         </div>
