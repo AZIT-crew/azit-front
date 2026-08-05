@@ -5,7 +5,7 @@ import {
   RESERVED_CREW_NAME_KEYWORDS,
 } from '@/shared/constants/crew';
 
-const VALID_CREW_NAME_REGEX = /^[가-힣a-zA-Z0-9]*$/;
+const VALID_CREW_NAME_REGEX = /^[가-힣ㄱ-ㅣa-zA-Z0-9]*$/;
 
 function containsReservedKeyword(name: string): boolean {
   const lowered = name.toLowerCase();
