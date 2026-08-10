@@ -17,7 +17,7 @@ export const label = style([
 ]);
 
 export const statusLabel = style([
-  typography.body.b4,
+  typography.body.b3,
   {
     color: vars.colors.gray50,
     marginLeft: 'auto',
