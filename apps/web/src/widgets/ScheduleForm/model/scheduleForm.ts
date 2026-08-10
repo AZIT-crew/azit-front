@@ -9,7 +9,6 @@ import type {
 import { formatDate } from '@/shared/lib/formatters';
 import { toastError } from '@/shared/ui/toast';
 
-
 export interface ScheduleFormValues {
   runType: CreateScheduleRequest['runType'];
   title: string;

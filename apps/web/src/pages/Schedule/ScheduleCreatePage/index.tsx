@@ -26,7 +26,6 @@ import { toastError } from '@/shared/ui/toast';
 
 import * as styles from './index.css';
 
-
 export function ScheduleCreatePage({ params }: { params?: { date?: Date } }) {
   const { pop, push } = useFlow();
 

@@ -4,8 +4,6 @@ import {
   type QueryClient,
 } from '@tanstack/react-query';
 
-import { deleteCartProduct } from './deleteCartProduct';
-import { updateCartProductQuantity } from './updateCartProductQuantity';
 
 import { getCartCount } from '@/entities/CommerceCart/api/getCartCount';
 import { getCartProducts } from '@/entities/CommerceCart/api/getCartProducts';
@@ -16,6 +14,8 @@ import type {
   CartProductUpdateQuantityRequest,
 } from '@/entities/CommerceCart/model';
 
+import { deleteCartProduct } from './deleteCartProduct';
+import { updateCartProductQuantity } from './updateCartProductQuantity';
 
 export const cartQueries = {
   all: ['cart'] as const,

@@ -6,7 +6,6 @@ import type { MemberRequestItem } from '@/entities/Crew/model/crew.types';
 
 import { RequestListItem } from './RequestListItem';
 
-
 interface RequestListProps {
   crewId: number;
   requests: MemberRequestItem[];

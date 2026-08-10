@@ -6,7 +6,6 @@ import { useCartAction } from '@/features/CommerceCart/model/useCartAction';
 import { useCartPrice } from '@/features/CommerceCart/model/useCartPrice';
 import { useCartSelect } from '@/features/CommerceCart/model/useCartSelect';
 
-
 import type { CartProductItem, CartBrand } from '@/entities/CommerceCart/model';
 
 const transformCartData = (items: CartProductItem[]): CartBrand[] => {

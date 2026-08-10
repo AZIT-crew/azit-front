@@ -4,7 +4,6 @@ import type { StoreProductItem } from '@/entities/CommerceStore/model';
 
 import { StoreGridItem } from './StoreGridItem';
 
-
 interface StoreGridProps {
   products: StoreProductItem[];
 }

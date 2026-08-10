@@ -5,7 +5,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { crewQueries } from '@/features/Crew/api/queries';
 import { MemberList } from '@/features/Crew/ui';
 
-
 import { useInfiniteScroll } from '@/shared/lib/useInfiniteScroll';
 import { BackButton } from '@/shared/ui/button';
 import { AppLayout } from '@/shared/ui/layout';

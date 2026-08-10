@@ -25,7 +25,6 @@ import { AppLayout } from '@/shared/ui/layout';
 
 import * as styles from './index.css';
 
-
 export function ScheduleEditPage({ params }: { params: { id: number } }) {
   const { pop, push } = useFlow();
 

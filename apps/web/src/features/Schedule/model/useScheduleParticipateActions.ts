@@ -6,7 +6,6 @@ import { userQueries } from '@/entities/User/api/queries';
 
 import { toastSuccess } from '@/shared/ui/toast';
 
-
 interface UseScheduleActionsProps {
   crewId: number;
   scheduleId: number;

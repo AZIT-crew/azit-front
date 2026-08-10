@@ -7,7 +7,6 @@ import type {
 
 import { OrderProductItem } from './OrderProductItem';
 
-
 type OrderProductListItem = OrderItem | OrderItemResponse;
 
 interface OrderProductListSectionProps {

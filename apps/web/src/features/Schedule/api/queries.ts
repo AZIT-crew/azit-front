@@ -4,7 +4,6 @@ import {
   queryOptions,
 } from '@tanstack/react-query';
 
-
 import {
   getScheduleDetail,
   getScheduleParticipants,

@@ -4,7 +4,6 @@ import type { NotificationSettingItem as NotificationSettingItemType } from '@/s
 
 import { NotificationSettingItem } from './NotificationSettingItem';
 
-
 interface NotificationSettingsListProps {
   items: NotificationSettingItemType[];
   onToggle: (id: string, enabled: boolean) => void;

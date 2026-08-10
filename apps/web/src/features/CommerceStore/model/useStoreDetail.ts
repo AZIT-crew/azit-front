@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { useAddToCart } from '@/entities/CommerceCart/model/useAddToCart';
+import { storeQueries } from '@/entities/CommerceStore/api/queries';
 
 import { showCartError } from '@/shared/lib/showCartError';
 import type { KakaoShareOptions } from '@/shared/lib/useKakaoShare';
 
-import { useAddToCart } from '@/entities/CommerceCart/model/useAddToCart';
-import { storeQueries } from '@/entities/CommerceStore/api/queries';
 
 export interface SelectedDetailItem {
   id: string;

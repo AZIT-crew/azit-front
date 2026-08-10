@@ -4,7 +4,6 @@ import type { MyInfoResult } from '@/entities/User/model';
 
 import * as styles from '../styles/MyProfileSection.css';
 
-
 interface MyProfileSectionProps {
   profile: MyInfoResult;
   navigateToMyProfileEditPage: () => void;

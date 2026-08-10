@@ -4,7 +4,6 @@ import { auth } from '@/shared/api/apiClient';
 import type { ApiResponse } from '@/shared/api/baseTypes';
 import { END_POINT } from '@/shared/constants/endpoint';
 
-
 export const updateSchedule = (
   crewId: number,
   scheduleId: number,
