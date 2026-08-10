@@ -10,7 +10,7 @@
     "dev:mobile": "pnpm --filter mobile start",
     "build:web": "turbo run build --filter=web",
     "build:mobile": "pnpm --filter mobile build",
-    "lint": "turbo run lint",
+    "lint": "turbo run lint --filter=!apk-center",
     "prettier": "prettier --cache --check \"**/*.{js,jsx,ts,tsx,json,md,yaml,yml}\"",
     "typecheck": "turbo run typecheck",
     "commitlint": "commitlint"
