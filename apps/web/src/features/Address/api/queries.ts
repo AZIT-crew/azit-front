@@ -14,7 +14,6 @@ import { deleteDeliveryAddress } from './deleteDeliveryAddress';
 import { postDeliveryAddress } from './postDeliveryAddress';
 import { updateDeliveryAddress } from './updateDeliveryAddress';
 
-
 export const addressQueries = {
   all: ['shippingAddresses'] as const,
   listKey: () => [...addressQueries.all] as const,

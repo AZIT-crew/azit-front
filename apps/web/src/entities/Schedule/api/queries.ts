@@ -6,7 +6,6 @@ import { getMemberScheduleList } from './getMemberScheduleList';
 import { getScheduleCheckInStatus } from './getScheduleCheckInStatus';
 import { postScheduleCheckIn } from './postScheduleCheckIn';
 
-
 export const scheduleEntityQueries = {
   all: ['schedule'] as const,
   memberListKey: () =>

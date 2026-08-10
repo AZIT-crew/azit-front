@@ -7,7 +7,6 @@ import { storeQueries } from '@/entities/CommerceStore/api/queries';
 import { showCartError } from '@/shared/lib/showCartError';
 import type { KakaoShareOptions } from '@/shared/lib/useKakaoShare';
 
-
 export interface SelectedDetailItem {
   id: string;
   optionId: number;
