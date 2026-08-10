@@ -76,6 +76,10 @@ const HomeNotificationPage = lazyImport(
   () => import('@/pages/Home/HomeNotificationPage'),
   'HomeNotificationPage'
 );
+const NoticeDetailPage = lazyImport(
+  () => import('@/pages/Home/NoticeDetailPage'),
+  'NoticeDetailPage'
+);
 
 const AttendancePage = lazyImport(
   () => import('@/pages/Crew/CrewAttendancePage'),
@@ -177,6 +181,12 @@ export const routes = [
     path: '/notification',
     element: HomeNotificationPage,
     withAuth: false,
+  },
+  {
+    name: 'NoticeDetailPage',
+    path: '/notice/:noticeId',
+    element: NoticeDetailPage,
+    withAuth: true,
   },
   {
     name: 'SchedulePage',
