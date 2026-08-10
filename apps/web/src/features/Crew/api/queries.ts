@@ -4,8 +4,6 @@ import {
   queryOptions,
 } from '@tanstack/react-query';
 
-
-
 import { deleteCrew } from '@/entities/Crew/api/deleteCrew';
 import { deleteCrewMember } from '@/entities/Crew/api/deleteCrewMember';
 import { deleteJoinRequest } from '@/entities/Crew/api/deleteJoinRequest';

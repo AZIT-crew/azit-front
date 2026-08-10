@@ -5,7 +5,6 @@ import type { MemberRole } from '@/entities/User/model';
 import { MEMBER_ROLE } from '@/shared/constants/member-role';
 import type { MenuGroup } from '@/shared/types/menu';
 
-
 type Push = (
   activity: ActivityName,
   params: Record<string, unknown>,

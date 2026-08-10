@@ -4,13 +4,13 @@
   "scripts": {
     "postinstall": "lefthook install",
     "format": "prettier --cache --write . && turbo run lint -- --fix",
-    "build": "turbo run build",
+    "build": "turbo run build --filter=!apk-center",
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=web",
     "dev:mobile": "pnpm --filter mobile start",
     "build:web": "turbo run build --filter=web",
     "build:mobile": "pnpm --filter mobile build",
-    "lint": "turbo run lint",
+    "lint": "turbo run lint --filter=!apk-center",
     "prettier": "prettier --cache --check \"**/*.{js,jsx,ts,tsx,json,md,yaml,yml}\"",
     "typecheck": "turbo run typecheck",
     "commitlint": "commitlint"

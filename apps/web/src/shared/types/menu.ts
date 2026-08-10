@@ -5,6 +5,7 @@ interface BaseMenuItem {
 
 export interface NavigationMenuItem extends BaseMenuItem {
   type: 'navigation';
+  value?: string;
   onNavigate: () => void;
 }
 
@@ -19,7 +20,18 @@ export interface InfoMenuItem extends BaseMenuItem {
   value: string;
 }
 
-export type MenuItem = NavigationMenuItem | ActionMenuItem | InfoMenuItem;
+export interface ToggleMenuItem extends BaseMenuItem {
+  type: 'toggle';
+  description?: string;
+  checked: boolean;
+  onToggle: (checked: boolean) => void;
+}
+
+export type MenuItem =
+  | NavigationMenuItem
+  | ActionMenuItem
+  | InfoMenuItem
+  | ToggleMenuItem;
 
 export interface MenuGroup {
   id: string;

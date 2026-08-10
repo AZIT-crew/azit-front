@@ -7,7 +7,6 @@ import type { ScheduleParticipant } from '@/entities/Schedule/model/schedule.typ
 import { ScheduleParticipantListItem } from './ScheduleParticipantListItem';
 import { ScheduleParticipantTitle } from './ScheduleParticipantTitle';
 
-
 interface ScheduleParticipantListProps {
   participants: ScheduleParticipant[];
   participantCount: number;

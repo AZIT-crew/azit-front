@@ -5,11 +5,14 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useEffect, useState } from 'react';
 
+import { useFlow } from '@/app/routes/stackflow';
+
 import { userQueries } from '@/entities/User/api/queries';
 
 import { BusinessError } from '@/shared/api/apiHandler';
 import { useWithdraw } from '@/shared/auth/model';
 import { bridge } from '@/shared/lib/bridge';
+import { mockMarketingConsentDescription } from '@/shared/mock/settings-notification';
 import { useAuthStore } from '@/shared/store/auth';
 import { BackButton } from '@/shared/ui/button';
 import { AppLayout } from '@/shared/ui/layout';
@@ -24,11 +27,14 @@ const PROVIDER_LABEL: Record<string, string> = {
 };
 
 export function SettingsPage() {
+  const { push } = useFlow();
   const { logout } = useAuthStore();
   const { handleWithdraw } = useWithdraw();
   const { data: providers } = useQuery(userQueries.myProvidersQuery());
   const [appVersion, setAppVersion] = useState<string>('');
   const [showLeaderError, setShowLeaderError] = useState(false);
+  const [allNotificationEnabled, setAllNotificationEnabled] = useState(true);
+  const [marketingConsentEnabled, setMarketingConsentEnabled] = useState(false);
 
   const handleWithdrawWithErrorHandling = async () => {
     try {
@@ -59,6 +65,15 @@ export function SettingsPage() {
     loginProvider,
     appVersion: appVersion ? `최신 버전(${appVersion})` : '',
     onLogout: logout,
+    onNavigateLoginInfo: () =>
+      push('SettingsLoginInfoPage', {}, { animate: true }),
+    onNavigateCrewNotification: () =>
+      push('SettingsCrewNotificationPage', {}, { animate: true }),
+    allNotificationEnabled,
+    onToggleAllNotification: setAllNotificationEnabled,
+    marketingConsentEnabled,
+    marketingConsentDescription: mockMarketingConsentDescription,
+    onToggleMarketingConsent: setMarketingConsentEnabled,
   });
 
   return (

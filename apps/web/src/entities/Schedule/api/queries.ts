@@ -1,11 +1,10 @@
 import { mutationOptions, queryOptions } from '@tanstack/react-query';
 
+import type { ScheduleCheckInRequest } from '@/entities/Schedule/model/schedule.model';
 
 import { getMemberScheduleList } from './getMemberScheduleList';
 import { getScheduleCheckInStatus } from './getScheduleCheckInStatus';
 import { postScheduleCheckIn } from './postScheduleCheckIn';
-
-import type { ScheduleCheckInRequest } from '@/entities/Schedule/model/schedule.model';
 
 export const scheduleEntityQueries = {
   all: ['schedule'] as const,

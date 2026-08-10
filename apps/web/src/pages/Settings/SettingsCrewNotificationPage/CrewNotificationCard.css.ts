@@ -1,67 +1,72 @@
 import { vars, typography } from '@azit/design-system';
 import { style } from '@vanilla-extract/css';
 
-import { listItemRow } from '@/shared/styles/listItemRow.css';
-
-export const item = listItemRow;
-
-export const itemClickable = style({
-  cursor: 'pointer',
-});
-
-export const label = style([
-  typography.body.b3,
-  {
-    color: vars.colors.gray70,
-  },
-]);
-
-export const statusLabel = style([
-  typography.body.b3,
-  {
-    color: vars.colors.gray50,
-    marginLeft: 'auto',
-    marginRight: '8px',
-  },
-]);
-
-export const rightGroup = style({
-  display: 'flex',
-  alignItems: 'flex-end',
-  justifyContent: 'flex-end',
-  gap: 2,
-});
-
-export const navValue = style([
-  typography.body.b3,
-  {
-    color: vars.colors.gray70,
-  },
-]);
-
-export const infoValue = style([
-  typography.body.b3,
-  {
-    color: vars.colors.blue80,
-  },
-]);
-
-export const pushIcon = style({
-  color: vars.colors.gray50,
-});
-
-export const toggleTextWrapper = style({
+export const card = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: 2,
+  gap: 12,
+  width: '100%',
+  padding: 20,
+  borderRadius: 16,
+  backgroundColor: vars.colors.white,
 });
 
-export const toggleDescription = style({
-  fontFamily: 'Inter',
-  fontSize: 11,
-  lineHeight: 'normal',
-  color: '#888888',
+export const row = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
 });
+
+export const divider = style({
+  width: '100%',
+  height: '0.5px',
+  minHeight: '0.5px',
+  backgroundColor: vars.colors.gray20,
+  border: 'none',
+  flexShrink: 0,
+});
+
+export const crewInfo = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+});
+
+export const crewImage = style({
+  width: 44,
+  height: 44,
+  borderRadius: '50%',
+  flexShrink: 0,
+});
+
+export const crewTextWrapper = style({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+});
+
+export const crewName = style([
+  typography.body.b3,
+  {
+    fontWeight: 500,
+    color: vars.colors.gray70,
+  },
+]);
+
+export const crewMeta = style([
+  typography.body.b4,
+  {
+    color: vars.colors.gray50,
+  },
+]);
+
+export const itemLabel = style([
+  typography.body.b3,
+  {
+    color: vars.colors.gray70,
+  },
+]);
 
 export const switchTrack = style({
   position: 'relative',

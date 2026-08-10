@@ -1,4 +1,3 @@
-import { Chip } from '@azit/design-system/chip';
 import clsx from 'clsx';
 
 import * as styles from '@/widgets/Notification/styles/NotificationListItem.css.ts';
@@ -7,27 +6,64 @@ import type { NotificationItem } from '@/shared/mock/notification';
 
 interface NotificationListItemProps {
   item: NotificationItem;
+  onClick: (item: NotificationItem) => void;
 }
 
-export function NotificationListItem({ item }: NotificationListItemProps) {
+export function NotificationListItem({
+  item,
+  onClick,
+}: NotificationListItemProps) {
   return (
     <div
-      className={clsx(
-        styles.itemContainer,
-        !item.isRead && styles.itemContainerUnread
-      )}
+      className={clsx(styles.itemContainer, !item.isRead && styles.unread)}
+      role="button"
+      tabIndex={0}
+      onClick={() => onClick(item)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick(item);
+        }
+      }}
     >
-      <div className={styles.contentContainer}>
-        <div className={styles.mainText}>
-          <span className={styles.dateText}>{item.date}에 </span>
-          <Chip type={item.type === 'regular' ? 'primary' : 'secondary'}>
-            {item.type === 'regular' ? '정기런' : '번개런'}
-          </Chip>
-          <span className={styles.dateText}> 이 등록되었어요</span>
+      <div className={styles.row}>
+        <div className={styles.leftContent}>
+          {item.kind === 'crew-schedule' ? (
+            <img
+              src={item.crewImageUrl}
+              alt={item.crewName}
+              className={styles.iconImage}
+            />
+          ) : (
+            <img
+              src="/icons/icon-notice-speaker.svg"
+              alt=""
+              className={styles.iconImage}
+            />
+          )}
+          <div className={styles.textWrapper}>
+            <div className={styles.titleRow}>
+              {item.kind === 'crew-schedule' && item.runType && (
+                <span
+                  className={clsx(
+                    styles.runTypeChip,
+                    item.runType === 'REGULAR'
+                      ? styles.runTypeChipRegular
+                      : styles.runTypeChipLightning
+                  )}
+                >
+                  {item.runType === 'REGULAR' ? '정기런' : '번개런'}
+                </span>
+              )}
+              <span className={styles.titleText}>
+                {item.kind === 'crew-schedule' ? item.crewName : item.title}
+              </span>
+            </div>
+            <p className={styles.descriptionText}>{item.description}</p>
+          </div>
         </div>
-        <p className={styles.descriptionText}>{item.description}</p>
+        <span className={styles.dateText}>{item.date}</span>
       </div>
-      <span className={styles.timestampText}>{item.timestamp}</span>
     </div>
   );
 }

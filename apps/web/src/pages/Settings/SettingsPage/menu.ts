@@ -10,12 +10,26 @@ interface SettingsMenuOptions {
   loginProvider: string;
   appVersion: string;
   onLogout: () => void;
+  onNavigateLoginInfo: () => void;
+  onNavigateCrewNotification: () => void;
+  allNotificationEnabled: boolean;
+  onToggleAllNotification: (checked: boolean) => void;
+  marketingConsentEnabled: boolean;
+  marketingConsentDescription: string;
+  onToggleMarketingConsent: (checked: boolean) => void;
 }
 
 export const getSettingsMenu = ({
   loginProvider,
   appVersion,
   onLogout,
+  onNavigateLoginInfo,
+  onNavigateCrewNotification,
+  allNotificationEnabled,
+  onToggleAllNotification,
+  marketingConsentEnabled,
+  marketingConsentDescription,
+  onToggleMarketingConsent,
 }: SettingsMenuOptions): MenuGroup[] => [
   {
     id: 'account',
@@ -24,8 +38,9 @@ export const getSettingsMenu = ({
       {
         id: 'login-info',
         label: '로그인 정보',
-        type: 'info',
+        type: 'navigation',
         value: loginProvider,
+        onNavigate: onNavigateLoginInfo,
       },
     ],
   },
@@ -49,6 +64,33 @@ export const getSettingsMenu = ({
           if (!bridge.isNativeMethodAvailable('openLocationSettings')) return;
           await bridge.openLocationSettings();
         },
+      },
+    ],
+  },
+  {
+    id: 'notification',
+    title: '알림 설정',
+    items: [
+      {
+        id: 'all-notification',
+        label: '전체 알림',
+        type: 'toggle',
+        checked: allNotificationEnabled,
+        onToggle: onToggleAllNotification,
+      },
+      {
+        id: 'crew-notification',
+        label: '크루별 알림 설정',
+        type: 'navigation',
+        onNavigate: onNavigateCrewNotification,
+      },
+      {
+        id: 'marketing-consent',
+        label: '마케팅 정보 수신 동의',
+        type: 'toggle',
+        description: marketingConsentDescription,
+        checked: marketingConsentEnabled,
+        onToggle: onToggleMarketingConsent,
       },
     ],
   },

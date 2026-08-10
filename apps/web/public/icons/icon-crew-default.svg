@@ -1,0 +1,18 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="app store logo">
+<g clip-path="url(#clip0_0_37)">
+<rect width="44" height="44" rx="22" fill="url(#paint0_linear_0_37)"/>
+<path id="Polygon 1" d="M25.3451 17.2231C27.2806 13.8707 32.1193 13.8707 34.0548 17.2231L49.1608 43.3874C51.0963 46.7397 48.6769 50.9302 44.8059 50.9302H14.594C10.723 50.9302 8.30364 46.7397 10.2391 43.3874L25.3451 17.2231Z" fill="#D1F801"/>
+<path id="Polygon 1_2" d="M28.5334 28.7403C28.8762 27.5349 30.5787 27.5184 30.9449 28.7169L35.999 45.2621C36.052 45.4356 36.142 45.5956 36.2627 45.7311L50.4946 61.7068C51.2166 62.5172 50.6413 63.8001 49.5559 63.8001H9.89361C8.80033 63.8001 8.2281 62.501 8.9661 61.6944L23.559 45.7446C23.6909 45.6005 23.7873 45.4277 23.8407 45.2399L28.5334 28.7403Z" fill="#0E326A"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_37" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
+<stop stop-color="#040F20"/>
+<stop offset="1" stop-color="#113F86"/>
+</linearGradient>
+<clipPath id="clip0_0_37">
+<rect width="44" height="44" rx="22" fill="white"/>
+</clipPath>
+</defs>
+</svg>

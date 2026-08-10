@@ -76,6 +76,10 @@ const HomeNotificationPage = lazyImport(
   () => import('@/pages/Home/HomeNotificationPage'),
   'HomeNotificationPage'
 );
+const NoticeDetailPage = lazyImport(
+  () => import('@/pages/Home/NoticeDetailPage'),
+  'NoticeDetailPage'
+);
 
 const AttendancePage = lazyImport(
   () => import('@/pages/Crew/CrewAttendancePage'),
@@ -126,6 +130,14 @@ const SettingsPage = lazyImport(
   () => import('@/pages/Settings/SettingsPage'),
   'SettingsPage'
 );
+const SettingsLoginInfoPage = lazyImport(
+  () => import('@/pages/Settings/SettingsLoginInfoPage'),
+  'SettingsLoginInfoPage'
+);
+const SettingsCrewNotificationPage = lazyImport(
+  () => import('@/pages/Settings/SettingsCrewNotificationPage'),
+  'SettingsCrewNotificationPage'
+);
 
 export const routes = [
   {
@@ -169,6 +181,12 @@ export const routes = [
     path: '/notification',
     element: HomeNotificationPage,
     withAuth: false,
+  },
+  {
+    name: 'NoticeDetailPage',
+    path: '/notice/:noticeId',
+    element: NoticeDetailPage,
+    withAuth: true,
   },
   {
     name: 'SchedulePage',
@@ -342,6 +360,18 @@ export const routes = [
     name: 'SettingsPage',
     path: '/settings',
     element: SettingsPage,
+    withAuth: true,
+  },
+  {
+    name: 'SettingsLoginInfoPage',
+    path: '/settings/login-info',
+    element: SettingsLoginInfoPage,
+    withAuth: true,
+  },
+  {
+    name: 'SettingsCrewNotificationPage',
+    path: '/settings/crew-notification',
+    element: SettingsCrewNotificationPage,
     withAuth: true,
   },
 ] as const satisfies readonly RouteConfig[];

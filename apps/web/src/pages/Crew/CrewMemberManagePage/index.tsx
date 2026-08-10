@@ -193,8 +193,14 @@ function RequestListContent({
   );
 }
 
-export function CrewMemberManagePage({ params }: { params?: { id?: string } }) {
-  const [activeTab, setActiveTab] = useState<'member' | 'request'>('member');
+export function CrewMemberManagePage({
+  params,
+}: {
+  params?: { id?: string; initialTab?: 'member' | 'request' };
+}) {
+  const [activeTab, setActiveTab] = useState<'member' | 'request'>(
+    params?.initialTab ?? 'member'
+  );
   const crewId = Number(params?.id) || 0;
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
 

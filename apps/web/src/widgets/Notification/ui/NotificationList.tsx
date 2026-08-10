@@ -1,35 +1,40 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import * as styles from '@/widgets/Notification/styles/NotificationList.css.ts';
 
-import { ScheduleFilterTab } from '@/features/Schedule/ui';
+import type {
+  NotificationCategory,
+  NotificationItem,
+} from '@/shared/mock/notification';
 
-import type { NotificationItem } from '@/shared/mock/notification';
-import type { RunType } from '@/shared/types/schedule';
-
+import { NotificationFilterTab } from './NotificationFilterTab';
 import { NotificationListItem } from './NotificationListItem';
 
 interface NotificationListProps {
   items: NotificationItem[];
+  onItemClick: (item: NotificationItem) => void;
 }
 
-export function NotificationList({ items }: NotificationListProps) {
-  const [activeFilter, setActiveFilter] = useState<RunType>(undefined);
+export function NotificationList({
+  items,
+  onItemClick,
+}: NotificationListProps) {
+  const [activeFilter, setActiveFilter] = useState<NotificationCategory>('all');
 
   const filteredNotifications = useMemo(() => {
-    if (activeFilter === undefined) {
-      return items;
+    if (activeFilter === 'all') return items;
+    if (activeFilter === 'notice') {
+      return items.filter((item) => item.kind !== 'crew-schedule');
     }
     return items.filter(
-      (item) =>
-        item.type === (activeFilter === 'REGULAR' ? 'regular' : 'lightning')
+      (item) => item.kind === 'crew-schedule' && item.runType === activeFilter
     );
   }, [activeFilter, items]);
 
   return (
     <div className={styles.listContainer}>
       <div className={styles.filterContainer}>
-        <ScheduleFilterTab
+        <NotificationFilterTab
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
         />
@@ -37,7 +42,11 @@ export function NotificationList({ items }: NotificationListProps) {
 
       <div className={styles.itemsContainer}>
         {filteredNotifications.map((item) => (
-          <NotificationListItem key={item.id} item={item} />
+          <NotificationListItem
+            key={item.id}
+            item={item}
+            onClick={onItemClick}
+          />
         ))}
       </div>
     </div>
