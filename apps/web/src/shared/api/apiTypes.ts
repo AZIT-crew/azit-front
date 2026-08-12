@@ -4,7021 +4,6989 @@
  */
 
 export interface paths {
-  '/api/v1/crews/{crewId}/schedules/{scheduleId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/schedules/{scheduleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 크루 일정 상세 조회
+         * @description 특정 크루 일정의 상세 정보를 조회합니다. <br><br>
+         *
+         *     **[참여자 미리보기 목록]** <br>
+         *     * 참여자 목록은 최대 10명까지만 반환됩니다. (미리보기 용도) <br>
+         *     * 정렬 기준: 일정 생성자(0순위) -> 크루 리더(1순위) -> 일반 멤버(신청 시간 순) <br>
+         *     * hasMoreParticipants 값이 true인 경우, 전체 참여자 명단 조회 API를 통해 추가 목록을 확인해야 합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 이미 취소(삭제)된 일정은 상세 조회가 불가능합니다. (ALREADY_CANCELLED_SCHEDULE)
+         *     * 존재하지 않는 일정일 경우 예외가 발생합니다. (SCHEDULE_NOT_FOUND)
+         */
+        get: operations["getScheduleDetail"];
+        /**
+         * 크루 일정 수정
+         * @description 기존에 생성된 크루 일정 정보를 수정합니다. <br>
+         *     준비물 리스트의 경우, 기존 리스트를 모두 대체하는 방식으로 업데이트됩니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 일정을 생성한 본인만 수정할 수 있습니다. (FORBIDDEN_ERROR)
+         *     * 해당 크루의 정회원(JOINED)이어야 합니다. (NOT_A_CREW_MEMBER)
+         *     * 정기런으로 수정하거나 정기런을 수정할 경우, 반드시 리더 권한이 있어야 합니다. (ONLY_LEADER_CAN_CREATE_REGULAR_RUN)
+         *     * 존재하지 않는 일정 ID를 입력할 경우 수정이 불가합니다. (SCHEDULE_NOT_FOUND)
+         *     * 이미 신청한 일정과 현재 신청하는 일정 간의 시간 차가 60분 미만일 경우 수정이 불가합니다. (SCHEDULE_INTERVAL_TOO_CLOSE)
+         *     * 일정 제목: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
+         *     * 세부 장소: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
+         *     * 준비물(선택): 최대 5개까지 등록 가능하며, 각 항목은 15자 이내여야 합니다. (INVALID_INPUT_VALUE)
+         *     * 모임 시간: 현재 시간보다 과거의 시간으로 수정할 수 없습니다. (INVALID_SCHEDULE_TIME)
+         *     * 출석을 시작한 일정은 수정이 불가능합니다. (SCHEDULE_MODIFICATION_NOT_ALLOWED_TIME) <br><br>
+         */
+        put: operations["updateSchedule"];
+        post?: never;
+        /**
+         * 크루 일정 취소(삭제)
+         * @description 생성된 일정을 취소 상태(CANCELLED)로 변경합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 일정을 생성한 본인만 취소할 수 있습니다. (FORBIDDEN_ERROR)
+         *     * 해당 크루의 정회원(JOINED 상태)이어야 합니다. (NOT_A_CREW_MEMBER)
+         *     * 이미 취소된 일정은 다시 취소할 수 없습니다. (ALREADY_CANCELLED_SCHEDULE)
+         *     * 출석을 시작한 일정은 삭제가 불가능합니다. (SCHEDULE_MODIFICATION_NOT_ALLOWED_TIME)
+         */
+        delete: operations["cancelSchedule"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 크루 일정 상세 조회
-     * @description 특정 크루 일정의 상세 정보를 조회합니다. <br><br>
-     *
-     *     **[참여자 미리보기 목록]** <br>
-     *     * 참여자 목록은 최대 10명까지만 반환됩니다. (미리보기 용도) <br>
-     *     * 정렬 기준: 일정 생성자(0순위) -> 크루 리더(1순위) -> 일반 멤버(신청 시간 순) <br>
-     *     * hasMoreParticipants 값이 true인 경우, 전체 참여자 명단 조회 API를 통해 추가 목록을 확인해야 합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 이미 취소(삭제)된 일정은 상세 조회가 불가능합니다. (ALREADY_CANCELLED_SCHEDULE)
-     *     * 존재하지 않는 일정일 경우 예외가 발생합니다. (SCHEDULE_NOT_FOUND)
-     */
-    get: operations['getScheduleDetail'];
-    /**
-     * 크루 일정 수정
-     * @description 기존에 생성된 크루 일정 정보를 수정합니다. <br>
-     *     준비물 리스트의 경우, 기존 리스트를 모두 대체하는 방식으로 업데이트됩니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 일정을 생성한 본인만 수정할 수 있습니다. (FORBIDDEN_ERROR)
-     *     * 해당 크루의 정회원(JOINED)이어야 합니다. (NOT_A_CREW_MEMBER)
-     *     * 정기런으로 수정하거나 정기런을 수정할 경우, 반드시 리더 권한이 있어야 합니다. (ONLY_LEADER_CAN_CREATE_REGULAR_RUN)
-     *     * 존재하지 않는 일정 ID를 입력할 경우 수정이 불가합니다. (SCHEDULE_NOT_FOUND)
-     *     * 이미 신청한 일정과 현재 신청하는 일정 간의 시간 차가 60분 미만일 경우 수정이 불가합니다. (SCHEDULE_INTERVAL_TOO_CLOSE)
-     *     * 일정 제목: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
-     *     * 세부 장소: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
-     *     * 준비물(선택): 최대 5개까지 등록 가능하며, 각 항목은 15자 이내여야 합니다. (INVALID_INPUT_VALUE)
-     *     * 모임 시간: 현재 시간보다 과거의 시간으로 수정할 수 없습니다. (INVALID_SCHEDULE_TIME)
-     *     * 출석을 시작한 일정은 수정이 불가능합니다. (SCHEDULE_MODIFICATION_NOT_ALLOWED_TIME) <br><br>
-     */
-    put: operations['updateSchedule'];
-    post?: never;
-    /**
-     * 크루 일정 취소(삭제)
-     * @description 생성된 일정을 취소 상태(CANCELLED)로 변경합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 일정을 생성한 본인만 취소할 수 있습니다. (FORBIDDEN_ERROR)
-     *     * 해당 크루의 정회원(JOINED 상태)이어야 합니다. (NOT_A_CREW_MEMBER)
-     *     * 이미 취소된 일정은 다시 취소할 수 없습니다. (ALREADY_CANCELLED_SCHEDULE)
-     *     * 출석을 시작한 일정은 삭제가 불가능합니다. (SCHEDULE_MODIFICATION_NOT_ALLOWED_TIME)
-     */
-    delete: operations['cancelSchedule'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/addresses/{addressId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/addresses/{addressId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * 배송지 수정
+         * @description 기존 배송지 정보를 수정합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 본인의 배송지만 수정 가능합니다. (FORBIDDEN_ADDRESS_ACCESS)
+         *     * 모든 필드는 필수 입력 항목입니다. (INVALID_ADDRESS_INPUT)
+         *     * 해당 주소를 '기본 배송지'로 변경 시, 기존의 다른 기본 배송지는 해제됩니다.
+         */
+        put: operations["updateDeliveryAddress"];
+        post?: never;
+        /**
+         * 배송지 삭제
+         * @description 등록된 배송지를 삭제합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 본인의 배송지만 삭제 가능합니다. (FORBIDDEN_ADDRESS_ACCESS)
+         *     * 기본 배송지일 경우 삭제가 불가능합니다. (CANNOT_DELETE_DEFAULT_ADDRESS)
+         */
+        delete: operations["deleteDeliveryAddress"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /**
-     * 배송지 수정
-     * @description 기존 배송지 정보를 수정합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 본인의 배송지만 수정 가능합니다. (FORBIDDEN_ADDRESS_ACCESS)
-     *     * 모든 필드는 필수 입력 항목입니다. (INVALID_ADDRESS_INPUT)
-     *     * 해당 주소를 '기본 배송지'로 변경 시, 기존의 다른 기본 배송지는 해제됩니다.
-     */
-    put: operations['updateDeliveryAddress'];
-    post?: never;
-    /**
-     * 배송지 삭제
-     * @description 등록된 배송지를 삭제합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 본인의 배송지만 삭제 가능합니다. (FORBIDDEN_ADDRESS_ACCESS)
-     *     * 기본 배송지일 경우 삭제가 불가능합니다. (CANNOT_DELETE_DEFAULT_ADDRESS)
-     */
-    delete: operations['deleteDeliveryAddress'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/test/members/me/withdraw-immediately': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/test/members/me/withdraw-immediately": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 사용자 즉시 탈퇴
+         * @description 사용자 탈퇴 및 신규 가입 플로우 테스트를 위한 API입니다. <br>
+         *     실제 탈퇴와 달리 사용자 관련 데이터를 DB에서 즉시 삭제합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 주문 관련 데이터는 운영과 동일하게 삭제하지 않습니다. (스냅샷 저장 용도) <br><br>
+         */
+        post: operations["forceWithdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 사용자 즉시 탈퇴
-     * @description 사용자 탈퇴 및 신규 가입 플로우 테스트를 위한 API입니다. <br>
-     *     실제 탈퇴와 달리 사용자 관련 데이터를 DB에서 즉시 삭제합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 주문 관련 데이터는 운영과 동일하게 삭제하지 않습니다. (스냅샷 저장 용도) <br><br>
-     */
-    post: operations['forceWithdraw'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/orders': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 주문 내역 목록 조회 (무한 스크롤)
+         * @description 커서 기반 페이징을 사용하여 사용자의 전체 주문 내역을 최신순으로 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
+         *     * 상품명, 브랜드명, 이미지 등은 구매 시점의 정보를 제공하므로 현재의 상품 정보와 다를 수 있습니다.
+         */
+        get: operations["getOrders"];
+        put?: never;
+        /**
+         * 주문 생성 (결제)
+         * @description 최종 결제 정보와 배송지를 입력받아 주문을 생성하고 상품 재고를 차감합니다. <br><br>
+         *
+         *     **[참고사항]** <br>
+         *     * 주문 시점에 각 SKU의 재고가 즉시 차감됩니다.
+         *     * 보유 포인트 잔액과 최소 사용 단위(1,000P)를 검증합니다. (INVALID_POINT_USAGE)
+         *     * 결제 수단 (MVP): 현재 '무통장 입금(BANK_TRANSFER)'만 지원합니다. 그 외 수단은 에러를 반환합니다. (PAYMENT_METHOD_NOT_SUPPORTED)
+         *     * 무통장 입금으로 주문 시, 입금자명은 필수입니다. (INVALID_ORDER_REQUEST)
+         *     * 주문이 성공하면 선택한 장바구니 아이템들은 자동으로 삭제됩니다.
+         */
+        post: operations["createOrder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 주문 내역 목록 조회 (무한 스크롤)
-     * @description 커서 기반 페이징을 사용하여 사용자의 전체 주문 내역을 최신순으로 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
-     *     * 상품명, 브랜드명, 이미지 등은 구매 시점의 정보를 제공하므로 현재의 상품 정보와 다를 수 있습니다.
-     */
-    get: operations['getOrders'];
-    put?: never;
-    /**
-     * 주문 생성 (결제)
-     * @description 최종 결제 정보와 배송지를 입력받아 주문을 생성하고 상품 재고를 차감합니다. <br><br>
-     *
-     *     **[참고사항]** <br>
-     *     * 주문 시점에 각 SKU의 재고가 즉시 차감됩니다.
-     *     * 보유 포인트 잔액과 최소 사용 단위(1,000P)를 검증합니다. (INVALID_POINT_USAGE)
-     *     * 결제 수단 (MVP): 현재 '무통장 입금(BANK_TRANSFER)'만 지원합니다. 그 외 수단은 에러를 반환합니다. (PAYMENT_METHOD_NOT_SUPPORTED)
-     *     * 무통장 입금으로 주문 시, 입금자명은 필수입니다. (INVALID_ORDER_REQUEST)
-     *     * 주문이 성공하면 선택한 장바구니 아이템들은 자동으로 삭제됩니다.
-     */
-    post: operations['createOrder'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/terms': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/terms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 약관 동의
+         * @description 소셜 로그인 직후 '약관 동의 대기(PENDING_TERMS)' 상태인 회원이 필수 서비스 약관에 동의하는 단계입니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * '약관 동의 대기(PENDING_TERMS)' 상태의 회원만 호출 가능합니다. (INVALID_MEMBER_STATUS)
+         *     * 필수 약관 중 하나라도 누락될 경우 가입이 진행되지 않습니다. (REQUIRED_TERMS_NOT_AGREED)
+         */
+        post: operations["agreeToTerms"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 약관 동의
-     * @description 소셜 로그인 직후 '약관 동의 대기(PENDING_TERMS)' 상태인 회원이 필수 서비스 약관에 동의하는 단계입니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * '약관 동의 대기(PENDING_TERMS)' 상태의 회원만 호출 가능합니다. (INVALID_MEMBER_STATUS)
-     *     * 필수 약관 중 하나라도 누락될 경우 가입이 진행되지 않습니다. (REQUIRED_TERMS_NOT_AGREED)
-     */
-    post: operations['agreeToTerms'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/withdraw': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 회원 탈퇴
+         * @description 서비스 이용을 중단하고 회원의 소셜 연동 해제 및 탈퇴 처리를 진행합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 리더로 소속된 크루가 있을 경우 서비스 탈퇴가 불가합니다. 리더 권한 위임 또는 크루 해산이 필요합니다. (CANNOT_SERVICE_WITHDRAW_AS_LEADER)
+         */
+        post: operations["withdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 회원 탈퇴
-     * @description 서비스 이용을 중단하고 회원의 소셜 연동 해제 및 탈퇴 처리를 진행합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 리더로 소속된 크루가 있을 경우 서비스 탈퇴가 불가합니다. 리더 권한 위임 또는 크루 해산이 필요합니다. (CANNOT_SERVICE_WITHDRAW_AS_LEADER)
-     */
-    post: operations['withdraw'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/schedules/{scheduleId}/check-in': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/schedules/{scheduleId}/check-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 일정 출석
+         * @description 사용자의 현재 위치와 시간을 검증하여 특정 일정에 대한 출석을 처리합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 일정 시작 시간 전후 1시간 이내여야 합니다. (NOT_CHECK_IN_TIME) <br>
+         *     * 사용자의 현재 위치가 일정 집결지로부터 100m 이내여야 합니다. (TOO_FAR_FROM_LOCATION) <br>
+         *     * 해당 일정에 참여 신청이 완료된 회원이어야 합니다. (NOT_PARTICIPATING_SCHEDULE) <br>
+         *     * 이미 출석을 완료한 일정은 다시 처리할 수 없습니다. (ALREADY_CHECKED_IN) <br>
+         *     * 출석 보상으로 100 포인트가 즉시 적립됩니다. <br><br>
+         */
+        post: operations["checkInSchedule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 일정 출석
-     * @description 사용자의 현재 위치와 시간을 검증하여 특정 일정에 대한 출석을 처리합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 일정 시작 시간 전후 1시간 이내여야 합니다. (NOT_CHECK_IN_TIME) <br>
-     *     * 사용자의 현재 위치가 일정 집결지로부터 100m 이내여야 합니다. (TOO_FAR_FROM_LOCATION) <br>
-     *     * 해당 일정에 참여 신청이 완료된 회원이어야 합니다. (NOT_PARTICIPATING_SCHEDULE) <br>
-     *     * 이미 출석을 완료한 일정은 다시 처리할 수 없습니다. (ALREADY_CHECKED_IN) <br>
-     *     * 출석 보상으로 100 포인트가 즉시 적립됩니다. <br><br>
-     */
-    post: operations['checkInSchedule'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/images/presigned-url': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/images/presigned-url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 이미지 업로드용 Presigned URL 발급
+         * @description S3에 이미지를 직접 업로드하기 위한 Presigned URL을 발급합니다. <br><br>
+         *
+         *     **[전체 플로우]** <br>
+         *     1. 해당 API를 호출하여 presignedUrl과 imageUrl을 발급받습니다. <br>
+         *     2. 클라이언트에서 presignedUrl로 **PUT 요청**을 보내 이미지를 업로드합니다. <br>
+         *     3. 업로드 완료 후 imageUrl으로 프로필 수정 / 크루 이미지 수정 등 관련 API를 호출합니다. <br><br>
+         *
+         *     **[업로드 타입]** <br>
+         *     * MEMBER_PROFILE : 멤버 프로필 이미지 (crewId 불필요) <br>
+         *     * CREW_IMAGE : 크루 이미지 (crewId 필수) <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 허용 확장자: jpg, jpeg, png, webp (그 외: UNSUPPORTED_FILE_EXTENSION) <br>
+         *     * Presigned URL 유효 시간: 5분 <br>
+         *     * 확장자 파싱이 불가능한 올바르지 않은 파일명일 경우 INVALID_FILE_NAME 에러가 발생합니다.
+         */
+        post: operations["generatePresignedUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 이미지 업로드용 Presigned URL 발급
-     * @description S3에 이미지를 직접 업로드하기 위한 Presigned URL을 발급합니다. <br><br>
-     *
-     *     **[전체 플로우]** <br>
-     *     1. 해당 API를 호출하여 presignedUrl과 imageUrl을 발급받습니다. <br>
-     *     2. 클라이언트에서 presignedUrl로 **PUT 요청**을 보내 이미지를 업로드합니다. <br>
-     *     3. 업로드 완료 후 imageUrl으로 프로필 수정 / 크루 이미지 수정 등 관련 API를 호출합니다. <br><br>
-     *
-     *     **[업로드 타입]** <br>
-     *     * MEMBER_PROFILE : 멤버 프로필 이미지 (crewId 불필요) <br>
-     *     * CREW_IMAGE : 크루 이미지 (crewId 필수) <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 허용 확장자: jpg, jpeg, png, webp (그 외: UNSUPPORTED_FILE_EXTENSION) <br>
-     *     * Presigned URL 유효 시간: 5분 <br>
-     *     * 확장자 파싱이 불가능한 올바르지 않은 파일명일 경우 INVALID_FILE_NAME 에러가 발생합니다.
-     */
-    post: operations['generatePresignedUrl'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 크루 생성
+         * @description 새로운 크루를 생성하고 고유한 초대 코드를 발급합니다. <br>
+         *     성공 시 영문 대문자와 숫자로 조합된 6자리 초대 코드를 반환합니다. <br><br>
+         *
+         *     **[입력 데이터]** <br>
+         *     * 카테고리(category): RUNNING
+         *     * 활동 지역(region): SEOUL, GYEONGGI_INCHEON, CHUNGCHEONG_DAEJEON, JEOLLA_GWANGJU, GYEONGBUK_DAEGU, GYEONGNAM_BUSAN, GANGWON, JEJU <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 크루 이름: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
+         *     * 크루 이름: 한글, 영문, 숫자만 사용 가능합니다. (INVALID_CREW_NAME_CHARACTERS)
+         *     * ACTIVE 상태의 사용자만 요청 가능합니다. (INVALID_MEMBER_STATUS)
+         */
+        post: operations["createCrew"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 크루 생성
-     * @description 새로운 크루를 생성하고 고유한 초대 코드를 발급합니다. <br>
-     *     성공 시 영문 대문자와 숫자로 조합된 6자리 초대 코드를 반환합니다. <br><br>
-     *
-     *     **[입력 데이터]** <br>
-     *     * 카테고리(category): RUNNING
-     *     * 활동 지역(region): SEOUL, GYEONGGI_INCHEON, CHUNGCHEONG_DAEJEON, JEOLLA_GWANGJU, GYEONGBUK_DAEGU, GYEONGNAM_BUSAN, GANGWON, JEJU <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 크루 이름: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
-     *     * 크루 이름: 한글, 영문, 숫자만 사용 가능합니다. (INVALID_CREW_NAME_CHARACTERS)
-     *     * ACTIVE 상태의 사용자만 요청 가능합니다. (INVALID_MEMBER_STATUS)
-     */
-    post: operations['createCrew'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/schedules': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/schedules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 크루 일정 목록 조회
+         * @description 특정 크루의 일정 목록을 날짜와 러닝 타입별로 필터링하여 조회합니다. <br>
+         *
+         *     **[쿼리 파라미터]** <br>
+         *     * date (선택): 특정 날짜(yyyy-MM-dd)의 일정만 조회합니다. 다른 파라미터보다 우선 적용됩니다.
+         *     * startDate / endDate (선택): 조회할 날짜 범위(yyyy-MM-dd)입니다. 두 값이 모두 있어야 동작합니다.
+         *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 월을 기준으로 조회합니다.
+         *     * runType (선택): REGULAR 또는 LIGHTNING으로 필터링합니다. 미입력 시 모든 타입을 조회합니다. <br><br>
+         *
+         *     **[파라미터 우선순위]** <br>
+         *     date > startDate·endDate > yearMonth > 현재 월 <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루의 정회원(JOINED)만 조회가 가능합니다. (NOT_A_CREW_MEMBER)
+         *     * 결과 목록은 모임 시간(meetingAt)이 빠른 순서대로 정렬되어 반환됩니다.
+         */
+        get: operations["getCrewSchedules"];
+        put?: never;
+        /**
+         * 크루 일정 생성
+         * @description 크루 내에서 진행되는 새로운 런(정기런 또는 번개런) 일정을 생성합니다. <br><br>
+         *
+         *     **[입력 데이터]** <br>
+         *     * 런 종류(runType): REGULAR(정기런), LIGHTNING(번개런) <br>
+         *     * 준비물(supplies): 문자열 리스트 형식으로 전달 <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루의 정회원(JOINED)만 일정을 생성할 수 있습니다. (NOT_A_CREW_MEMBER)
+         *     * 정기런은 크루의 리더만 생성 가능합니다. (ONLY_LEADER_CAN_CREATE_REGULAR_RUN)
+         *     * 이미 신청한 일정과 현재 신청하는 일정 간의 시간 차가 60분 미만일 경우 생성이 불가합니다. (SCHEDULE_INTERVAL_TOO_CLOSE)
+         *     * 일정 제목: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
+         *     * 세부 장소: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
+         *     * 준비물(선택): 최대 5개까지 등록 가능하며, 각 항목은 15자 이내여야 합니다. (INVALID_INPUT_VALUE)
+         *     * 모임 시간: 현재 시간보다 과거의 시간으로 생성할 수 없습니다. (INVALID_SCHEDULE_TIME)
+         */
+        post: operations["createSchedule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 크루 일정 목록 조회
-     * @description 특정 크루의 일정 목록을 날짜와 러닝 타입별로 필터링하여 조회합니다. <br>
-     *
-     *     **[쿼리 파라미터]** <br>
-     *     * date (선택): 특정 날짜(yyyy-MM-dd)의 일정만 조회합니다. 다른 파라미터보다 우선 적용됩니다.
-     *     * startDate / endDate (선택): 조회할 날짜 범위(yyyy-MM-dd)입니다. 두 값이 모두 있어야 동작합니다.
-     *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 월을 기준으로 조회합니다.
-     *     * runType (선택): REGULAR 또는 LIGHTNING으로 필터링합니다. 미입력 시 모든 타입을 조회합니다. <br><br>
-     *
-     *     **[파라미터 우선순위]** <br>
-     *     date > startDate·endDate > yearMonth > 현재 월 <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루의 정회원(JOINED)만 조회가 가능합니다. (NOT_A_CREW_MEMBER)
-     *     * 결과 목록은 모임 시간(meetingAt)이 빠른 순서대로 정렬되어 반환됩니다.
-     */
-    get: operations['getCrewSchedules'];
-    put?: never;
-    /**
-     * 크루 일정 생성
-     * @description 크루 내에서 진행되는 새로운 런(정기런 또는 번개런) 일정을 생성합니다. <br><br>
-     *
-     *     **[입력 데이터]** <br>
-     *     * 런 종류(runType): REGULAR(정기런), LIGHTNING(번개런) <br>
-     *     * 준비물(supplies): 문자열 리스트 형식으로 전달 <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루의 정회원(JOINED)만 일정을 생성할 수 있습니다. (NOT_A_CREW_MEMBER)
-     *     * 정기런은 크루의 리더만 생성 가능합니다. (ONLY_LEADER_CAN_CREATE_REGULAR_RUN)
-     *     * 이미 신청한 일정과 현재 신청하는 일정 간의 시간 차가 60분 미만일 경우 생성이 불가합니다. (SCHEDULE_INTERVAL_TOO_CLOSE)
-     *     * 일정 제목: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
-     *     * 세부 장소: 최대 15자 이내로 작성해야 합니다. (INVALID_INPUT_VALUE)
-     *     * 준비물(선택): 최대 5개까지 등록 가능하며, 각 항목은 15자 이내여야 합니다. (INVALID_INPUT_VALUE)
-     *     * 모임 시간: 현재 시간보다 과거의 시간으로 생성할 수 없습니다. (INVALID_SCHEDULE_TIME)
-     */
-    post: operations['createSchedule'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/schedules/{scheduleId}/participate': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/schedules/{scheduleId}/participate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 크루 일정 참여 신청
+         * @description 특정 일정에 참여 신청을 합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루의 정회원(JOINED 상태)만 신청할 수 있습니다. (NOT_A_CREW_MEMBER)
+         *     * 이미 취소된 일정에는 신청할 수 없습니다. (ALREADY_CANCELLED_SCHEDULE)
+         *     * 이미 신청한 일정에 중복 신청은 불가합니다. (ALREADY_PARTICIPATED)
+         *     * 모집 인원이 마감된(정원 초과) 일정에는 신청할 수 없습니다. (EXCEEDED_MAX_PARTICIPANTS)
+         *     * 이미 신청한 일정과 현재 신청하는 일정 간의 시간 차가 60분 미만일 경우 신청이 불가합니다. (SCHEDULE_INTERVAL_TOO_CLOSE)
+         *     * 출석 가능한 시간이 지난 일정은 참여 신청 및 취소가 불가능합니다.(PARTICIPATION_AND_CANCEL_CLOSED)
+         */
+        post: operations["participateSchedule"];
+        /**
+         * 크루 일정 참여 취소
+         * @description 참여 신청했던 일정에서 참여를 취소합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 일정 생성자는 본인의 일정 참여를 취소할 수 없습니다. (CREATOR_CANNOT_CANCEL_PARTICIPATION)
+         *     * 참여하지 않은 일정은 취소할 수 없습니다. (NOT_PARTICIPATING_SCHEDULE)
+         *     * 이미 출석한 일정은 취소할 수 없습니다. (CANNOT_CANCEL_AFTER_CHECK_IN)
+         *     * 출석 가능한 시간이 지난 일정은 참여 신청 및 취소가 불가능합니다.(PARTICIPATION_AND_CANCEL_CLOSED)
+         */
+        delete: operations["cancelParticipation"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 크루 일정 참여 신청
-     * @description 특정 일정에 참여 신청을 합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루의 정회원(JOINED 상태)만 신청할 수 있습니다. (NOT_A_CREW_MEMBER)
-     *     * 이미 취소된 일정에는 신청할 수 없습니다. (ALREADY_CANCELLED_SCHEDULE)
-     *     * 이미 신청한 일정에 중복 신청은 불가합니다. (ALREADY_PARTICIPATED)
-     *     * 모집 인원이 마감된(정원 초과) 일정에는 신청할 수 없습니다. (EXCEEDED_MAX_PARTICIPANTS)
-     *     * 이미 신청한 일정과 현재 신청하는 일정 간의 시간 차가 60분 미만일 경우 신청이 불가합니다. (SCHEDULE_INTERVAL_TOO_CLOSE)
-     *     * 출석 가능한 시간이 지난 일정은 참여 신청 및 취소가 불가능합니다.(PARTICIPATION_AND_CANCEL_CLOSED)
-     */
-    post: operations['participateSchedule'];
-    /**
-     * 크루 일정 참여 취소
-     * @description 참여 신청했던 일정에서 참여를 취소합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 일정 생성자는 본인의 일정 참여를 취소할 수 없습니다. (CREATOR_CANNOT_CANCEL_PARTICIPATION)
-     *     * 참여하지 않은 일정은 취소할 수 없습니다. (NOT_PARTICIPATING_SCHEDULE)
-     *     * 이미 출석한 일정은 취소할 수 없습니다. (CANNOT_CANCEL_AFTER_CHECK_IN)
-     *     * 출석 가능한 시간이 지난 일정은 참여 신청 및 취소가 불가능합니다.(PARTICIPATION_AND_CANCEL_CLOSED)
-     */
-    delete: operations['cancelParticipation'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/join-requests/{targetMemberId}/reject': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/join-requests/{targetMemberId}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 가입 요청 거절
+         * @description 크루 리더가 대기 중인 가입 요청을 거절합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 해당 크루의 **리더(LEADER)**만 이 API를 호출할 수 있습니다. (FORBIDDEN_ERROR)
+         */
+        post: operations["rejectJoinRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 가입 요청 거절
-     * @description 크루 리더가 대기 중인 가입 요청을 거절합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 해당 크루의 **리더(LEADER)**만 이 API를 호출할 수 있습니다. (FORBIDDEN_ERROR)
-     */
-    post: operations['rejectJoinRequest'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/join-requests/{targetMemberId}/approve': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/join-requests/{targetMemberId}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 가입 요청 승인
+         * @description 크루 리더가 대기 중인 가입 요청을 승인합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 해당 크루의 리더(LEADER)만 API를 호출할 수 있습니다. (FORBIDDEN_ERROR)
+         */
+        post: operations["approveJoinRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 가입 요청 승인
-     * @description 크루 리더가 대기 중인 가입 요청을 승인합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 해당 크루의 리더(LEADER)만 API를 호출할 수 있습니다. (FORBIDDEN_ERROR)
-     */
-    post: operations['approveJoinRequest'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/invitation-code': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/invitation-code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 초대 코드 재발급
+         * @description 크루 리더가 기존 초대 코드를 폐기하고 새로운 초대 코드를 발급합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 해당 크루의 리더(LEADER)만 해당 API를 호출할 수 있습니다. (NOT_CREW_LEADER) <br>
+         *     * 재발급 즉시 기존 코드는 무효화됩니다.
+         */
+        post: operations["regenerateInvitationCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 초대 코드 재발급
-     * @description 크루 리더가 기존 초대 코드를 폐기하고 새로운 초대 코드를 발급합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 해당 크루의 리더(LEADER)만 해당 API를 호출할 수 있습니다. (NOT_CREW_LEADER) <br>
-     *     * 재발급 즉시 기존 코드는 무효화됩니다.
-     */
-    post: operations['regenerateInvitationCode'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/join': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 크루 가입 신청
+         * @description 6자리 초대 코드를 입력하여 특정 크루에 가입 신청을 보냅니다. <br>
+         *     크루 리더의 승인이 완료되기 전까지는 정회원(ACTIVE)으로 전환되지 않습니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 본인이 리더인 크루이거나 이미 멤버로 등록된 크루에는 재신청이 불가합니다. (ALREADY_JOINED_CREW)
+         *     * 유효하지 않은 초대 코드를 입력할 경우 가입이 불가합니다. (CREW_NOT_FOUND)
+         *     * 방출된 크루가 존재할 시 24시간 내에는 재가입 신청이 불가합니다. (EXPELLED_REJOINING_COOLDOWN)
+         */
+        post: operations["joinCrew"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 크루 가입 신청
-     * @description 6자리 초대 코드를 입력하여 특정 크루에 가입 신청을 보냅니다. <br>
-     *     크루 리더의 승인이 완료되기 전까지는 정회원(ACTIVE)으로 전환되지 않습니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 본인이 리더인 크루이거나 이미 멤버로 등록된 크루에는 재신청이 불가합니다. (ALREADY_JOINED_CREW)
-     *     * 유효하지 않은 초대 코드를 입력할 경우 가입이 불가합니다. (CREW_NOT_FOUND)
-     *     * 방출된 크루가 존재할 시 24시간 내에는 재가입 신청이 불가합니다. (EXPELLED_REJOINING_COOLDOWN)
-     */
-    post: operations['joinCrew'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/carts/items': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/carts/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 장바구니 담기 및 수량 추가(상품 상세)
+         * @description 상품 상세 페이지에서 상품의 특정 옵션(SKU)을 장바구니에 담거나 기존 항목의 수량을 추가합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 장바구니에 해당 SKU가 없는 경우 새로운 항목으로 등록됩니다.
+         *     * 이미 동일한 SKU가 장바구니에 있는 경우, 기존 수량에 요청한 수량만큼 더해집니다.
+         *     * 담으려는 총 수량이 상품의 실제 재고 수량을 초과할 경우 에러가 발생합니다. (OUT_OF_STOCK)
+         *     * 수량은 최소 1개 이상이어야 합니다. (INVALID_QUANTITY)
+         */
+        post: operations["addCartItem"];
+        /**
+         * 장바구니 항목 삭제
+         * @description 선택한 장바구니 항목들을 삭제합니다. <br><br>
+         *
+         *     **[동작 방식]** <br>
+         *     * 단건 삭제: 리스트에 하나의 ID만 담아 요청합니다. (예: {"cartItemIds": [1]})
+         *     * 다건 삭제: 삭제할 모든 ID를 리스트에 담아 요청합니다. (예: {"cartItemIds": [1, 2, 3]})
+         *
+         *     **[참고 사항]** <br>
+         *     * 로그인한 사용자의 장바구니 항목만 삭제할 수 있습니다. 타인의 ID를 포함하더라도 해당 항목은 무시되고 본인의 것만 삭제됩니다.
+         *     * 멱등성 보장을 위해 이미 삭제된 ID나 존재하지 않는 ID를 요청에 포함하더라도 에러를 발생시키지 않고 성공 처리합니다.
+         */
+        delete: operations["deleteItems"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 장바구니 담기 및 수량 추가(상품 상세)
-     * @description 상품 상세 페이지에서 상품의 특정 옵션(SKU)을 장바구니에 담거나 기존 항목의 수량을 추가합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 장바구니에 해당 SKU가 없는 경우 새로운 항목으로 등록됩니다.
-     *     * 이미 동일한 SKU가 장바구니에 있는 경우, 기존 수량에 요청한 수량만큼 더해집니다.
-     *     * 담으려는 총 수량이 상품의 실제 재고 수량을 초과할 경우 에러가 발생합니다. (OUT_OF_STOCK)
-     *     * 수량은 최소 1개 이상이어야 합니다. (INVALID_QUANTITY)
-     */
-    post: operations['addCartItem'];
-    /**
-     * 장바구니 항목 삭제
-     * @description 선택한 장바구니 항목들을 삭제합니다. <br><br>
-     *
-     *     **[동작 방식]** <br>
-     *     * 단건 삭제: 리스트에 하나의 ID만 담아 요청합니다. (예: {"cartItemIds": [1]})
-     *     * 다건 삭제: 삭제할 모든 ID를 리스트에 담아 요청합니다. (예: {"cartItemIds": [1, 2, 3]})
-     *
-     *     **[참고 사항]** <br>
-     *     * 로그인한 사용자의 장바구니 항목만 삭제할 수 있습니다. 타인의 ID를 포함하더라도 해당 항목은 무시되고 본인의 것만 삭제됩니다.
-     *     * 멱등성 보장을 위해 이미 삭제된 ID나 존재하지 않는 ID를 요청에 포함하더라도 에러를 발생시키지 않고 성공 처리합니다.
-     */
-    delete: operations['deleteItems'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/auth/social-login/{provider}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/auth/social-login/{provider}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 소셜 로그인 (애플 제외)
+         * @description 카카오 등 소셜 플랫폼의 인가 코드 및 액세스 토큰을 통해 로그인을 진행합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 보안을 위해 리프레시 토큰은 HttpOnly 쿠키에 저장되어 발급됩니다. <br>
+         */
+        post: operations["socialLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 소셜 로그인 (애플 제외)
-     * @description 카카오 등 소셜 플랫폼의 인가 코드 및 액세스 토큰을 통해 로그인을 진행합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 보안을 위해 리프레시 토큰은 HttpOnly 쿠키에 저장되어 발급됩니다. <br>
-     */
-    post: operations['socialLogin'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/auth/social-login/apple': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/auth/social-login/apple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 애플 소셜 로그인 (백엔드 전용)
+         * @description 애플 서버로부터 직접 리다이렉트되는 콜백 엔드포인트입니다. 클라이언트가 아닌 서버 간 통신을 통해 로그인을 처리합니다. <br><br>
+         */
+        post: operations["appleLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 애플 소셜 로그인 (백엔드 전용)
-     * @description 애플 서버로부터 직접 리다이렉트되는 콜백 엔드포인트입니다. 클라이언트가 아닌 서버 간 통신을 통해 로그인을 처리합니다. <br><br>
-     */
-    post: operations['appleLogin'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/auth/reissue': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/auth/reissue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 토큰 재발급
+         * @description 쿠키에 저장된 리프레시 토큰을 사용하여 액세스 토큰을 갱신합니다. <br><br>
+         *
+         *     **[RTR(Refresh Token Rotation) 방식 적용]** <br>
+         *     * 토큰 재발급 시 기존 리프레시 토큰은 폐기되고 새로운 리프레시 토큰이 쿠키에 다시 저장됩니다. <br>
+         *     * 만약 이미 사용된 리프레시 토큰이 다시 제출될 경우, 보안 위협으로 간주하여 쿠키 삭제 및 로그아웃됩니다. (TOKEN_REUSE_DETECTED)
+         */
+        post: operations["reissue"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 토큰 재발급
-     * @description 쿠키에 저장된 리프레시 토큰을 사용하여 액세스 토큰을 갱신합니다. <br><br>
-     *
-     *     **[RTR(Refresh Token Rotation) 방식 적용]** <br>
-     *     * 토큰 재발급 시 기존 리프레시 토큰은 폐기되고 새로운 리프레시 토큰이 쿠키에 다시 저장됩니다. <br>
-     *     * 만약 이미 사용된 리프레시 토큰이 다시 제출될 경우, 보안 위협으로 간주하여 쿠키 삭제 및 로그아웃됩니다. (TOKEN_REUSE_DETECTED)
-     */
-    post: operations['reissue'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/auth/logout': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 로그아웃
+         * @description 현재 사용자의 세션을 종료하고 리프레시 토큰 쿠키를 제거합니다.
+         */
+        post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 로그아웃
-     * @description 현재 사용자의 세션을 종료하고 리프레시 토큰 쿠키를 제거합니다.
-     */
-    post: operations['logout'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/auth/apple/notification': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/auth/apple/notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 애플 서버 알림 수신 (S2S)
+         * @description Apple 서버가 사용자 상태 변경 알림(계정 연동 해제 등)을 보낼 때 이를 수신하여 서버 데이터를 동기화합니다. <br><br>
+         *
+         *     **[수신 케이스]** <br>
+         *     * CONSENT_REVOKED: 사용자가 Apple 설정에서 앱 연동을 해제한 경우 탈퇴 처리를 진행합니다. <br>
+         *     * ACCOUNT_DELETE: Apple 계정이 삭제된 경우 탈퇴 처리를 진행합니다.
+         *     * EMAIL_ENABLED: 사용자가 Apple 설정에서 이메일 공유를 활성화한 경우(숨기기 해제) 해당 플래그를 Y로 설정합니다.
+         *     * EMAIL_DISABLED: 사용자가 Apple 설정에서 이메일 공유를 비활성화한 경우(숨기기 설정) 해당 플래그를 N으로 설정합니다.
+         */
+        post: operations["receiveAppleNotification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * 애플 서버 알림 수신 (S2S)
-     * @description Apple 서버가 사용자 상태 변경 알림(계정 연동 해제 등)을 보낼 때 이를 수신하여 서버 데이터를 동기화합니다. <br><br>
-     *
-     *     **[수신 케이스]** <br>
-     *     * CONSENT_REVOKED: 사용자가 Apple 설정에서 앱 연동을 해제한 경우 탈퇴 처리를 진행합니다. <br>
-     *     * ACCOUNT_DELETE: Apple 계정이 삭제된 경우 탈퇴 처리를 진행합니다.
-     *     * EMAIL_ENABLED: 사용자가 Apple 설정에서 이메일 공유를 활성화한 경우(숨기기 해제) 해당 플래그를 Y로 설정합니다.
-     *     * EMAIL_DISABLED: 사용자가 Apple 설정에서 이메일 공유를 비활성화한 경우(숨기기 설정) 해당 플래그를 N으로 설정합니다.
-     */
-    post: operations['receiveAppleNotification'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/addresses': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/addresses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 배송지 목록 조회
+         * @description 사용자의 모든 배송지 목록을 조회합니다. <br><br>
+         *
+         *     **[정렬 기준]** <br>
+         *     1. 기본 배송지가 가장 상단에 노출됩니다. <br>
+         *     2. 그 외 주소는 최신 등록순으로 정렬됩니다.
+         */
+        get: operations["getDeliveryAddresses"];
+        put?: never;
+        /**
+         * 배송지 등록
+         * @description 신규 배송지 정보를 등록합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 수령인, 연락처, 우편번호, 기본 주소, 상세 주소는 모두 필수 입력 항목입니다. (INVALID_ADDRESS_INPUT)
+         *     * 사용자의 첫 번째 배송지 등록인 경우, 요청값과 관계없이 자동으로 '기본 배송지'로 설정됩니다.
+         *     * 새 주소를 기본 배송지(isDefault: true)로 등록할 경우, 기존에 설정된 기본 배송지는 자동으로 일반 배송지로 변경됩니다.
+         */
+        post: operations["registerDeliveryAddress"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 배송지 목록 조회
-     * @description 사용자의 모든 배송지 목록을 조회합니다. <br><br>
-     *
-     *     **[정렬 기준]** <br>
-     *     1. 기본 배송지가 가장 상단에 노출됩니다. <br>
-     *     2. 그 외 주소는 최신 등록순으로 정렬됩니다.
-     */
-    get: operations['getDeliveryAddresses'];
-    put?: never;
-    /**
-     * 배송지 등록
-     * @description 신규 배송지 정보를 등록합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 수령인, 연락처, 우편번호, 기본 주소, 상세 주소는 모두 필수 입력 항목입니다. (INVALID_ADDRESS_INPUT)
-     *     * 사용자의 첫 번째 배송지 등록인 경우, 요청값과 관계없이 자동으로 '기본 배송지'로 설정됩니다.
-     *     * 새 주소를 기본 배송지(isDefault: true)로 등록할 경우, 기존에 설정된 기본 배송지는 자동으로 일반 배송지로 변경됩니다.
-     */
-    post: operations['registerDeliveryAddress'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/orders/{orderNumber}/cancel': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/orders/{orderNumber}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 주문 취소
+         * @description 주문 상태가 결제 대기(PENDING) 혹은 결제 완료(PAID)인 경우에만 취소가 가능합니다. <br><br>
+         *
+         *     **[내부 로직]** <br>
+         *     1. 주문 상태를 CANCELLED(주문 취소)로 변경합니다.
+         *     2. 주문했던 상품의 재고를 주문 수량만큼 다시 증가시킵니다.
+         *     3. 사용했던 포인트를 사용자 계정으로 전액 환불합니다.
+         */
+        patch: operations["cancelOrder"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /**
-     * 주문 취소
-     * @description 주문 상태가 결제 대기(PENDING) 혹은 결제 완료(PAID)인 경우에만 취소가 가능합니다. <br><br>
-     *
-     *     **[내부 로직]** <br>
-     *     1. 주문 상태를 CANCELLED(주문 취소)로 변경합니다.
-     *     2. 주문했던 상품의 재고를 주문 수량만큼 다시 증가시킵니다.
-     *     3. 사용했던 포인트를 사용자 계정으로 전액 환불합니다.
-     */
-    patch: operations['cancelOrder'];
-    trace?: never;
-  };
-  '/api/v1/members/me/profile': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 프로필 수정
+         * @description 사용자의 프로필 정보를 수정합니다. <br><br>
+         *
+         *     **[닉네임 제약 사항]** <br>
+         *     * 최대 10자까지 입력 가능합니다. <br>
+         *     * 특수문자는 사용할 수 없으며, 한글/영문/숫자만 허용됩니다. <br><br>
+         *
+         *     **[프로필 이미지 URL 제약 사항]** <br>
+         *     프로필 이미지 URL은 아래 세 가지 중 하나여야 합니다.<br>
+         *     1. temp 경로가 포함된 CloudFront URL (새 커스텀 이미지 적용 시)<br>
+         *     2. default 경로가 포함된 URL (기본 이미지 적용 시 — 프론트에서 랜덤 선택 후 전달)<br>
+         *     3. 현재 이미지 URL (이미지 변경 없음) <br><br>
+         *
+         *     **[이미지 처리 방식]** <br>
+         *     imageUrl 값에 따라 아래 세 가지 케이스로 처리됩니다. <br>
+         *     1. **새 커스텀 이미지 적용**: temp/ 경로가 포함된 CloudFront URL 전달 <br>
+         *        - 사전에 POST /api/v1/images/presigned-url로 Presigned URL 발급 후 S3에 실제 업로드 필요 <br>
+         *        - 업로드되지 않은 URL이면 IMAGE_NOT_UPLOADED 오류 <br>
+         *        - 본인이 업로드한 이미지만 사용 가능 (IMAGE_OWNERSHIP_MISMATCH) <br>
+         *     2. **기본 이미지 적용**: default/ 경로가 포함된 URL 전달 (프론트에서 랜덤 선택 후 전달) <br>
+         *        - 기존 커스텀 이미지가 있으면 S3에서 자동 삭제 후 교체 <br>
+         *     3. **이미지 변경 없음**: 현재 저장된 이미지 URL 그대로 전달 <br>
+         *        - S3 작업 없이 닉네임만 수정됨
+         */
+        patch: operations["updateMemberProfile"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /**
-     * 프로필 수정
-     * @description 사용자의 프로필 정보를 수정합니다. <br><br>
-     *
-     *     **[닉네임 제약 사항]** <br>
-     *     * 최대 10자까지 입력 가능합니다. <br>
-     *     * 특수문자는 사용할 수 없으며, 한글/영문/숫자만 허용됩니다. <br><br>
-     *
-     *     **[프로필 이미지 URL 제약 사항]** <br>
-     *     프로필 이미지 URL은 아래 세 가지 중 하나여야 합니다.<br>
-     *     1. temp 경로가 포함된 CloudFront URL (새 커스텀 이미지 적용 시)<br>
-     *     2. default 경로가 포함된 URL (기본 이미지 적용 시 — 프론트에서 랜덤 선택 후 전달)<br>
-     *     3. 현재 이미지 URL (이미지 변경 없음) <br><br>
-     *
-     *     **[이미지 처리 방식]** <br>
-     *     imageUrl 값에 따라 아래 세 가지 케이스로 처리됩니다. <br>
-     *     1. **새 커스텀 이미지 적용**: temp/ 경로가 포함된 CloudFront URL 전달 <br>
-     *        - 사전에 POST /api/v1/images/presigned-url로 Presigned URL 발급 후 S3에 실제 업로드 필요 <br>
-     *        - 업로드되지 않은 URL이면 IMAGE_NOT_UPLOADED 오류 <br>
-     *        - 본인이 업로드한 이미지만 사용 가능 (IMAGE_OWNERSHIP_MISMATCH) <br>
-     *     2. **기본 이미지 적용**: default/ 경로가 포함된 URL 전달 (프론트에서 랜덤 선택 후 전달) <br>
-     *        - 기존 커스텀 이미지가 있으면 S3에서 자동 삭제 후 교체 <br>
-     *     3. **이미지 변경 없음**: 현재 저장된 이미지 URL 그대로 전달 <br>
-     *        - S3 작업 없이 닉네임만 수정됨
-     */
-    patch: operations['updateMemberProfile'];
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/info': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 크루 정보 조회
+         * @description 크루 이미지, 크루명, 크루 한줄 소개를 조회합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 해당 크루에 가입된 멤버(JOINED 상태)만 조회할 수 있습니다. (NOT_A_CREW_MEMBER)
+         */
+        get: operations["getCrewInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 크루 프로필 수정
+         * @description 크루 프로필을 수정합니다. <br><br>
+         *
+         *     **[크루 이미지 URL 제약 사항]** <br>
+         *     크루 이미지 URL은 아래 세 가지 중 하나여야 합니다.<br>
+         *     1. temp 경로가 포함된 CloudFront URL (새 커스텀 이미지 적용 시)<br>
+         *     2. default 경로가 포함된 URL (기본 이미지 적용 시 — 프론트에서 전달)<br>
+         *     3. 현재 이미지 URL (이미지 변경 없음) <br><br>
+         *
+         *     **[이미지 처리 방식]** <br>
+         *     imageUrl 값에 따라 아래 두 가지 케이스로 처리됩니다. <br>
+         *     1. **새 이미지 적용**: temp/ 경로가 포함된 CloudFront URL 전달 <br>
+         *        - 사전에 POST /api/v1/images/presigned-url에 type: CREW_IMAGE, crewId를 전달하여 Presigned URL 발급 후 S3에 실제 업로드 필요 <br>
+         *        - 업로드되지 않은 URL이면 IMAGE_NOT_UPLOADED 오류 <br>
+         *        - Presigned URL 발급 시 사용한 crewId와 요청 경로의 crewId가 일치해야 합니다. (IMAGE_OWNERSHIP_MISMATCH) <br>
+         *     2. **이미지 변경 없음**: 현재 저장된 이미지 URL 그대로 전달 <br>
+         *        - S3 작업 없이 크루명·소개만 수정됨 <br><br>
+         *
+         *     **[이외 제약 사항]** <br>
+         *     * 리더만 수정할 수 있습니다. (NOT_CREW_LEADER) <br>
+         *     * 크루 이름은 필수이며 최대 15자까지 입력 가능합니다. <br>
+         *     * 크루 이름: 한글, 영문, 숫자만 사용 가능합니다. (INVALID_CREW_NAME_CHARACTERS) <br>
+         *     * 크루 한줄 소개는 선택이며 최대 20자까지 입력 가능합니다. (미입력 시 null로 저장)
+         */
+        patch: operations["updateCrewProfile"];
+        trace?: never;
     };
-    /**
-     * 크루 정보 조회
-     * @description 크루 이미지, 크루명, 크루 한줄 소개를 조회합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 해당 크루에 가입된 멤버(JOINED 상태)만 조회할 수 있습니다. (NOT_A_CREW_MEMBER)
-     */
-    get: operations['getCrewInfo'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /**
-     * 크루 프로필 수정
-     * @description 크루 프로필을 수정합니다. <br><br>
-     *
-     *     **[크루 이미지 URL 제약 사항]** <br>
-     *     크루 이미지 URL은 아래 세 가지 중 하나여야 합니다.<br>
-     *     1. temp 경로가 포함된 CloudFront URL (새 커스텀 이미지 적용 시)<br>
-     *     2. default 경로가 포함된 URL (기본 이미지 적용 시 — 프론트에서 전달)<br>
-     *     3. 현재 이미지 URL (이미지 변경 없음) <br><br>
-     *
-     *     **[이미지 처리 방식]** <br>
-     *     imageUrl 값에 따라 아래 두 가지 케이스로 처리됩니다. <br>
-     *     1. **새 이미지 적용**: temp/ 경로가 포함된 CloudFront URL 전달 <br>
-     *        - 사전에 POST /api/v1/images/presigned-url에 type: CREW_IMAGE, crewId를 전달하여 Presigned URL 발급 후 S3에 실제 업로드 필요 <br>
-     *        - 업로드되지 않은 URL이면 IMAGE_NOT_UPLOADED 오류 <br>
-     *        - Presigned URL 발급 시 사용한 crewId와 요청 경로의 crewId가 일치해야 합니다. (IMAGE_OWNERSHIP_MISMATCH) <br>
-     *     2. **이미지 변경 없음**: 현재 저장된 이미지 URL 그대로 전달 <br>
-     *        - S3 작업 없이 크루명·소개만 수정됨 <br><br>
-     *
-     *     **[이외 제약 사항]** <br>
-     *     * 리더만 수정할 수 있습니다. (NOT_CREW_LEADER) <br>
-     *     * 크루 이름은 필수이며 최대 15자까지 입력 가능합니다. <br>
-     *     * 크루 이름: 한글, 영문, 숫자만 사용 가능합니다. (INVALID_CREW_NAME_CHARACTERS) <br>
-     *     * 크루 한줄 소개는 선택이며 최대 20자까지 입력 가능합니다. (미입력 시 null로 저장)
-     */
-    patch: operations['updateCrewProfile'];
-    trace?: never;
-  };
-  '/api/v1/carts/items/{cartItemId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/carts/items/{cartItemId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 장바구니 아이템 수량 변경
+         * @description 장바구니에 담긴 특정 아이템의 수량을 변경(절대값)합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 변경하려는 수량이 상품의 재고보다 많을 수 없습니다. (OUT_OF_STOCK)
+         *     * 변경하려는 수량은 최소 1개 이상이어야 합니다. (INVALID_QUANTITY)
+         *     * 본인의 장바구니 항목만 수정할 수 있습니다. (FORBIDDEN_ERROR)
+         */
+        patch: operations["updateCartItemQuantity"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /**
-     * 장바구니 아이템 수량 변경
-     * @description 장바구니에 담긴 특정 아이템의 수량을 변경(절대값)합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 변경하려는 수량이 상품의 재고보다 많을 수 없습니다. (OUT_OF_STOCK)
-     *     * 변경하려는 수량은 최소 1개 이상이어야 합니다. (INVALID_QUANTITY)
-     *     * 본인의 장바구니 항목만 수정할 수 있습니다. (FORBIDDEN_ERROR)
-     */
-    patch: operations['updateCartItemQuantity'];
-    trace?: never;
-  };
-  '/api/v1/products': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 상품 목록 조회 (무한 스크롤)
+         * @description 커서 기반 페이징을 사용하여 전체 상품 목록을 최신순으로 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
+         */
+        get: operations["getProducts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 상품 목록 조회 (무한 스크롤)
-     * @description 커서 기반 페이징을 사용하여 전체 상품 목록을 최신순으로 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
-     */
-    get: operations['getProducts'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/products/{productId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/products/{productId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 상품 상세 정보 조회
+         * @description 상품의 상세 정보, 이미지 리스트, 옵션 그룹 및 재고 정보를 조회합니다. <br><br>
+         *
+         *     **[데이터 구조]** <br>
+         *     * expectedShippingDate: 상품의 배송 출고 소요 시간을 기준으로 자동 계산된 예상 배송 시작일입니다.
+         *     * slideImageUrls: 상품 상단 배너에 노출할 이미지 리스트입니다.
+         *     * detailImageUrls: 상품 하단 상세 설명 영역에 노출할 이미지 리스트입니다.
+         *     * skus: 선택 가능한 옵션 조합(SKU) 리스트입니다. 각 SKU는 optionValueIds 리스트를 통해 어떤 옵션값들의 조합인지 나타냅니다.
+         *
+         *     **[참고 사항]** <br>
+         *     * 옵션 관련 데이터들은 DB에 저장된 노출 순서를 기준으로 정렬되어 있습니다.
+         */
+        get: operations["getProduct"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 상품 상세 정보 조회
-     * @description 상품의 상세 정보, 이미지 리스트, 옵션 그룹 및 재고 정보를 조회합니다. <br><br>
-     *
-     *     **[데이터 구조]** <br>
-     *     * expectedShippingDate: 상품의 배송 출고 소요 시간을 기준으로 자동 계산된 예상 배송 시작일입니다.
-     *     * slideImageUrls: 상품 상단 배너에 노출할 이미지 리스트입니다.
-     *     * detailImageUrls: 상품 하단 상세 설명 영역에 노출할 이미지 리스트입니다.
-     *     * skus: 선택 가능한 옵션 조합(SKU) 리스트입니다. 각 SKU는 optionValueIds 리스트를 통해 어떤 옵션값들의 조합인지 나타냅니다.
-     *
-     *     **[참고 사항]** <br>
-     *     * 옵션 관련 데이터들은 DB에 저장된 노출 순서를 기준으로 정렬되어 있습니다.
-     */
-    get: operations['getProduct'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/orders/{orderNumber}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/orders/{orderNumber}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 주문 상세 조회
+         * @description 특정 주문 번호를 기반으로 주문의 상세 내역을 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 요청한 사용자가 해당 주문의 소유자인지 확인하며, 타인의 주문 조회 시 에러를 반환합니다. (FORBIDDEN_ERROR)
+         *     * 구매 당시의 상품명, 브랜드명, 옵션 정보, 이미지 및 수량이 반영된 가격 정보를 포함하는 '스냅샷' 정보를 제공합니다.
+         *     * API 호출 시에는 #이 없는 형태(예: AZ2602104434)를 사용합니다. 단, API 응답 시에는 UI 가독성을 위해 주문번호에 #을 접두어로 붙여 반환합니다.
+         */
+        get: operations["getOrderDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 주문 상세 조회
-     * @description 특정 주문 번호를 기반으로 주문의 상세 내역을 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 요청한 사용자가 해당 주문의 소유자인지 확인하며, 타인의 주문 조회 시 에러를 반환합니다. (FORBIDDEN_ERROR)
-     *     * 구매 당시의 상품명, 브랜드명, 옵션 정보, 이미지 및 수량이 반영된 가격 정보를 포함하는 '스냅샷' 정보를 제공합니다.
-     *     * API 호출 시에는 #이 없는 형태(예: AZ2602104434)를 사용합니다. 단, API 응답 시에는 UI 가독성을 위해 주문번호에 #을 접두어로 붙여 반환합니다.
-     */
-    get: operations['getOrderDetail'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/orders/checkout/direct': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/orders/checkout/direct": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 주문서 조회(바로 구매)
+         * @description 상품 상세에서 선택한 상품을 바탕으로 주문서(결제 상세 페이지)에 필요한 정보를 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 파라미터 deliveryAddressId가 있을 경우, deliveryAddressId로 배송지 정보를 조회합니다.
+         *     * 파라미터 deliveryAddressId가 없을 경우, 사용자의 기본 배송지 정보를 조회합니다. (없을 경우 null 반환)
+         *     * 브랜드별로 가장 높은 배송비를 한 번씩만 합산하여 계산합니다.
+         *     * 보유 포인트와 함께 사용 가능한 최소 단위(1,000P), 입력 단위(100P) 정보를 제공합니다.
+         *     * 현재 사용 가능한 결제 수단 목록과 활성화 여부를 제공합니다. (네이버페이는 현재 비활성화 상태)
+         *     * '아지트 멤버십 할인'은 각 상품의 (정가 - 판매가) 총합으로 계산됩니다.
+         *     * 포인트 '모두 사용' 클릭 시 응답의 availablePoints 값을 활용하여 100P 단위로 가공하시면 됩니다.
+         */
+        get: operations["getCheckoutInfoDirect"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 주문서 조회(바로 구매)
-     * @description 상품 상세에서 선택한 상품을 바탕으로 주문서(결제 상세 페이지)에 필요한 정보를 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 파라미터 deliveryAddressId가 있을 경우, deliveryAddressId로 배송지 정보를 조회합니다.
-     *     * 파라미터 deliveryAddressId가 없을 경우, 사용자의 기본 배송지 정보를 조회합니다. (없을 경우 null 반환)
-     *     * 브랜드별로 가장 높은 배송비를 한 번씩만 합산하여 계산합니다.
-     *     * 보유 포인트와 함께 사용 가능한 최소 단위(1,000P), 입력 단위(100P) 정보를 제공합니다.
-     *     * 현재 사용 가능한 결제 수단 목록과 활성화 여부를 제공합니다. (네이버페이는 현재 비활성화 상태)
-     *     * '아지트 멤버십 할인'은 각 상품의 (정가 - 판매가) 총합으로 계산됩니다.
-     *     * 포인트 '모두 사용' 클릭 시 응답의 availablePoints 값을 활용하여 100P 단위로 가공하시면 됩니다.
-     */
-    get: operations['getCheckoutInfoDirect'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/orders/checkout/cart': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/orders/checkout/cart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 주문서 조회(장바구니)
+         * @description 장바구니에서 선택한 상품들을 바탕으로 주문서(결제 상세 페이지)에 필요한 정보를 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 파라미터 deliveryAddressId가 있을 경우, deliveryAddressId로 배송지 정보를 조회합니다.
+         *     * 파라미터 deliveryAddressId가 없을 경우, 사용자의 기본 배송지 정보를 조회합니다. (없을 경우 null 반환)
+         *     * 브랜드별로 가장 높은 배송비를 한 번씩만 합산하여 계산합니다.
+         *     * 보유 포인트와 함께 사용 가능한 최소 단위(1,000P), 입력 단위(100P) 정보를 제공합니다.
+         *     * 현재 사용 가능한 결제 수단 목록과 활성화 여부를 제공합니다.
+         *     * '아지트 멤버십 할인'은 각 상품의 (정가 - 판매가) 총합으로 계산됩니다.
+         *     * 포인트 '모두 사용' 클릭 시 응답의 availablePoints 값을 활용하여 100P 단위로 가공하시면 됩니다.
+         */
+        get: operations["getCheckoutInfoFromCart"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 주문서 조회(장바구니)
-     * @description 장바구니에서 선택한 상품들을 바탕으로 주문서(결제 상세 페이지)에 필요한 정보를 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 파라미터 deliveryAddressId가 있을 경우, deliveryAddressId로 배송지 정보를 조회합니다.
-     *     * 파라미터 deliveryAddressId가 없을 경우, 사용자의 기본 배송지 정보를 조회합니다. (없을 경우 null 반환)
-     *     * 브랜드별로 가장 높은 배송비를 한 번씩만 합산하여 계산합니다.
-     *     * 보유 포인트와 함께 사용 가능한 최소 단위(1,000P), 입력 단위(100P) 정보를 제공합니다.
-     *     * 현재 사용 가능한 결제 수단 목록과 활성화 여부를 제공합니다.
-     *     * '아지트 멤버십 할인'은 각 상품의 (정가 - 판매가) 총합으로 계산됩니다.
-     *     * 포인트 '모두 사용' 클릭 시 응답의 availablePoints 값을 활용하여 100P 단위로 가공하시면 됩니다.
-     */
-    get: operations['getCheckoutInfoFromCart'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 내 정보 조회 (마이페이지 상단 카드)
+         * @description 로그인한 사용자의 기본 프로필 정보(닉네임, 프로필 이미지, 포인트, 출석 횟수)를 조회합니다. <br>
+         */
+        get: operations["getMyInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 내 정보 조회 (마이페이지 상단 카드)
-     * @description 로그인한 사용자의 기본 프로필 정보(닉네임, 프로필 이미지, 포인트, 출석 횟수)를 조회합니다. <br>
-     */
-    get: operations['getMyInfo'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/schedules': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/schedules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 내 일정 목록 조회
+         * @description 현재 로그인한 사용자가 참여(신청) 중인 모든 크루의 일정 목록을 조회합니다. <br>
+         *     홈 탭에서 사용자가 앞으로 참여해야 할 일정들을 확인하는 데 사용됩니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 본인이 참여 신청을 완료한 일정만 반환됩니다.
+         *     * 취소(삭제)된 일정은 응답에서 제외됩니다.
+         *     * 오늘 현재 시간 이후의 일정만 반환됩니다. (지난 일정 제외)
+         *     * 모임 시간이 가장 가까운 순서대로 정렬됩니다.
+         */
+        get: operations["getMySchedules"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 내 일정 목록 조회
-     * @description 현재 로그인한 사용자가 참여(신청) 중인 모든 크루의 일정 목록을 조회합니다. <br>
-     *     홈 탭에서 사용자가 앞으로 참여해야 할 일정들을 확인하는 데 사용됩니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 본인이 참여 신청을 완료한 일정만 반환됩니다.
-     *     * 취소(삭제)된 일정은 응답에서 제외됩니다.
-     *     * 오늘 현재 시간 이후의 일정만 반환됩니다. (지난 일정 제외)
-     *     * 모임 시간이 가장 가까운 순서대로 정렬됩니다.
-     */
-    get: operations['getMySchedules'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/providers': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 연동된 소셜 로그인 조회
+         * @description 로그인한 사용자가 연동한 소셜 로그인 목록을 반환합니다. <br><br>
+         *
+         *     **[응답값]** <br>
+         *     * KAKAO: 카카오 연동 <br>
+         *     * APPLE: 애플 연동 <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 현재는 계정당 하나의 소셜 로그인만 지원합니다. <br>
+         *     * 추후 계정 연동 기능 도입 시 복수의 소셜 로그인이 반환될 수 있습니다.
+         */
+        get: operations["getLinkedProviders"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 연동된 소셜 로그인 조회
-     * @description 로그인한 사용자가 연동한 소셜 로그인 목록을 반환합니다. <br><br>
-     *
-     *     **[응답값]** <br>
-     *     * KAKAO: 카카오 연동 <br>
-     *     * APPLE: 애플 연동 <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 현재는 계정당 하나의 소셜 로그인만 지원합니다. <br>
-     *     * 추후 계정 연동 기능 도입 시 복수의 소셜 로그인이 반환될 수 있습니다.
-     */
-    get: operations['getLinkedProviders'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/crews': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/crews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 내 크루 목록 조회 (마이페이지)
+         * @description 로그인한 사용자가 가입(JOINED)하거나 승인 대기(REQUESTED) 중인 크루 목록을 조회합니다. <br>
+         *     최대 3개의 크루가 반환되며, 크루가 없으면 빈 배열([])을 반환합니다. <br><br>
+         *
+         *     **[memberStatus 값]** <br>
+         *     * JOINED: 정식 가입 상태. memberRole 이 함께 반환됩니다. <br>
+         *     * REQUESTED: 승인 대기 상태. memberRole 은 null 입니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * invitationCode: JOINED 상태일 때 값이 존재하며, 그 외의 경우(REQUESTED 등)에는 null로 내려갑니다.
+         */
+        get: operations["getMyCrews"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 내 크루 목록 조회 (마이페이지)
-     * @description 로그인한 사용자가 가입(JOINED)하거나 승인 대기(REQUESTED) 중인 크루 목록을 조회합니다. <br>
-     *     최대 3개의 크루가 반환되며, 크루가 없으면 빈 배열([])을 반환합니다. <br><br>
-     *
-     *     **[memberStatus 값]** <br>
-     *     * JOINED: 정식 가입 상태. memberRole 이 함께 반환됩니다. <br>
-     *     * REQUESTED: 승인 대기 상태. memberRole 은 null 입니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * invitationCode: JOINED 상태일 때 값이 존재하며, 그 외의 경우(REQUESTED 등)에는 null로 내려갑니다.
-     */
-    get: operations['getMyCrews'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/check-in-status': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/check-in-status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 오늘의 러닝 및 출석 현황 조회 (홈 위젯용)
+         * @description 홈 화면 최상단 위젯에 표시될 사용자의 실시간 러닝 및 출석 상태를 조회합니다. <br>
+         *     오늘 참여할 일정의 활성화 여부와 다음 일정까지의 남은 기간(D-Day) 정보를 포함합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 출석 가능 시간 (isAvailableTime): 일정 시작 1시간 전부터 1시간 후 사이인 경우 true를 반환합니다.
+         *     * 일정 시작 시점부터 최소 1시간, 혹은 일정 시작 후 최대 3시간까지 출석 완료 화면을 유지합니다.
+         *     * 하루에 여러 일정이 있을 때, 앞선 일정 시작 이후 1시간 동안은 다음 일정이 활성화되는 시간(1시간 전)이더라도 출석 완료를 유지합니다.
+         *     <br><br>
+         *
+         *     **[UI 설정 가이드]** <br>
+         *     * 출석하기 활성화: isCheckedIn == false && isAvailableTime == true && (GPS 거리 100m 이내) <br>
+         *     * 출석하기 비활성화: isCheckedIn == false && (isAvailableTime == false || GPS 거리 100m 밖) <br>
+         *     * 출석 완료: isCheckedIn == true <br>
+         *     * D-Day: hasScheduleToday == false 일 경우 daysLeft 필드 활용
+         */
+        get: operations["getCheckInStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 오늘의 러닝 및 출석 현황 조회 (홈 위젯용)
-     * @description 홈 화면 최상단 위젯에 표시될 사용자의 실시간 러닝 및 출석 상태를 조회합니다. <br>
-     *     오늘 참여할 일정의 활성화 여부와 다음 일정까지의 남은 기간(D-Day) 정보를 포함합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 출석 가능 시간 (isAvailableTime): 일정 시작 1시간 전부터 1시간 후 사이인 경우 true를 반환합니다.
-     *     * 일정 시작 시점부터 최소 1시간, 혹은 일정 시작 후 최대 3시간까지 출석 완료 화면을 유지합니다.
-     *     * 하루에 여러 일정이 있을 때, 앞선 일정 시작 이후 1시간 동안은 다음 일정이 활성화되는 시간(1시간 전)이더라도 출석 완료를 유지합니다.
-     *     <br><br>
-     *
-     *     **[UI 설정 가이드]** <br>
-     *     * 출석하기 활성화: isCheckedIn == false && isAvailableTime == true && (GPS 거리 100m 이내) <br>
-     *     * 출석하기 비활성화: isCheckedIn == false && (isAvailableTime == false || GPS 거리 100m 밖) <br>
-     *     * 출석 완료: isCheckedIn == true <br>
-     *     * D-Day: hasScheduleToday == false 일 경우 daysLeft 필드 활용
-     */
-    get: operations['getCheckInStatus'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/attendances': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/attendances": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 내 출석 로그 목록 조회
+         * @description 사용자의 월별 출석 횟수, 누적 획득 포인트 및 상세 활동 이력을 조회합니다. <br>
+         *
+         *     **[쿼리 파라미터]** <br>
+         *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 시간 기준의 월을 조회합니다.<br>
+         *     * crewId (선택): 특정 크루의 출석 이력만 필터링합니다. 미입력 시 전체 크루의 이력을 조회합니다.<br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 아직 모임 시간이 지나지 않았고 출석도 하지 않은 예정 일정은 리스트에 나타나지 않습니다. <br>
+         *     * 모임 시간이 이미 지난 일정(출석/결석 확정) 또는 모임 시간 전이라도 출석을 완료한 일정만 반환됩니다. <br><br>
+         */
+        get: operations["getMyAttendanceLogs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 내 출석 로그 목록 조회
-     * @description 사용자의 월별 출석 횟수, 누적 획득 포인트 및 상세 활동 이력을 조회합니다. <br>
-     *
-     *     **[쿼리 파라미터]** <br>
-     *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 시간 기준의 월을 조회합니다.<br>
-     *     * crewId (선택): 특정 크루의 출석 이력만 필터링합니다. 미입력 시 전체 크루의 이력을 조회합니다.<br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 아직 모임 시간이 지나지 않았고 출석도 하지 않은 예정 일정은 리스트에 나타나지 않습니다. <br>
-     *     * 모임 시간이 이미 지난 일정(출석/결석 확정) 또는 모임 시간 전이라도 출석을 완료한 일정만 반환됩니다. <br><br>
-     */
-    get: operations['getMyAttendanceLogs'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/members/me/attendances/calendar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/members/me/attendances/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 월간 내 출석 로그 목록 조회 (캘린더 표시용)
+         * @description 특정 월의 날짜별 출석 상태(정기런/번개런)를 조회합니다. 신청한 일정이 하나라도 존재하는 날짜만 조회됩니다. <br>
+         *     캘린더에서 각 날짜 하단에 상태 점을 표시하는 데 사용됩니다. <br><br>
+         *
+         *     **[쿼리 파라미터]** <br>
+         *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 시간 기준의 월을 조회합니다.<br>
+         *     * crewId (선택): 특정 크루의 출석 이력만 필터링합니다. 미입력 시 전체 크루의 이력을 조회합니다.<br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 아직 모임 시간이 지나지 않았고 출석도 하지 않은 예정 일정은 리스트에 나타나지 않습니다. <br>
+         *     * 모임 시간이 이미 지난 일정(출석/결석 확정) 또는 모임 시간 전이라도 출석을 완료한 일정만 반환됩니다. <br><br>
+         */
+        get: operations["getMyAttendancesForCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 월간 내 출석 로그 목록 조회 (캘린더 표시용)
-     * @description 특정 월의 날짜별 출석 상태(정기런/번개런)를 조회합니다. 신청한 일정이 하나라도 존재하는 날짜만 조회됩니다. <br>
-     *     캘린더에서 각 날짜 하단에 상태 점을 표시하는 데 사용됩니다. <br><br>
-     *
-     *     **[쿼리 파라미터]** <br>
-     *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 시간 기준의 월을 조회합니다.<br>
-     *     * crewId (선택): 특정 크루의 출석 이력만 필터링합니다. 미입력 시 전체 크루의 이력을 조회합니다.<br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 아직 모임 시간이 지나지 않았고 출석도 하지 않은 예정 일정은 리스트에 나타나지 않습니다. <br>
-     *     * 모임 시간이 이미 지난 일정(출석/결석 확정) 또는 모임 시간 전이라도 출석을 완료한 일정만 반환됩니다. <br><br>
-     */
-    get: operations['getMyAttendancesForCalendar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/locations/search': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/locations/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 장소 검색
+         * @description 네이버 지역 검색 API를 호출하여 입력한 키워드에 부합하는 장소 목록을 최대 5개 반환합니다. <br>
+         *     일정 등록 시 집합 장소를 검색하기 위한 용도로 사용됩니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 도로명 주소를 우선적으로 반환하며, 도로명 주소가 없을 경우 지번 주소를 반환합니다. <br>
+         */
+        get: operations["search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 장소 검색
-     * @description 네이버 지역 검색 API를 호출하여 입력한 키워드에 부합하는 장소 목록을 최대 5개 반환합니다. <br>
-     *     일정 등록 시 집합 장소를 검색하기 위한 용도로 사용됩니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 도로명 주소를 우선적으로 반환하며, 도로명 주소가 없을 경우 지번 주소를 반환합니다. <br>
-     */
-    get: operations['search'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/schedules/{scheduleId}/participants': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/schedules/{scheduleId}/participants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 크루 일정 참여자 명단 조회 (무한스크롤)
+         * @description 특정 일정에 참여 중인 전체 멤버 명단을 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루의 정회원(JOINED)만 조회 가능합니다. (NOT_A_CREW_MEMBER)
+         *     * 이미 취소(삭제)된 일정은 명단 조회가 불가능합니다. (ALREADY_CANCELLED_SCHEDULE)
+         *     * 탈퇴하거나 가입 정보가 유실된 회원은 명단에서 제외되어 반환됩니다.
+         *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
+         */
+        get: operations["getScheduleParticipants"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 크루 일정 참여자 명단 조회 (무한스크롤)
-     * @description 특정 일정에 참여 중인 전체 멤버 명단을 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루의 정회원(JOINED)만 조회 가능합니다. (NOT_A_CREW_MEMBER)
-     *     * 이미 취소(삭제)된 일정은 명단 조회가 불가능합니다. (ALREADY_CANCELLED_SCHEDULE)
-     *     * 탈퇴하거나 가입 정보가 유실된 회원은 명단에서 제외되어 반환됩니다.
-     *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
-     */
-    get: operations['getScheduleParticipants'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/schedules/calendar': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/schedules/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 월간/주간 크루 일정 목록 조회 (캘린더 표시용)
+         * @description 날짜별 일정 존재 여부(정기런/번개런)를 조회합니다. 일정이 하나라도 존재하는 날짜만 조회됩니다. <br>
+         *     캘린더에서 각 날짜 하단에 상태 점을 표시하는 데 사용됩니다. <br><br>
+         *
+         *     **[쿼리 파라미터]** <br>
+         *     * startDate / endDate (선택): 조회할 날짜 범위(yyyy-MM-dd)입니다. 두 값이 모두 있어야 동작합니다.<br>
+         *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 월을 기준으로 조회합니다. <br><br>
+         *
+         *     **[파라미터 우선순위]** <br>
+         *     startDate·endDate > yearMonth > 현재 월 <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루의 정회원(JOINED)만 조회가 가능합니다. (NOT_A_CREW_MEMBER)
+         *     * 취소(삭제)된 일정은 응답에서 제외됩니다.
+         */
+        get: operations["getMonthlySchedulesForCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 월간/주간 크루 일정 목록 조회 (캘린더 표시용)
-     * @description 날짜별 일정 존재 여부(정기런/번개런)를 조회합니다. 일정이 하나라도 존재하는 날짜만 조회됩니다. <br>
-     *     캘린더에서 각 날짜 하단에 상태 점을 표시하는 데 사용됩니다. <br><br>
-     *
-     *     **[쿼리 파라미터]** <br>
-     *     * startDate / endDate (선택): 조회할 날짜 범위(yyyy-MM-dd)입니다. 두 값이 모두 있어야 동작합니다.<br>
-     *     * yearMonth (선택): 조회할 연월(yyyy-MM)입니다. 미입력 시 현재 월을 기준으로 조회합니다. <br><br>
-     *
-     *     **[파라미터 우선순위]** <br>
-     *     startDate·endDate > yearMonth > 현재 월 <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루의 정회원(JOINED)만 조회가 가능합니다. (NOT_A_CREW_MEMBER)
-     *     * 취소(삭제)된 일정은 응답에서 제외됩니다.
-     */
-    get: operations['getMonthlySchedulesForCalendar'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/members': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 크루 멤버 목록 조회 (무한스크롤)
+         * @description 커서 기반 페이징을 사용하여 해당 크루에 가입되어 있는 모든 멤버의 목록을 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루에 가입된 멤버(JOINED 상태)만 이 API를 호출할 수 있습니다. (NOT_A_CREW_MEMBER)
+         *     * 리더가 목록 최상단으로 정렬되고, 그 외 멤버는 가입일이 최신인 순서대로 정렬됩니다.
+         *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
+         */
+        get: operations["getCrewMembers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 크루 멤버 목록 조회 (무한스크롤)
-     * @description 커서 기반 페이징을 사용하여 해당 크루에 가입되어 있는 모든 멤버의 목록을 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루에 가입된 멤버(JOINED 상태)만 이 API를 호출할 수 있습니다. (NOT_A_CREW_MEMBER)
-     *     * 리더가 목록 최상단으로 정렬되고, 그 외 멤버는 가입일이 최신인 순서대로 정렬됩니다.
-     *     * 무한 스크롤 방식: hasNext를 통해 다음 페이지 존재 여부를 확인하고, lastId를 다음 요청의 cursorId로 호출하면 됩니다.
-     */
-    get: operations['getCrewMembers'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/join-status': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/join-status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 가입 요청 상태 조회
+         * @description 특정 크루에 신청한 멤버(로그인한 사용자) 가입 요청이 어떤 상태인지 조회합니다. <br><br>
+         *
+         *     **[응답 상태값]** <br>
+         *     * REQUESTED: 승인 대기 중
+         *     * JOINED: 승인 완료
+         *     * REJECTED: 가입 거절
+         */
+        get: operations["getCrewJoinStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 가입 요청 상태 조회
-     * @description 특정 크루에 신청한 멤버(로그인한 사용자) 가입 요청이 어떤 상태인지 조회합니다. <br><br>
-     *
-     *     **[응답 상태값]** <br>
-     *     * REQUESTED: 승인 대기 중
-     *     * JOINED: 승인 완료
-     *     * REJECTED: 가입 거절
-     */
-    get: operations['getCrewJoinStatus'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/join-requests': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/join-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 가입 신청 목록 조회
+         * @description 크루 리더가 현재 승인 대기 중(REQUESTED)인 유저들의 목록을 조회합니다.
+         */
+        get: operations["getJoinRequests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 가입 신청 목록 조회
-     * @description 크루 리더가 현재 승인 대기 중(REQUESTED)인 유저들의 목록을 조회합니다.
-     */
-    get: operations['getJoinRequests'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/me': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 가입 완료한 크루 목록 조회
+         * @description 사용자가 가입 완료(JOINED) 상태인 크루 목록을 조회합니다. <br><br>
+         */
+        get: operations["getJoinedCrews"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 가입 완료한 크루 목록 조회
-     * @description 사용자가 가입 완료(JOINED) 상태인 크루 목록을 조회합니다. <br><br>
-     */
-    get: operations['getJoinedCrews'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/invitation/{invitationCode}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/invitation/{invitationCode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 초대 코드로 크루 정보 조회
+         * @description 입력한 6자리 초대 코드가 유효한지 확인하고, 해당 크루의 요약 정보를 반환합니다. <br>
+         *     사용자가 가입 신청을 하기 전, 크루 정보를 미리 확인할 때 사용합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 유효하지 않거나 만료된 초대 코드일 경우 INVALID_INVITATION_CODE 오류가 발생합니다.
+         */
+        get: operations["getCrewByInvitation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 초대 코드로 크루 정보 조회
-     * @description 입력한 6자리 초대 코드가 유효한지 확인하고, 해당 크루의 요약 정보를 반환합니다. <br>
-     *     사용자가 가입 신청을 하기 전, 크루 정보를 미리 확인할 때 사용합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 유효하지 않거나 만료된 초대 코드일 경우 INVALID_INVITATION_CODE 오류가 발생합니다.
-     */
-    get: operations['getCrewByInvitation'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/carts': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/carts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 장바구니 목록 조회
+         * @description 사용자의 장바구니에 담긴 상품 목록을 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * expectedShippingDate: 상품의 예상 출고 소요 시간을 기준으로 계산되며, 주말(토, 일)은 발송일에서 제외됩니다.
+         */
+        get: operations["getCarts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 장바구니 목록 조회
-     * @description 사용자의 장바구니에 담긴 상품 목록을 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * expectedShippingDate: 상품의 예상 출고 소요 시간을 기준으로 계산되며, 주말(토, 일)은 발송일에서 제외됩니다.
-     */
-    get: operations['getCarts'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/carts/count': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/carts/count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 장바구니 수량 조회
+         * @description 장바구니 아이콘에 표시될 아이템 종류 수를 조회합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 상품의 총 수량 합계가 아닌 장바구니에 담긴 '품목'의 개수를 반환합니다.
+         */
+        get: operations["getCartItemCount"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * 장바구니 수량 조회
-     * @description 장바구니 아이콘에 표시될 아이템 종류 수를 조회합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 상품의 총 수량 합계가 아닌 장바구니에 담긴 '품목'의 개수를 반환합니다.
-     */
-    get: operations['getCartItemCount'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 크루 해산
+         * @description 리더가 크루를 영구적으로 해산합니다. <br><br>
+         *
+         *     **[처리 내용]** <br>
+         *     * 미래 ACTIVE 일정이 모두 CANCELLED 처리됩니다. <br>
+         *     * 정회원(JOINED) 전원이 EXITED 처리됩니다. <br>
+         *     * 크루 인원 수가 0으로 초기화되고 상태가 DISSOLVED로 변경됩니다. <br>
+         *     * 과거 일정 및 출석 로그는 보존됩니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 크루 리더만 해산을 요청할 수 있습니다. (NOT_CREW_LEADER)
+         *     * 이미 해산된 크루는 재해산이 불가합니다. (CREW_ALREADY_DISSOLVED)
+         */
+        delete: operations["dissolveCrew"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /**
-     * 크루 해산
-     * @description 리더가 크루를 영구적으로 해산합니다. <br><br>
-     *
-     *     **[처리 내용]** <br>
-     *     * 미래 ACTIVE 일정이 모두 CANCELLED 처리됩니다. <br>
-     *     * 정회원(JOINED) 전원이 EXITED 처리됩니다. <br>
-     *     * 크루 인원 수가 0으로 초기화되고 상태가 DISSOLVED로 변경됩니다. <br>
-     *     * 과거 일정 및 출석 로그는 보존됩니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 크루 리더만 해산을 요청할 수 있습니다. (NOT_CREW_LEADER)
-     *     * 이미 해산된 크루는 재해산이 불가합니다. (CREW_ALREADY_DISSOLVED)
-     */
-    delete: operations['dissolveCrew'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/members/{targetMemberId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/members/{targetMemberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 크루 멤버 방출
+         * @description 크루 리더가 특정 멤버를 크루에서 방출(탈퇴 처리)합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 해당 크루의 리더(LEADER)만 이 API를 호출할 수 있습니다. (NOT_CREW_LEADER)
+         *     * 리더 본인은 스스로를 방출할 수 없습니다. (CANNOT_KICK_SELF)
+         *     * 가입 완료(JOINED) 상태인 멤버만 방출 가능합니다. (NOT_A_CREW_MEMBER)
+         *     * 방출 후 크루 가입 상태(CrewMemberStatus)가 EXPELLED로 변경됩니다.
+         */
+        delete: operations["deleteCrewMember"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /**
-     * 크루 멤버 방출
-     * @description 크루 리더가 특정 멤버를 크루에서 방출(탈퇴 처리)합니다. <br><br>
-     *
-     *     **[참고 사항]** <br>
-     *     * 해당 크루의 리더(LEADER)만 이 API를 호출할 수 있습니다. (NOT_CREW_LEADER)
-     *     * 리더 본인은 스스로를 방출할 수 없습니다. (CANNOT_KICK_SELF)
-     *     * 가입 완료(JOINED) 상태인 멤버만 방출 가능합니다. (NOT_A_CREW_MEMBER)
-     *     * 방출 후 크루 가입 상태(CrewMemberStatus)가 EXPELLED로 변경됩니다.
-     */
-    delete: operations['deleteCrewMember'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/members/me': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/members/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 크루 탈퇴
+         * @description 로그인한 사용자가 특정 크루에서 자진 탈퇴합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 크루 리더(LEADER)는 크루 탈퇴가 불가합니다. 리더 권한 위임 또는 크루 해산이 필요합니다. (CANNOT_WITHDRAW_AS_LEADER) <br>
+         *     * 탈퇴 후 24시간 이내에는 동일 크루 재가입 요청이 차단됩니다. (EXIT_REJOINING_COOLDOWN) <br>
+         *     * 가입 완료(JOINED) 상태인 경우에만 탈퇴가 가능합니다. (NOT_A_CREW_MEMBER)
+         */
+        delete: operations["exitCrew"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /**
-     * 크루 탈퇴
-     * @description 로그인한 사용자가 특정 크루에서 자진 탈퇴합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 크루 리더(LEADER)는 크루 탈퇴가 불가합니다. 리더 권한 위임 또는 크루 해산이 필요합니다. (CANNOT_WITHDRAW_AS_LEADER) <br>
-     *     * 탈퇴 후 24시간 이내에는 동일 크루 재가입 요청이 차단됩니다. (EXIT_REJOINING_COOLDOWN) <br>
-     *     * 가입 완료(JOINED) 상태인 경우에만 탈퇴가 가능합니다. (NOT_A_CREW_MEMBER)
-     */
-    delete: operations['exitCrew'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v1/crews/{crewId}/join-request': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/v1/crews/{crewId}/join-request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 크루 가입 신청 취소
+         * @description 승인 대기 중인 크루 가입 신청을 취소합니다. <br><br>
+         *
+         *     **[제약 사항]** <br>
+         *     * 가입 신청(REQUESTED) 상태인 경우에만 취소가 가능합니다. (JOIN_REQUEST_NOT_FOUND) <br>
+         *     * 취소 후 1시간 이내에는 동일 크루에 재신청이 불가합니다. (CANCEL_REJOINING_COOLDOWN)
+         */
+        delete: operations["cancelJoinRequest"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    /**
-     * 크루 가입 신청 취소
-     * @description 승인 대기 중인 크루 가입 신청을 취소합니다. <br><br>
-     *
-     *     **[제약 사항]** <br>
-     *     * 가입 신청(REQUESTED) 상태인 경우에만 취소가 가능합니다. (JOIN_REQUEST_NOT_FOUND) <br>
-     *     * 취소 후 1시간 이내에는 동일 크루에 재신청이 불가합니다. (CANCEL_REJOINING_COOLDOWN)
-     */
-    delete: operations['cancelJoinRequest'];
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    UpdateScheduleRequest: {
-      /** @description 런 타이틀 */
-      title: string;
-      /**
-       * @description 런 종류 (REGULAR: 정기런, LIGHTNING: 번개런)
-       * @enum {string}
-       */
-      runType: 'REGULAR' | 'LIGHTNING';
-      /**
-       * Format: date-time
-       * @description 일정 일시 (yyyy-MM-dd HH:mm:ss)
-       */
-      meetingAt: string;
-      /** @description 집합 장소 명칭 */
-      locationName: string;
-      /** @description 집합 장소 주소 */
-      address: string;
-      /** @description 세부 장소 (유저 직접 입력) */
-      detailedLocation: string;
-      /**
-       * Format: double
-       * @description 위도
-       */
-      latitude: number;
-      /**
-       * Format: double
-       * @description 경도
-       */
-      longitude: number;
-      /**
-       * Format: int32
-       * @description 목표 거리 (km)
-       */
-      distance?: number;
-      /**
-       * Format: int32
-       * @description 목표 페이스 (분/km)
-       */
-      pace?: number;
-      /**
-       * Format: int32
-       * @description 최대 모집 인원
-       */
-      maxParticipants?: number;
-      /** @description 상세 설명 */
-      description?: string;
-      /**
-       * @description 준비물 리스트 (각 최대 15자, 최대 5개)
-       * @example [
-       *       "러닝화",
-       *       "생수"
-       *     ]
-       */
-      supplies?: string[];
-    };
-    CommonResponseVoid: {
-      code?: string;
-      message?: string;
-      result?: Record<string, never>;
-    };
-    UpdateDeliveryAddressRequest: {
-      /** @description 수령인 */
-      recipientName: string;
-      /** @description 수령인 연락처 */
-      phoneNumber: string;
-      /** @description 우편번호 */
-      zipcode: string;
-      /** @description 기본 주소 */
-      baseAddress: string;
-      /** @description 상세 주소 */
-      detailAddress: string;
-      /** @description 기본 배송지 여부 */
-      isDefault: boolean;
-    };
-    CreateOrderRequest: {
-      /** @description 주문할 장바구니 아이템 ID 리스트(장바구니 구매용) */
-      cartItemIds?: number[];
-      /**
-       * Format: int64
-       * @description sku ID(바로 구매용)
-       */
-      skuId?: number;
-      /**
-       * Format: int32
-       * @description 구매할 상품 수량(바로 구매용)
-       */
-      quantity?: number;
-      /** @description 수령인 이름 */
-      recipientName: string;
-      /** @description 수령인 연락처 */
-      phoneNumber: string;
-      /** @description 기본 주소 */
-      baseAddress: string;
-      /** @description 상세 주소 */
-      detailAddress: string;
-      /** @description 배송 요청사항 */
-      shippingInstruction?: string;
-      /**
-       * Format: int64
-       * @description 사용할 포인트
-       */
-      usedPoints?: number;
-      /** @description 결제 수단 */
-      paymentMethod: string;
-      /** @description 입금자명(무통장입금) */
-      depositorName?: string;
-    };
-    CommonResponseCreateOrderResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CreateOrderResponse'];
-    };
-    CreateOrderResponse: {
-      /** @description 주문 번호 */
-      orderNumber?: string;
-      deliveryInfo?: components['schemas']['OrderDeliveryInfoResponse'];
-      depositAccountInfo?: components['schemas']['DepositAccountInfoResponse'];
-      summary?: components['schemas']['OrderSummaryResponse'];
-    };
-    /** @description 입금 계좌 정보 */
-    DepositAccountInfoResponse: {
-      /** @description 은행명 */
-      bankName?: string;
-      /** @description 계좌번호 */
-      accountNumber?: string;
-      /** @description 예금주 */
-      accountHolder?: string;
-      /** @description 입금자명 */
-      depositorName?: string;
-      /**
-       * Format: date-time
-       * @description 입금 기한
-       */
-      paymentDeadline?: string;
-    };
-    /** @description 배송지 정보 */
-    OrderDeliveryInfoResponse: {
-      /** @description 수령인 이름 */
-      recipientName?: string;
-      /** @description 수령인 연락처 */
-      phoneNumber?: string;
-      /** @description 기본 주소 */
-      baseAddress?: string;
-      /** @description 상세 주소 */
-      detailAddress?: string;
-    };
-    /** @description 최종 결제 금액 요약 */
-    OrderSummaryResponse: {
-      /**
-       * Format: int64
-       * @description 총 상품금액 (할인 전 합계)
-       */
-      totalProductPrice?: number;
-      /**
-       * Format: int64
-       * @description 아지트 멤버십 할인 금액
-       */
-      membershipDiscount?: number;
-      /**
-       * Format: int64
-       * @description 포인트 할인 금액
-       */
-      pointDiscount?: number;
-      /**
-       * Format: int64
-       * @description 배송비
-       */
-      shippingFee?: number;
-      /**
-       * Format: int64
-       * @description 총 결제 금액
-       */
-      totalPaymentPrice?: number;
-    };
-    AgreeToTermsRequest: {
-      /** @description 서비스 이용약관 동의 여부 (필수) */
-      serviceTermsAgreed: boolean;
-      /** @description 개인정보 처리방침 동의 여부 (필수) */
-      privacyPolicyAgreed: boolean;
-      /** @description 위치기반 서비스 이용약관 동의 여부 (필수) */
-      locationServiceAgreed: boolean;
-      /** @description 제3자 정보제공 동의 여부 (필수) */
-      thirdPartyInfoAgreed: boolean;
-      /** @description 마케팅 정보 수신 동의 여부 (선택) */
-      marketingTermsAgreed: boolean;
-      /** @description 알림 수신 동의 여부 (선택) */
-      notificationTermsAgreed?: boolean;
-    };
-    CheckInRequest: {
-      /**
-       * Format: double
-       * @description 위도
-       */
-      latitude: number;
-      /**
-       * Format: double
-       * @description 경도
-       */
-      longitude: number;
-    };
-    PresignedUrlRequest: {
-      /**
-       * @description 이미지 업로드 타입
-       * @enum {string}
-       */
-      type: 'MEMBER_PROFILE' | 'CREW_IMAGE' | 'STORE_REVIEW';
-      /** @description 업로드할 파일명 (확장자 포함) */
-      fileName: string;
-      /**
-       * Format: int64
-       * @description 크루 ID (type이 CREW_IMAGE일 때 필수)
-       */
-      crewId?: number;
-    };
-    CommonResponsePresignedUrlResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['PresignedUrlResponse'];
-    };
-    PresignedUrlResponse: {
-      presignedUrl?: string;
-      imageUrl?: string;
-    };
-    CreateCrewRequest: {
-      /** @description 크루 이름 */
-      name: string;
-      /** @description 크루 카테고리 */
-      category: string;
-      /** @description 크루 활동 지역 */
-      region: string;
-    };
-    CommonResponseCreateCrewResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CreateCrewResponse'];
-    };
-    CreateCrewResponse: {
-      /** @description 초대코드 */
-      invitationCode?: string;
-      /** @description 크루 이미지 url */
-      crewImageUrl?: string;
-    };
-    CreateScheduleRequest: {
-      /** @description 런 타이틀 */
-      title: string;
-      /**
-       * @description 런 종류 (REGULAR: 정기런, LIGHTNING: 번개런)
-       * @enum {string}
-       */
-      runType: 'REGULAR' | 'LIGHTNING';
-      /**
-       * Format: date-time
-       * @description 일정 일시 (yyyy-MM-dd HH:mm:ss)
-       */
-      meetingAt: string;
-      /** @description 집합 장소 명칭 */
-      locationName: string;
-      /** @description 집합 장소 주소 */
-      address: string;
-      /** @description 세부 장소 (유저 직접 입력) */
-      detailedLocation: string;
-      /**
-       * Format: double
-       * @description 위도
-       */
-      latitude: number;
-      /**
-       * Format: double
-       * @description 경도
-       */
-      longitude: number;
-      /**
-       * Format: int32
-       * @description 목표 거리 (km)
-       */
-      distance: number;
-      /**
-       * Format: int32
-       * @description 목표 페이스 (분/km)
-       */
-      pace: number;
-      /**
-       * Format: int32
-       * @description 최대 모집 인원
-       */
-      maxParticipants: number;
-      /** @description 상세 설명 */
-      description: string;
-      /**
-       * @description 준비물 리스트 (각 최대 15자, 최대 5개)
-       * @example [
-       *       "러닝화",
-       *       "생수"
-       *     ]
-       */
-      supplies?: string[];
-    };
-    CommonResponseInvitationCodeResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['InvitationCodeResponse'];
-    };
-    InvitationCodeResponse: {
-      /** @description 새로 발급된 초대 코드 */
-      invitationCode?: string;
-    };
-    JoinCrewRequest: {
-      /** @description 초대코드 */
-      invitationCode?: string;
-    };
-    AddToCartRequest: {
-      /**
-       * Format: int64
-       * @description 상품 ID
-       */
-      productId: number;
-      /**
-       * Format: int64
-       * @description 상품 옵션 조합(SKU) ID
-       */
-      productSkuId: number;
-      /**
-       * Format: int32
-       * @description 담을 수량
-       */
-      quantity?: number;
-    };
-    SocialLoginRequest: {
-      /** @description 소셜 서비스로부터 발급받은 인가 코드 */
-      authorizationCode?: string;
-      /** @description 카카오 네이티브 SDK로부터 발급받은 액세스 토큰 (네이티브 SDK) */
-      accessToken?: string;
-    };
-    CommonResponseSocialLoginResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['SocialLoginResponse'];
-    };
-    SocialLoginResponse: {
-      /** @description 액세스 토큰 */
-      accessToken?: string;
-      /**
-       * Format: int64
-       * @description 액세스 토큰 만료 시간 (초)
-       */
-      accessTokenExpiresIn?: number;
-      /**
-       * @description 회원 상태
-       * @enum {string}
-       */
-      status?: 'ACTIVE' | 'WITHDRAWN' | 'DELETED' | 'PENDING_TERMS';
-      /**
-       * Format: int64
-       * @description 가입한 크루 ID (없을 경우 null)
-       */
-      crewId?: number;
-      /** @description 필수 약관 재동의 필요 여부 */
-      needsTermsUpdate?: boolean;
-    };
-    AppleNotificationRequest: {
-      /** @description Apple에서 전달한 페이로드 */
-      payload: string;
-    };
-    RegisterDeliveryAddressRequest: {
-      /** @description 수령인 */
-      recipientName: string;
-      /** @description 수령인 연락처 */
-      phoneNumber: string;
-      /** @description 우편번호 */
-      zipcode: string;
-      /** @description 기본 주소 */
-      baseAddress: string;
-      /** @description 상세 주소 */
-      detailAddress: string;
-      /** @description 기본 배송지 여부 */
-      isDefault: boolean;
-    };
-    UpdateMemberProfileRequest: {
-      /** @description 변경할 닉네임 (최대 10자, 특수문자 불가) */
-      nickname: string;
-      /**
-       * @description 변경할 프로필 이미지 URL
-       * @example https://azitcrew.com/temp/profile/123/2026-04-22_550e8400.jpg
-       */
-      imageUrl: string;
-    };
-    UpdateCrewProfileRequest: {
-      /**
-       * @description 변경할 크루 이미지 URL
-       * @example https://images.azitcrew.com/temp/crew/1/2026-04-22_550e8400.jpg
-       */
-      imageUrl: string;
-      /** @description 크루 이름 */
-      name: string;
-      /** @description 크루 한줄 소개 (선택) */
-      description?: string;
-    };
-    UpdateCartItemQuantityRequest: {
-      /**
-       * Format: int32
-       * @description 담을 수량
-       */
-      quantity?: number;
-    };
-    CursorPageQuery: {
-      /** Format: int64 */
-      cursorId?: number;
-      /** Format: int32 */
-      size?: number;
-    };
-    CommonResponseSliceResponseProductListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['SliceResponseProductListResponse'];
-    };
-    /** @description 데이터 내용 */
-    ProductListResponse: {
-      /**
-       * Format: int64
-       * @description 상품 ID
-       */
-      id?: number;
-      /** @description 브랜드명 */
-      brandName?: string;
-      /** @description 상품명 */
-      productName?: string;
-      /**
-       * Format: int64
-       * @description 정가
-       */
-      basePrice?: number;
-      /**
-       * Format: int32
-       * @description 할인율
-       */
-      discountRate?: number;
-      /**
-       * Format: int64
-       * @description 할인된 가격
-       */
-      salePrice?: number;
-      /** @description 썸네일 이미지 url */
-      thumbnailImageUrl?: string;
-    };
-    SliceResponseProductListResponse: {
-      /** @description 데이터 내용 */
-      content?: components['schemas']['ProductListResponse'][];
-      /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
-      hasNext?: boolean;
-      /**
-       * Format: int64
-       * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
-       */
-      lastId?: number;
-    };
-    CommonResponseProductDetailResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['ProductDetailResponse'];
-    };
-    /** @description 옵션 그룹 목록 */
-    OptionGroupResponse: {
-      /**
-       * Format: int64
-       * @description 옵션 그룹 ID
-       */
-      id?: number;
-      /** @description 옵션 그룹 명칭 */
-      name?: string;
-      /** @description 그룹에 속한 옵션값 목록 */
-      values?: components['schemas']['OptionValueResponse'][];
-    };
-    /** @description 그룹에 속한 옵션값 목록 */
-    OptionValueResponse: {
-      /**
-       * Format: int64
-       * @description 옵션값 ID
-       */
-      id?: number;
-      /** @description 옵션값 명칭 */
-      value?: string;
-      /** @description 품절 여부 */
-      isSoldOut?: boolean;
-    };
-    ProductDetailResponse: {
-      /**
-       * Format: int64
-       * @description 상품 ID
-       */
-      id?: number;
-      /** @description 브랜드명 */
-      brandName?: string;
-      /** @description 상품명 */
-      productName?: string;
-      /**
-       * Format: int64
-       * @description 정가
-       */
-      basePrice?: number;
-      /**
-       * Format: int32
-       * @description 할인율(%)
-       */
-      discountRate?: number;
-      /**
-       * Format: int64
-       * @description 최종 판매가
-       */
-      salePrice?: number;
-      /**
-       * Format: int64
-       * @description 배송비
-       */
-      shippingFee?: number;
-      /**
-       * Format: date
-       * @description 예상 발송 시작일
-       */
-      expectedShippingDate?: string;
-      /** @description 환불 정책 */
-      refundPolicy?: string;
-      /** @description 상품 상세 설명 */
-      description?: string;
-      /** @description 상단 슬라이드 이미지 URL 리스트 */
-      slideImageUrls?: string[];
-      /** @description 하단 상세 설명 이미지 URL 리스트 */
-      detailImageUrls?: string[];
-      /** @description 옵션 그룹 목록 */
-      optionGroups?: components['schemas']['OptionGroupResponse'][];
-      /** @description 재고 및 옵션 조합 정보 (SKU) */
-      skus?: components['schemas']['SkuResponse'][];
-    };
-    /** @description 재고 및 옵션 조합 정보 (SKU) */
-    SkuResponse: {
-      /**
-       * Format: int64
-       * @description SKU ID
-       */
-      id?: number;
-      /**
-       * Format: int64
-       * @description 옵션 별 추가 금액
-       */
-      additionalPrice?: number;
-      /**
-       * Format: int32
-       * @description 재고 수량
-       */
-      stockQuantity?: number;
-      /** @description 매칭되는 옵션값 ID 리스트 (정렬된 순서) */
-      optionValueIds?: number[];
-      /** @description 품절 여부 */
-      isSoldOut?: boolean;
-    };
-    CommonResponseSliceResponseOrderListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['SliceResponseOrderListResponse'];
-    };
-    /** @description 주문 상품 목록 */
-    OrderItemResponse: {
-      /**
-       * Format: int64
-       * @description 카트 아이템 ID
-       */
-      id?: number;
-      /**
-       * Format: int64
-       * @description 상품 ID
-       */
-      productId?: number;
-      /**
-       * Format: int64
-       * @description sku ID
-       */
-      skuId?: number;
-      /** @description 구매 당시 브랜드명 */
-      brandName?: string;
-      /** @description 구매 당시 상품명 */
-      productName?: string;
-      /** @description 구매 당시 옵션 정보 */
-      optionDescription?: string;
-      /** @description 구매 당시 상품 대표 이미지 url */
-      productImageUrl?: string;
-      /**
-       * Format: int64
-       * @description 상품 정가
-       */
-      basePrice?: number;
-      /**
-       * Format: int64
-       * @description 상품 판매가
-       */
-      salePrice?: number;
-      /**
-       * Format: int64
-       * @description 총 판매가
-       */
-      totalSalePrice?: number;
-      /**
-       * Format: int32
-       * @description 구매 수량
-       */
-      quantity?: number;
-    };
-    /** @description 데이터 내용 */
-    OrderListResponse: {
-      /**
-       * Format: int64
-       * @description 주문 ID
-       */
-      id?: number;
-      /**
-       * Format: date-time
-       * @description 주문 날짜
-       */
-      orderDate?: string;
-      /** @description 주문 번호 */
-      orderNumber?: string;
-      /**
-       * @description 주문 상태
-       * @enum {string}
-       */
-      status?:
-        | 'PENDING'
-        | 'PAID'
-        | 'PREPARING'
-        | 'SHIPPING'
-        | 'DELIVERED'
-        | 'PURCHASE_CONFIRMED'
-        | 'CANCELLED'
-        | 'EXPIRED'
-        | 'PENDING_REFUNDED'
-        | 'REFUNDED';
-      /** @description 주문 상품 목록 */
-      items?: components['schemas']['OrderItemResponse'][];
-    };
-    SliceResponseOrderListResponse: {
-      /** @description 데이터 내용 */
-      content?: components['schemas']['OrderListResponse'][];
-      /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
-      hasNext?: boolean;
-      /**
-       * Format: int64
-       * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
-       */
-      lastId?: number;
-    };
-    CommonResponseOrderDetailResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['OrderDetailResponse'];
-    };
-    /** @description 배송지 정보 */
-    OrderDetailDeliveryInfoResponse: {
-      /** @description 수령인 이름 */
-      recipientName?: string;
-      /** @description 수령인 연락처 */
-      phoneNumber?: string;
-      /** @description 기본 주소 */
-      baseAddress?: string;
-      /** @description 상세 주소 */
-      detailAddress?: string;
-      /** @description 배송 요청사항 */
-      shippingInstruction?: string;
-    };
-    OrderDetailResponse: {
-      /**
-       * Format: int64
-       * @description 주문 ID
-       */
-      id?: number;
-      /**
-       * Format: date-time
-       * @description 주문 날짜
-       */
-      orderDate?: string;
-      /** @description 주문 번호 */
-      orderNumber?: string;
-      /**
-       * @description 주문 상태
-       * @enum {string}
-       */
-      status?:
-        | 'PENDING'
-        | 'PAID'
-        | 'PREPARING'
-        | 'SHIPPING'
-        | 'DELIVERED'
-        | 'PURCHASE_CONFIRMED'
-        | 'CANCELLED'
-        | 'EXPIRED'
-        | 'PENDING_REFUNDED'
-        | 'REFUNDED';
-      deliveryInfo?: components['schemas']['OrderDetailDeliveryInfoResponse'];
-      depositAccountInfo?: components['schemas']['DepositAccountInfoResponse'];
-      shippingInfo?: components['schemas']['ShippingResponse'];
-      /** @description 주문 상품 목록 */
-      items?: components['schemas']['OrderItemResponse'][];
-      summary?: components['schemas']['OrderSummaryResponse'];
-    };
-    /** @description 배송 정보 */
-    ShippingResponse: {
-      /** @description 택배사 (배송 전일 경우 null) */
-      courier?: string;
-      /** @description 운송장 번호 (배송 전일 경우 null) */
-      trackingNumber?: string;
-    };
-    /** @description 주문할 상품 목록 */
-    CheckoutItemDetailResponse: {
-      /**
-       * Format: int64
-       * @description 상품 ID
-       */
-      productId?: number;
-      /**
-       * Format: int64
-       * @description sku ID
-       */
-      skuId?: number;
-      /** @description 브랜드명 */
-      brandName?: string;
-      /** @description 상품명 */
-      productName?: string;
-      /** @description 선택 옵션 정보 */
-      optionDescription?: string;
-      /** @description 상품 대표 이미지 URL */
-      productImageUrl?: string;
-      /**
-       * Format: int64
-       * @description 상품 정가
-       */
-      basePrice?: number;
-      /**
-       * Format: int64
-       * @description 상품 판매가
-       */
-      salePrice?: number;
-      /**
-       * Format: int32
-       * @description 장바구니에 담은 수량
-       */
-      quantity?: number;
-      /**
-       * Format: int64
-       * @description 총 정가
-       */
-      totalBasePrice?: number;
-      /**
-       * Format: int64
-       * @description 총 판매가
-       */
-      totalSalePrice?: number;
-    };
-    CommonResponseOrderCheckoutResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['OrderCheckoutResponse'];
-    };
-    /** @description 배송지 정보 (기본 배송지 우선, 없으면 null) */
-    DeliveryAddressResponse: {
-      /**
-       * Format: int64
-       * @description 배송지 ID
-       */
-      id?: number;
-      /** @description 수령인 이름 */
-      recipientName?: string;
-      /** @description 수령인 연락처 */
-      phoneNumber?: string;
-      /** @description 우편번호 */
-      zipcode?: string;
-      /** @description 기본 주소 */
-      baseAddress?: string;
-      /** @description 상세 주소 */
-      detailAddress?: string;
-      /** @description 기본 배송지 여부 */
-      isDefault?: boolean;
-    };
-    OrderCheckoutResponse: {
-      deliveryInfo?: components['schemas']['DeliveryAddressResponse'];
-      /** @description 주문할 상품 목록 */
-      items?: components['schemas']['CheckoutItemDetailResponse'][];
-      depositAccountInfo?: components['schemas']['DepositAccountInfoResponse'];
-      pointInfo?: components['schemas']['PointInfoResponse'];
-      /** @description 사용 가능한 결제 수단 목록 */
-      paymentMethods?: components['schemas']['PaymentMethodResponse'][];
-      summary?: components['schemas']['OrderSummaryResponse'];
-    };
-    /** @description 사용 가능한 결제 수단 목록 */
-    PaymentMethodResponse: {
-      /** @description 결제 수단 코드 */
-      code?: string;
-      /** @description 결제 수단 설명 */
-      description?: string;
-      /** @description 활성화 여부 */
-      isEnabled?: boolean;
-    };
-    /** @description 포인트 정보 */
-    PointInfoResponse: {
-      /**
-       * Format: int64
-       * @description 보유 포인트
-       */
-      availablePoints?: number;
-      /**
-       * Format: int64
-       * @description 최소 사용 가능 포인트
-       */
-      minUsePoints?: number;
-      /**
-       * Format: int64
-       * @description 포인트 사용 단위
-       */
-      pointUnit?: number;
-    };
-    CommonResponseMyInfoResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['MyInfoResponse'];
-    };
-    MyInfoResponse: {
-      /**
-       * Format: int64
-       * @description 사용자 ID
-       */
-      id?: number;
-      /** @description 닉네임 */
-      nickname?: string;
-      /** @description 프로필 이미지 URL */
-      profileImageUrl?: string;
-      /**
-       * Format: int64
-       * @description 포인트
-       */
-      totalPoints?: number;
-    };
-    CommonResponseListCrewScheduleListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewScheduleListResponse'][];
-    };
-    CrewScheduleListResponse: {
-      /**
-       * Format: int64
-       * @description 일정 ID
-       */
-      scheduleId?: number;
-      /** @description 일정 제목 */
-      title?: string;
-      /**
-       * @description 러닝 타입
-       * @enum {string}
-       */
-      runType?: 'REGULAR' | 'LIGHTNING';
-      /**
-       * Format: date-time
-       * @description 모임 시간
-       */
-      meetingAt?: string;
-      /** @description 집합 장소명 */
-      placeName?: string;
-      /**
-       * Format: int32
-       * @description 목표 거리 (km)
-       */
-      distance?: number;
-      /**
-       * Format: int32
-       * @description 목표 페이스
-       */
-      pace?: number;
-      /**
-       * Format: int32
-       * @description 최대 인원
-       */
-      maxParticipants?: number;
-      /**
-       * Format: int32
-       * @description 현재 참여 인원
-       */
-      currentParticipants?: number;
-      /** @description 내가 생성한 일정인지 여부 */
-      isMine?: boolean;
-      /** @description 내가 참여 중인 일정인지 여부 */
-      isParticipating?: boolean;
-      /**
-       * Format: date-time
-       * @description 생성 시간
-       */
-      createdAt?: string;
-      /**
-       * @description 일정 상태
-       * @enum {string}
-       */
-      status?: 'ACTIVE' | 'CANCELLED';
-    };
-    CommonResponseLinkedProviderResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['LinkedProviderResponse'];
-    };
-    LinkedProviderResponse: {
-      /** @description 연동된 소셜 로그인 목록 */
-      providers?: ('KAKAO' | 'APPLE')[];
-    };
-    CommonResponseListMyCrewResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['MyCrewResponse'][];
-    };
-    MyCrewResponse: {
-      /**
-       * Format: int64
-       * @description 크루 ID
-       */
-      crewId?: number;
-      /** @description 크루 이름 */
-      crewName?: string;
-      /** @description 크루 이미지 URL */
-      crewImageUrl?: string;
-      /**
-       * @description 크루 내 역할
-       * @enum {string}
-       */
-      memberRole?: 'LEADER' | 'MEMBER';
-      /**
-       * @description 크루 가입 상태
-       * @enum {string}
-       */
-      memberStatus?:
-        | 'REQUESTED'
-        | 'JOINED'
-        | 'REJECTED'
-        | 'EXITED'
-        | 'EXPELLED'
-        | 'CANCELLED';
-      /** @description 크루 초대 코드 */
-      invitationCode?: string;
-    };
-    CheckInStatusResponse: {
-      /** @description 오늘 참여할 일정이 있는지 여부 */
-      hasScheduleToday?: boolean;
-      todayScheduleInfo?: components['schemas']['TodayScheduleResponse'];
-      nextScheduleInfo?: components['schemas']['NextScheduleResponse'];
-    };
-    CommonResponseCheckInStatusResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CheckInStatusResponse'];
-    };
-    /** @description 다음 일정 정보 */
-    NextScheduleResponse: {
-      /** @description 다음 일정 제목 */
-      title?: string;
-      /**
-       * Format: int64
-       * @description 다음 일정까지 남은 일수
-       */
-      daysLeft?: number;
-    };
-    /** @description 오늘의 일정 정보 */
-    TodayScheduleResponse: {
-      /**
-       * Format: int64
-       * @description 일정 ID
-       */
-      scheduleId?: number;
-      /** @description 일정 제목 */
-      title?: string;
-      /**
-       * @description 러닝 타입
-       * @enum {string}
-       */
-      runType?: 'REGULAR' | 'LIGHTNING';
-      /**
-       * Format: double
-       * @description 집합 장소 위도
-       */
-      latitude?: number;
-      /**
-       * Format: double
-       * @description 집합 장소 경도
-       */
-      longitude?: number;
-      /** @description 출석 완료 여부 */
-      isCheckedIn?: boolean;
-      /**
-       * Format: date-time
-       * @description 출석 완료 시간
-       */
-      checkedInAt?: string;
-      /** @description 출석 가능 시간 여부 (시작 1시간 전~후) */
-      isAvailableTime?: boolean;
-    };
-    CommonResponseMyAttendanceLogResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['MyAttendanceLogResponse'];
-    };
-    /** @description 일자별 활동 상세 리스트 */
-    DailyAttendanceLog: {
-      /**
-       * Format: int64
-       * @description 일정 ID
-       */
-      scheduleId?: number;
-      /** @description 크루명 */
-      crewName?: string;
-      /** @description 일정 제목 */
-      title?: string;
-      /**
-       * @description 러닝 타입
-       * @enum {string}
-       */
-      runType?: 'REGULAR' | 'LIGHTNING';
-      /**
-       * Format: date-time
-       * @description 모임 시간
-       */
-      meetingAt?: string;
-      /** @description 집합 장소명 */
-      placeName?: string;
-      /**
-       * @description 출석 상태
-       * @enum {string}
-       */
-      status?: 'ATTENDED' | 'ABSENT';
-      /**
-       * Format: int32
-       * @description 최대 인원
-       */
-      maxParticipants?: number;
-      /**
-       * Format: int32
-       * @description 현재 참여 인원
-       */
-      currentParticipants?: number;
-    };
-    MyAttendanceLogResponse: {
-      /**
-       * Format: int32
-       * @description 이번 달 총 출석 횟수
-       */
-      totalAttendanceCount?: number;
-      /**
-       * Format: int64
-       * @description 이번 달 획득한 누적 포인트
-       */
-      totalPoints?: number;
-      /** @description 일자별 활동 상세 리스트 */
-      attendanceLogs?: components['schemas']['DailyAttendanceLog'][];
-    };
-    CommonResponseListMyAttendanceMonthlyListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['MyAttendanceMonthlyListResponse'][];
-    };
-    MyAttendanceMonthlyListResponse: {
-      /**
-       * Format: date
-       * @description 날짜
-       */
-      date?: string;
-      /** @description 정기런 존재 여부 */
-      hasRegular?: boolean;
-      /** @description 번개런 존재 여부 */
-      hasLightning?: boolean;
-    };
-    CommonResponseListLocationSearchResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['LocationSearchResponse'][];
-    };
-    LocationSearchResponse: {
-      /** @description 장소 명칭 */
-      placeName?: string;
-      /** @description 카테고리 */
-      category?: string;
-      /** @description 주소 */
-      address?: string;
-      /**
-       * Format: double
-       * @description 위도
-       */
-      latitude?: number;
-      /**
-       * Format: double
-       * @description 경도
-       */
-      longitude?: number;
-    };
-    CommonResponseCrewScheduleDetailResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewScheduleDetailResponse'];
-    };
-    CrewScheduleDetailResponse: {
-      /**
-       * Format: int64
-       * @description 일정 ID
-       */
-      scheduleId?: number;
-      /** @description 일정 제목 */
-      title?: string;
-      /**
-       * @description 러닝 타입
-       * @enum {string}
-       */
-      runType?: 'REGULAR' | 'LIGHTNING';
-      /**
-       * Format: date-time
-       * @description 모임 시간
-       */
-      meetingAt?: string;
-      locationInfo?: components['schemas']['LocationInfoResponse'];
-      /** @description 일정 설명 */
-      description?: string;
-      /**
-       * Format: int32
-       * @description 목표 거리 (km)
-       */
-      distance?: number;
-      /**
-       * Format: int32
-       * @description 목표 페이스
-       */
-      pace?: number;
-      /**
-       * Format: int32
-       * @description 최대 인원
-       */
-      maxParticipants?: number;
-      /**
-       * Format: int32
-       * @description 현재 참여 인원
-       */
-      currentParticipants?: number;
-      /** @description 준비물 리스트 */
-      supplies?: string[];
-      /**
-       * Format: int64
-       * @description 생성자 ID
-       */
-      creatorId?: number;
-      /** @description 생성자 닉네임 */
-      creatorNickname?: string;
-      /** @description 생성자 프로필 이미지 */
-      creatorProfileImageUrl?: string;
-      /**
-       * @description 생성자 크루 내 역할
-       * @enum {string}
-       */
-      creatorRole?: 'LEADER' | 'MEMBER';
-      /** @description 내가 생성한 일정인지 여부 */
-      isMine?: boolean;
-      /** @description 내가 참여 중인 일정인지 여부 */
-      isParticipating?: boolean;
-      /** @description 출석 완료 여부 */
-      isCheckedIn?: boolean;
-      /** @description 수정 및 삭제 가능 여부 */
-      isModifiable?: boolean;
-      /** @description 참여 및 참여 취소 가능 여부 */
-      isParticipationModifiable?: boolean;
-      /** @description 참여 멤버 미리보기 리스트(최대 10명) */
-      participants?: components['schemas']['ParticipantResponse'][];
-      /** @description 참여자 명단이 더 있는지 여부 (10명 초과 시 true) */
-      hasMoreParticipants?: boolean;
-      /**
-       * Format: date-time
-       * @description 생성 시간
-       */
-      createdAt?: string;
-      /**
-       * @description 일정 상태
-       * @enum {string}
-       */
-      status?: 'ACTIVE' | 'CANCELLED';
-    };
-    /** @description 장소 정보 */
-    LocationInfoResponse: {
-      /** @description 집합 장소명 */
-      placeName?: string;
-      /** @description 주소 */
-      address?: string;
-      /** @description 모이는 지점 */
-      meetingSpot?: string;
-      /**
-       * Format: double
-       * @description 위도
-       */
-      latitude?: number;
-      /**
-       * Format: double
-       * @description 경도
-       */
-      longitude?: number;
-    };
-    /** @description 참여 멤버 미리보기 리스트(최대 10명) */
-    ParticipantResponse: {
-      /**
-       * Format: int64
-       * @description 멤버 ID
-       */
-      memberId?: number;
-      /** @description 닉네임 */
-      nickname?: string;
-      /** @description 프로필 이미지 URL */
-      profileImageUrl?: string;
-      /**
-       * @description 크루 내 역할
-       * @enum {string}
-       */
-      role?: 'LEADER' | 'MEMBER';
-      /** @description 일정 생성자 여부 */
-      isCreator?: boolean;
-      /**
-       * Format: date-time
-       * @description 신청 시간
-       */
-      participatedAt?: string;
-    };
-    CommonResponseSliceResponseParticipantResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['SliceResponseParticipantResponse'];
-    };
-    SliceResponseParticipantResponse: {
-      /** @description 데이터 내용 */
-      content?: components['schemas']['ParticipantResponse'][];
-      /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
-      hasNext?: boolean;
-      /**
-       * Format: int64
-       * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
-       */
-      lastId?: number;
-    };
-    CommonResponseListCrewScheduleMonthlyListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewScheduleMonthlyListResponse'][];
-    };
-    CrewScheduleMonthlyListResponse: {
-      /**
-       * Format: date
-       * @description 날짜
-       */
-      date?: string;
-      /** @description 정기런 존재 여부 */
-      hasRegular?: boolean;
-      /** @description 번개런 존재 여부 */
-      hasLightning?: boolean;
-    };
-    CommonResponseCrewMemberListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewMemberListResponse'];
-    };
-    /** @description 멤버 목록 */
-    CrewMemberDetailResponse: {
-      /**
-       * Format: int64
-       * @description 크루 멤버 ID
-       */
-      id?: number;
-      /**
-       * Format: int64
-       * @description 멤버 ID
-       */
-      memberId?: number;
-      /** @description 닉네임 */
-      nickname?: string;
-      /** @description 프로필 이미지 URL */
-      profileImageUrl?: string;
-      /**
-       * @description 크루 내 역할
-       * @enum {string}
-       */
-      role?: 'LEADER' | 'MEMBER';
-      /**
-       * Format: date-time
-       * @description 가입일
-       */
-      joinedDate?: string;
-    };
-    CrewMemberListResponse: {
-      /**
-       * Format: int64
-       * @description 전체 멤버 수
-       */
-      totalCount?: number;
-      /** @description 멤버 목록 */
-      content?: components['schemas']['CrewMemberDetailResponse'][];
-      /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
-      hasNext?: boolean;
-      /**
-       * Format: int64
-       * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
-       */
-      lastId?: number;
-    };
-    CommonResponseCrewJoinStatusResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewJoinStatusResponse'];
-    };
-    CrewJoinStatusResponse: {
-      /**
-       * Format: int64
-       * @description 크루 ID
-       */
-      crewId?: number;
-      /** @description 크루 이름 */
-      name?: string;
-      /** @description 크루 이미지 url */
-      crewImageUrl?: string;
-      /**
-       * @description 멤버 상태
-       * @enum {string}
-       */
-      status?:
-        | 'REQUESTED'
-        | 'JOINED'
-        | 'REJECTED'
-        | 'EXITED'
-        | 'EXPELLED'
-        | 'CANCELLED';
-    };
-    CommonResponseListJoinRequestMemberResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['JoinRequestMemberResponse'][];
-    };
-    JoinRequestMemberResponse: {
-      /**
-       * Format: int64
-       * @description 멤버 ID
-       */
-      memberId?: number;
-      /** @description 닉네임 */
-      nickname?: string;
-      /** @description 프로필 이미지 URL */
-      profileImageUrl?: string;
-      /**
-       * Format: date-time
-       * @description 가입 신청 일시
-       */
-      requestedAt?: string;
-    };
-    CommonResponseCrewInfoResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewInfoResponse'];
-    };
-    CrewInfoResponse: {
-      /** @description 크루 이미지 URL */
-      crewImageUrl?: string;
-      /** @description 크루 이름 */
-      name?: string;
-      /** @description 크루 한줄 소개 */
-      description?: string;
-    };
-    CommonResponseListJoinedCrewResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['JoinedCrewResponse'][];
-    };
-    JoinedCrewResponse: {
-      /**
-       * Format: int64
-       * @description 크루 ID
-       */
-      crewId?: number;
-      /** @description 크루명 */
-      name?: string;
-      /** @description 크루 이미지 URL */
-      imageUrl?: string;
-      /** @description 크루 한줄 소개 */
-      description?: string;
-    };
-    CommonResponseCrewInvitationResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CrewInvitationResponse'];
-    };
-    CrewInvitationResponse: {
-      /**
-       * Format: int64
-       * @description 크루 ID
-       */
-      crewId?: number;
-      /** @description 크루 이름 */
-      name?: string;
-      /** @description 크루 카테고리 */
-      category?: string;
-      /**
-       * Format: int64
-       * @description 크루에 가입되어 있는 멤버 수
-       */
-      memberCount?: number;
-      /** @description 크루 이미지 url */
-      crewImageUrl?: string;
-      /** @description 크루 소개 */
-      description?: string;
-    };
-    CartItemListResponse: {
-      /**
-       * Format: int64
-       * @description 장바구니 항목 ID
-       */
-      id?: number;
-      /**
-       * Format: int64
-       * @description 브랜드 ID
-       */
-      brandId?: number;
-      /** @description 브랜드명 */
-      brandName?: string;
-      /**
-       * Format: int64
-       * @description 상품 ID
-       */
-      productId?: number;
-      /** @description 상품명 */
-      productName?: string;
-      /**
-       * Format: date
-       * @description 예상 발송 시작일
-       */
-      expectedShippingDate?: string;
-      /**
-       * Format: int64
-       * @description 상품 sku ID
-       */
-      productSkuId?: number;
-      /** @description 선택 옵션 정보 */
-      optionDescription?: string;
-      /** @description 상품 대표 이미지 URL */
-      productImageUrl?: string;
-      /**
-       * Format: int64
-       * @description 상품 정가
-       */
-      basePrice?: number;
-      /**
-       * Format: int64
-       * @description 상품 판매가
-       */
-      salePrice?: number;
-      /**
-       * Format: int32
-       * @description 장바구니에 담은 수량
-       */
-      quantity?: number;
-      /** @description 품절 여부 */
-      isOutOfStock?: boolean;
-      /**
-       * Format: int64
-       * @description 배송비
-       */
-      shippingFee?: number;
-    };
-    CommonResponseListCartItemListResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CartItemListResponse'][];
-    };
-    CartItemCountResponse: {
-      /**
-       * Format: int64
-       * @description 장바구니 아이템 종류 수
-       */
-      count?: number;
-    };
-    CommonResponseCartItemCountResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['CartItemCountResponse'];
-    };
-    CommonResponseListDeliveryAddressResponse: {
-      code?: string;
-      message?: string;
-      result?: components['schemas']['DeliveryAddressResponse'][];
-    };
-    CartItemDeleteRequest: {
-      /** @description 삭제할 장바구니 ID 리스트 */
-      cartItemIds: number[];
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    schemas: {
+        UpdateScheduleRequest: {
+            /** @description 런 타이틀 */
+            title: string;
+            /**
+             * @description 런 종류 (REGULAR: 정기런, LIGHTNING: 번개런)
+             * @enum {string}
+             */
+            runType: "REGULAR" | "LIGHTNING";
+            /**
+             * Format: date-time
+             * @description 일정 일시 (yyyy-MM-dd HH:mm:ss)
+             */
+            meetingAt: string;
+            /** @description 집합 장소 명칭 */
+            locationName: string;
+            /** @description 집합 장소 주소 */
+            address: string;
+            /** @description 세부 장소 (유저 직접 입력) */
+            detailedLocation: string;
+            /**
+             * Format: double
+             * @description 위도
+             */
+            latitude: number;
+            /**
+             * Format: double
+             * @description 경도
+             */
+            longitude: number;
+            /**
+             * Format: int32
+             * @description 목표 거리 (km)
+             */
+            distance?: number;
+            /**
+             * Format: int32
+             * @description 목표 페이스 (분/km)
+             */
+            pace?: number;
+            /**
+             * Format: int32
+             * @description 최대 모집 인원
+             */
+            maxParticipants?: number;
+            /** @description 상세 설명 */
+            description?: string;
+            /**
+             * @description 준비물 리스트 (각 최대 15자, 최대 5개)
+             * @example [
+             *       "러닝화",
+             *       "생수"
+             *     ]
+             */
+            supplies?: string[];
+        };
+        CommonResponseVoid: {
+            code?: string;
+            message?: string;
+            result?: Record<string, never>;
+        };
+        UpdateDeliveryAddressRequest: {
+            /** @description 수령인 */
+            recipientName: string;
+            /** @description 수령인 연락처 */
+            phoneNumber: string;
+            /** @description 우편번호 */
+            zipcode: string;
+            /** @description 기본 주소 */
+            baseAddress: string;
+            /** @description 상세 주소 */
+            detailAddress: string;
+            /** @description 기본 배송지 여부 */
+            isDefault: boolean;
+        };
+        CreateOrderRequest: {
+            /** @description 주문할 장바구니 아이템 ID 리스트(장바구니 구매용) */
+            cartItemIds?: number[];
+            /**
+             * Format: int64
+             * @description sku ID(바로 구매용)
+             */
+            skuId?: number;
+            /**
+             * Format: int32
+             * @description 구매할 상품 수량(바로 구매용)
+             */
+            quantity?: number;
+            /** @description 수령인 이름 */
+            recipientName: string;
+            /** @description 수령인 연락처 */
+            phoneNumber: string;
+            /** @description 기본 주소 */
+            baseAddress: string;
+            /** @description 상세 주소 */
+            detailAddress: string;
+            /** @description 배송 요청사항 */
+            shippingInstruction?: string;
+            /**
+             * Format: int64
+             * @description 사용할 포인트
+             */
+            usedPoints?: number;
+            /** @description 결제 수단 */
+            paymentMethod: string;
+            /** @description 입금자명(무통장입금) */
+            depositorName?: string;
+        };
+        CommonResponseCreateOrderResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CreateOrderResponse"];
+        };
+        CreateOrderResponse: {
+            /** @description 주문 번호 */
+            orderNumber?: string;
+            deliveryInfo?: components["schemas"]["OrderDeliveryInfoResponse"];
+            depositAccountInfo?: components["schemas"]["DepositAccountInfoResponse"];
+            summary?: components["schemas"]["OrderSummaryResponse"];
+        };
+        /** @description 입금 계좌 정보 */
+        DepositAccountInfoResponse: {
+            /** @description 은행명 */
+            bankName?: string;
+            /** @description 계좌번호 */
+            accountNumber?: string;
+            /** @description 예금주 */
+            accountHolder?: string;
+            /** @description 입금자명 */
+            depositorName?: string;
+            /**
+             * Format: date-time
+             * @description 입금 기한
+             */
+            paymentDeadline?: string;
+        };
+        /** @description 배송지 정보 */
+        OrderDeliveryInfoResponse: {
+            /** @description 수령인 이름 */
+            recipientName?: string;
+            /** @description 수령인 연락처 */
+            phoneNumber?: string;
+            /** @description 기본 주소 */
+            baseAddress?: string;
+            /** @description 상세 주소 */
+            detailAddress?: string;
+        };
+        /** @description 최종 결제 금액 요약 */
+        OrderSummaryResponse: {
+            /**
+             * Format: int64
+             * @description 총 상품금액 (할인 전 합계)
+             */
+            totalProductPrice?: number;
+            /**
+             * Format: int64
+             * @description 아지트 멤버십 할인 금액
+             */
+            membershipDiscount?: number;
+            /**
+             * Format: int64
+             * @description 포인트 할인 금액
+             */
+            pointDiscount?: number;
+            /**
+             * Format: int64
+             * @description 배송비
+             */
+            shippingFee?: number;
+            /**
+             * Format: int64
+             * @description 총 결제 금액
+             */
+            totalPaymentPrice?: number;
+        };
+        AgreeToTermsRequest: {
+            /** @description 서비스 이용약관 동의 여부 (필수) */
+            serviceTermsAgreed: boolean;
+            /** @description 개인정보 처리방침 동의 여부 (필수) */
+            privacyPolicyAgreed: boolean;
+            /** @description 위치기반 서비스 이용약관 동의 여부 (필수) */
+            locationServiceAgreed: boolean;
+            /** @description 제3자 정보제공 동의 여부 (필수) */
+            thirdPartyInfoAgreed: boolean;
+            /** @description 마케팅 정보 수신 동의 여부 (선택) */
+            marketingTermsAgreed: boolean;
+            /** @description 알림 수신 동의 여부 (선택) */
+            notificationTermsAgreed?: boolean;
+        };
+        CheckInRequest: {
+            /**
+             * Format: double
+             * @description 위도
+             */
+            latitude: number;
+            /**
+             * Format: double
+             * @description 경도
+             */
+            longitude: number;
+        };
+        PresignedUrlRequest: {
+            /**
+             * @description 이미지 업로드 타입
+             * @enum {string}
+             */
+            type: "MEMBER_PROFILE" | "CREW_IMAGE" | "STORE_REVIEW";
+            /** @description 업로드할 파일명 (확장자 포함) */
+            fileName: string;
+            /**
+             * Format: int64
+             * @description 크루 ID (type이 CREW_IMAGE일 때 필수)
+             */
+            crewId?: number;
+        };
+        CommonResponsePresignedUrlResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["PresignedUrlResponse"];
+        };
+        PresignedUrlResponse: {
+            presignedUrl?: string;
+            imageUrl?: string;
+        };
+        CreateCrewRequest: {
+            /** @description 크루 이름 */
+            name: string;
+            /** @description 크루 카테고리 */
+            category: string;
+            /** @description 크루 활동 지역 */
+            region: string;
+        };
+        CommonResponseCreateCrewResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CreateCrewResponse"];
+        };
+        CreateCrewResponse: {
+            /** @description 초대코드 */
+            invitationCode?: string;
+            /** @description 크루 이미지 url */
+            crewImageUrl?: string;
+        };
+        CreateScheduleRequest: {
+            /** @description 런 타이틀 */
+            title: string;
+            /**
+             * @description 런 종류 (REGULAR: 정기런, LIGHTNING: 번개런)
+             * @enum {string}
+             */
+            runType: "REGULAR" | "LIGHTNING";
+            /**
+             * Format: date-time
+             * @description 일정 일시 (yyyy-MM-dd HH:mm:ss)
+             */
+            meetingAt: string;
+            /** @description 집합 장소 명칭 */
+            locationName: string;
+            /** @description 집합 장소 주소 */
+            address: string;
+            /** @description 세부 장소 (유저 직접 입력) */
+            detailedLocation: string;
+            /**
+             * Format: double
+             * @description 위도
+             */
+            latitude: number;
+            /**
+             * Format: double
+             * @description 경도
+             */
+            longitude: number;
+            /**
+             * Format: int32
+             * @description 목표 거리 (km)
+             */
+            distance: number;
+            /**
+             * Format: int32
+             * @description 목표 페이스 (분/km)
+             */
+            pace: number;
+            /**
+             * Format: int32
+             * @description 최대 모집 인원
+             */
+            maxParticipants: number;
+            /** @description 상세 설명 */
+            description: string;
+            /**
+             * @description 준비물 리스트 (각 최대 15자, 최대 5개)
+             * @example [
+             *       "러닝화",
+             *       "생수"
+             *     ]
+             */
+            supplies?: string[];
+        };
+        CommonResponseInvitationCodeResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["InvitationCodeResponse"];
+        };
+        InvitationCodeResponse: {
+            /** @description 새로 발급된 초대 코드 */
+            invitationCode?: string;
+        };
+        JoinCrewRequest: {
+            /** @description 초대코드 */
+            invitationCode?: string;
+        };
+        AddToCartRequest: {
+            /**
+             * Format: int64
+             * @description 상품 ID
+             */
+            productId: number;
+            /**
+             * Format: int64
+             * @description 상품 옵션 조합(SKU) ID
+             */
+            productSkuId: number;
+            /**
+             * Format: int32
+             * @description 담을 수량
+             */
+            quantity?: number;
+        };
+        SocialLoginRequest: {
+            /** @description 소셜 서비스로부터 발급받은 인가 코드 */
+            authorizationCode?: string;
+            /** @description 카카오 네이티브 SDK로부터 발급받은 액세스 토큰 (네이티브 SDK) */
+            accessToken?: string;
+        };
+        CommonResponseSocialLoginResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["SocialLoginResponse"];
+        };
+        SocialLoginResponse: {
+            /** @description 액세스 토큰 */
+            accessToken?: string;
+            /**
+             * Format: int64
+             * @description 액세스 토큰 만료 시간 (초)
+             */
+            accessTokenExpiresIn?: number;
+            /**
+             * @description 회원 상태
+             * @enum {string}
+             */
+            status?: "ACTIVE" | "WITHDRAWN" | "DELETED" | "PENDING_TERMS";
+            /**
+             * Format: int64
+             * @description 가입한 크루 ID (없을 경우 null)
+             */
+            crewId?: number;
+            /** @description 필수 약관 재동의 필요 여부 */
+            needsTermsUpdate?: boolean;
+        };
+        AppleNotificationRequest: {
+            /** @description Apple에서 전달한 페이로드 */
+            payload: string;
+        };
+        RegisterDeliveryAddressRequest: {
+            /** @description 수령인 */
+            recipientName: string;
+            /** @description 수령인 연락처 */
+            phoneNumber: string;
+            /** @description 우편번호 */
+            zipcode: string;
+            /** @description 기본 주소 */
+            baseAddress: string;
+            /** @description 상세 주소 */
+            detailAddress: string;
+            /** @description 기본 배송지 여부 */
+            isDefault: boolean;
+        };
+        UpdateMemberProfileRequest: {
+            /** @description 변경할 닉네임 (최대 10자, 특수문자 불가) */
+            nickname: string;
+            /**
+             * @description 변경할 프로필 이미지 URL
+             * @example https://azitcrew.com/temp/profile/123/2026-04-22_550e8400.jpg
+             */
+            imageUrl: string;
+        };
+        UpdateCrewProfileRequest: {
+            /**
+             * @description 변경할 크루 이미지 URL
+             * @example https://images.azitcrew.com/temp/crew/1/2026-04-22_550e8400.jpg
+             */
+            imageUrl: string;
+            /** @description 크루 이름 */
+            name: string;
+            /** @description 크루 한줄 소개 (선택) */
+            description?: string;
+        };
+        UpdateCartItemQuantityRequest: {
+            /**
+             * Format: int32
+             * @description 담을 수량
+             */
+            quantity?: number;
+        };
+        CursorPageQuery: {
+            /** Format: int64 */
+            cursorId?: number;
+            /** Format: int32 */
+            size?: number;
+        };
+        CommonResponseSliceResponseProductListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["SliceResponseProductListResponse"];
+        };
+        /** @description 데이터 내용 */
+        ProductListResponse: {
+            /**
+             * Format: int64
+             * @description 상품 ID
+             */
+            id?: number;
+            /** @description 브랜드명 */
+            brandName?: string;
+            /** @description 상품명 */
+            productName?: string;
+            /**
+             * Format: int64
+             * @description 정가
+             */
+            basePrice?: number;
+            /**
+             * Format: int32
+             * @description 할인율
+             */
+            discountRate?: number;
+            /**
+             * Format: int64
+             * @description 할인된 가격
+             */
+            salePrice?: number;
+            /** @description 썸네일 이미지 url */
+            thumbnailImageUrl?: string;
+        };
+        SliceResponseProductListResponse: {
+            /** @description 데이터 내용 */
+            content?: components["schemas"]["ProductListResponse"][];
+            /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
+            hasNext?: boolean;
+            /**
+             * Format: int64
+             * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
+             */
+            lastId?: number;
+        };
+        CommonResponseProductDetailResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["ProductDetailResponse"];
+        };
+        /** @description 옵션 그룹 목록 */
+        OptionGroupResponse: {
+            /**
+             * Format: int64
+             * @description 옵션 그룹 ID
+             */
+            id?: number;
+            /** @description 옵션 그룹 명칭 */
+            name?: string;
+            /** @description 그룹에 속한 옵션값 목록 */
+            values?: components["schemas"]["OptionValueResponse"][];
+        };
+        /** @description 그룹에 속한 옵션값 목록 */
+        OptionValueResponse: {
+            /**
+             * Format: int64
+             * @description 옵션값 ID
+             */
+            id?: number;
+            /** @description 옵션값 명칭 */
+            value?: string;
+            /** @description 품절 여부 */
+            isSoldOut?: boolean;
+        };
+        ProductDetailResponse: {
+            /**
+             * Format: int64
+             * @description 상품 ID
+             */
+            id?: number;
+            /** @description 브랜드명 */
+            brandName?: string;
+            /** @description 상품명 */
+            productName?: string;
+            /**
+             * Format: int64
+             * @description 정가
+             */
+            basePrice?: number;
+            /**
+             * Format: int32
+             * @description 할인율(%)
+             */
+            discountRate?: number;
+            /**
+             * Format: int64
+             * @description 최종 판매가
+             */
+            salePrice?: number;
+            /**
+             * Format: int64
+             * @description 배송비
+             */
+            shippingFee?: number;
+            /**
+             * Format: date
+             * @description 예상 발송 시작일
+             */
+            expectedShippingDate?: string;
+            /** @description 환불 정책 */
+            refundPolicy?: string;
+            /** @description 상품 상세 설명 */
+            description?: string;
+            /** @description 상단 슬라이드 이미지 URL 리스트 */
+            slideImageUrls?: string[];
+            /** @description 하단 상세 설명 이미지 URL 리스트 */
+            detailImageUrls?: string[];
+            /** @description 옵션 그룹 목록 */
+            optionGroups?: components["schemas"]["OptionGroupResponse"][];
+            /** @description 재고 및 옵션 조합 정보 (SKU) */
+            skus?: components["schemas"]["SkuResponse"][];
+        };
+        /** @description 재고 및 옵션 조합 정보 (SKU) */
+        SkuResponse: {
+            /**
+             * Format: int64
+             * @description SKU ID
+             */
+            id?: number;
+            /**
+             * Format: int64
+             * @description 옵션 별 추가 금액
+             */
+            additionalPrice?: number;
+            /**
+             * Format: int32
+             * @description 재고 수량
+             */
+            stockQuantity?: number;
+            /** @description 매칭되는 옵션값 ID 리스트 (정렬된 순서) */
+            optionValueIds?: number[];
+            /** @description 품절 여부 */
+            isSoldOut?: boolean;
+        };
+        CommonResponseSliceResponseOrderListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["SliceResponseOrderListResponse"];
+        };
+        /** @description 주문 상품 목록 */
+        OrderItemResponse: {
+            /**
+             * Format: int64
+             * @description 카트 아이템 ID
+             */
+            id?: number;
+            /**
+             * Format: int64
+             * @description 상품 ID
+             */
+            productId?: number;
+            /**
+             * Format: int64
+             * @description sku ID
+             */
+            skuId?: number;
+            /** @description 구매 당시 브랜드명 */
+            brandName?: string;
+            /** @description 구매 당시 상품명 */
+            productName?: string;
+            /** @description 구매 당시 옵션 정보 */
+            optionDescription?: string;
+            /** @description 구매 당시 상품 대표 이미지 url */
+            productImageUrl?: string;
+            /**
+             * Format: int64
+             * @description 상품 정가
+             */
+            basePrice?: number;
+            /**
+             * Format: int64
+             * @description 상품 판매가
+             */
+            salePrice?: number;
+            /**
+             * Format: int64
+             * @description 총 판매가
+             */
+            totalSalePrice?: number;
+            /**
+             * Format: int32
+             * @description 구매 수량
+             */
+            quantity?: number;
+        };
+        /** @description 데이터 내용 */
+        OrderListResponse: {
+            /**
+             * Format: int64
+             * @description 주문 ID
+             */
+            id?: number;
+            /**
+             * Format: date-time
+             * @description 주문 날짜
+             */
+            orderDate?: string;
+            /** @description 주문 번호 */
+            orderNumber?: string;
+            /**
+             * @description 주문 상태
+             * @enum {string}
+             */
+            status?: "PENDING" | "PAID" | "PREPARING" | "SHIPPING" | "DELIVERED" | "PURCHASE_CONFIRMED" | "CANCELLED" | "EXPIRED" | "PENDING_REFUNDED" | "REFUNDED";
+            /** @description 주문 상품 목록 */
+            items?: components["schemas"]["OrderItemResponse"][];
+        };
+        SliceResponseOrderListResponse: {
+            /** @description 데이터 내용 */
+            content?: components["schemas"]["OrderListResponse"][];
+            /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
+            hasNext?: boolean;
+            /**
+             * Format: int64
+             * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
+             */
+            lastId?: number;
+        };
+        CommonResponseOrderDetailResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["OrderDetailResponse"];
+        };
+        /** @description 배송지 정보 */
+        OrderDetailDeliveryInfoResponse: {
+            /** @description 수령인 이름 */
+            recipientName?: string;
+            /** @description 수령인 연락처 */
+            phoneNumber?: string;
+            /** @description 기본 주소 */
+            baseAddress?: string;
+            /** @description 상세 주소 */
+            detailAddress?: string;
+            /** @description 배송 요청사항 */
+            shippingInstruction?: string;
+        };
+        OrderDetailResponse: {
+            /**
+             * Format: int64
+             * @description 주문 ID
+             */
+            id?: number;
+            /**
+             * Format: date-time
+             * @description 주문 날짜
+             */
+            orderDate?: string;
+            /** @description 주문 번호 */
+            orderNumber?: string;
+            /**
+             * @description 주문 상태
+             * @enum {string}
+             */
+            status?: "PENDING" | "PAID" | "PREPARING" | "SHIPPING" | "DELIVERED" | "PURCHASE_CONFIRMED" | "CANCELLED" | "EXPIRED" | "PENDING_REFUNDED" | "REFUNDED";
+            deliveryInfo?: components["schemas"]["OrderDetailDeliveryInfoResponse"];
+            depositAccountInfo?: components["schemas"]["DepositAccountInfoResponse"];
+            shippingInfo?: components["schemas"]["ShippingResponse"];
+            /** @description 주문 상품 목록 */
+            items?: components["schemas"]["OrderItemResponse"][];
+            summary?: components["schemas"]["OrderSummaryResponse"];
+        };
+        /** @description 배송 정보 */
+        ShippingResponse: {
+            /** @description 택배사 (배송 전일 경우 null) */
+            courier?: string;
+            /** @description 운송장 번호 (배송 전일 경우 null) */
+            trackingNumber?: string;
+        };
+        /** @description 주문할 상품 목록 */
+        CheckoutItemDetailResponse: {
+            /**
+             * Format: int64
+             * @description 상품 ID
+             */
+            productId?: number;
+            /**
+             * Format: int64
+             * @description sku ID
+             */
+            skuId?: number;
+            /** @description 브랜드명 */
+            brandName?: string;
+            /** @description 상품명 */
+            productName?: string;
+            /** @description 선택 옵션 정보 */
+            optionDescription?: string;
+            /** @description 상품 대표 이미지 URL */
+            productImageUrl?: string;
+            /**
+             * Format: int64
+             * @description 상품 정가
+             */
+            basePrice?: number;
+            /**
+             * Format: int64
+             * @description 상품 판매가
+             */
+            salePrice?: number;
+            /**
+             * Format: int32
+             * @description 장바구니에 담은 수량
+             */
+            quantity?: number;
+            /**
+             * Format: int64
+             * @description 총 정가
+             */
+            totalBasePrice?: number;
+            /**
+             * Format: int64
+             * @description 총 판매가
+             */
+            totalSalePrice?: number;
+        };
+        CommonResponseOrderCheckoutResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["OrderCheckoutResponse"];
+        };
+        /** @description 배송지 정보 (기본 배송지 우선, 없으면 null) */
+        DeliveryAddressResponse: {
+            /**
+             * Format: int64
+             * @description 배송지 ID
+             */
+            id?: number;
+            /** @description 수령인 이름 */
+            recipientName?: string;
+            /** @description 수령인 연락처 */
+            phoneNumber?: string;
+            /** @description 우편번호 */
+            zipcode?: string;
+            /** @description 기본 주소 */
+            baseAddress?: string;
+            /** @description 상세 주소 */
+            detailAddress?: string;
+            /** @description 기본 배송지 여부 */
+            isDefault?: boolean;
+        };
+        OrderCheckoutResponse: {
+            deliveryInfo?: components["schemas"]["DeliveryAddressResponse"];
+            /** @description 주문할 상품 목록 */
+            items?: components["schemas"]["CheckoutItemDetailResponse"][];
+            depositAccountInfo?: components["schemas"]["DepositAccountInfoResponse"];
+            pointInfo?: components["schemas"]["PointInfoResponse"];
+            /** @description 사용 가능한 결제 수단 목록 */
+            paymentMethods?: components["schemas"]["PaymentMethodResponse"][];
+            summary?: components["schemas"]["OrderSummaryResponse"];
+        };
+        /** @description 사용 가능한 결제 수단 목록 */
+        PaymentMethodResponse: {
+            /** @description 결제 수단 코드 */
+            code?: string;
+            /** @description 결제 수단 설명 */
+            description?: string;
+            /** @description 활성화 여부 */
+            isEnabled?: boolean;
+        };
+        /** @description 포인트 정보 */
+        PointInfoResponse: {
+            /**
+             * Format: int64
+             * @description 보유 포인트
+             */
+            availablePoints?: number;
+            /**
+             * Format: int64
+             * @description 최소 사용 가능 포인트
+             */
+            minUsePoints?: number;
+            /**
+             * Format: int64
+             * @description 포인트 사용 단위
+             */
+            pointUnit?: number;
+        };
+        CommonResponseMyInfoResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["MyInfoResponse"];
+        };
+        MyInfoResponse: {
+            /**
+             * Format: int64
+             * @description 사용자 ID
+             */
+            id?: number;
+            /** @description 닉네임 */
+            nickname?: string;
+            /** @description 프로필 이미지 URL */
+            profileImageUrl?: string;
+            /**
+             * Format: int64
+             * @description 포인트
+             */
+            totalPoints?: number;
+        };
+        CommonResponseListCrewScheduleListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewScheduleListResponse"][];
+        };
+        CrewScheduleListResponse: {
+            /**
+             * Format: int64
+             * @description 일정 ID
+             */
+            scheduleId?: number;
+            /** @description 일정 제목 */
+            title?: string;
+            /**
+             * @description 러닝 타입
+             * @enum {string}
+             */
+            runType?: "REGULAR" | "LIGHTNING";
+            /**
+             * Format: date-time
+             * @description 모임 시간
+             */
+            meetingAt?: string;
+            /** @description 집합 장소명 */
+            placeName?: string;
+            /**
+             * Format: int32
+             * @description 목표 거리 (km)
+             */
+            distance?: number;
+            /**
+             * Format: int32
+             * @description 목표 페이스
+             */
+            pace?: number;
+            /**
+             * Format: int32
+             * @description 최대 인원
+             */
+            maxParticipants?: number;
+            /**
+             * Format: int32
+             * @description 현재 참여 인원
+             */
+            currentParticipants?: number;
+            /** @description 내가 생성한 일정인지 여부 */
+            isMine?: boolean;
+            /** @description 내가 참여 중인 일정인지 여부 */
+            isParticipating?: boolean;
+            /**
+             * Format: date-time
+             * @description 생성 시간
+             */
+            createdAt?: string;
+            /**
+             * @description 일정 상태
+             * @enum {string}
+             */
+            status?: "ACTIVE" | "CANCELLED";
+        };
+        CommonResponseLinkedProviderResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["LinkedProviderResponse"];
+        };
+        LinkedProviderResponse: {
+            /** @description 연동된 소셜 로그인 목록 */
+            providers?: ("KAKAO" | "APPLE")[];
+        };
+        CommonResponseListMyCrewResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["MyCrewResponse"][];
+        };
+        MyCrewResponse: {
+            /**
+             * Format: int64
+             * @description 크루 ID
+             */
+            crewId?: number;
+            /** @description 크루 이름 */
+            crewName?: string;
+            /** @description 크루 이미지 URL */
+            crewImageUrl?: string;
+            /**
+             * @description 크루 내 역할
+             * @enum {string}
+             */
+            memberRole?: "LEADER" | "MEMBER";
+            /**
+             * @description 크루 가입 상태
+             * @enum {string}
+             */
+            memberStatus?: "REQUESTED" | "JOINED" | "REJECTED" | "EXITED" | "EXPELLED" | "CANCELLED";
+            /** @description 크루 초대 코드 */
+            invitationCode?: string;
+        };
+        CheckInStatusResponse: {
+            /** @description 오늘 참여할 일정이 있는지 여부 */
+            hasScheduleToday?: boolean;
+            todayScheduleInfo?: components["schemas"]["TodayScheduleResponse"];
+            nextScheduleInfo?: components["schemas"]["NextScheduleResponse"];
+        };
+        CommonResponseCheckInStatusResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CheckInStatusResponse"];
+        };
+        /** @description 다음 일정 정보 */
+        NextScheduleResponse: {
+            /** @description 다음 일정 제목 */
+            title?: string;
+            /**
+             * Format: int64
+             * @description 다음 일정까지 남은 일수
+             */
+            daysLeft?: number;
+        };
+        /** @description 오늘의 일정 정보 */
+        TodayScheduleResponse: {
+            /**
+             * Format: int64
+             * @description 일정 ID
+             */
+            scheduleId?: number;
+            /** @description 일정 제목 */
+            title?: string;
+            /**
+             * @description 러닝 타입
+             * @enum {string}
+             */
+            runType?: "REGULAR" | "LIGHTNING";
+            /**
+             * Format: double
+             * @description 집합 장소 위도
+             */
+            latitude?: number;
+            /**
+             * Format: double
+             * @description 집합 장소 경도
+             */
+            longitude?: number;
+            /** @description 출석 완료 여부 */
+            isCheckedIn?: boolean;
+            /**
+             * Format: date-time
+             * @description 출석 완료 시간
+             */
+            checkedInAt?: string;
+            /** @description 출석 가능 시간 여부 (시작 1시간 전~후) */
+            isAvailableTime?: boolean;
+        };
+        CommonResponseMyAttendanceLogResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["MyAttendanceLogResponse"];
+        };
+        /** @description 일자별 활동 상세 리스트 */
+        DailyAttendanceLog: {
+            /**
+             * Format: int64
+             * @description 일정 ID
+             */
+            scheduleId?: number;
+            /** @description 크루명 */
+            crewName?: string;
+            /** @description 일정 제목 */
+            title?: string;
+            /**
+             * @description 러닝 타입
+             * @enum {string}
+             */
+            runType?: "REGULAR" | "LIGHTNING";
+            /**
+             * Format: date-time
+             * @description 모임 시간
+             */
+            meetingAt?: string;
+            /** @description 집합 장소명 */
+            placeName?: string;
+            /**
+             * @description 출석 상태
+             * @enum {string}
+             */
+            status?: "ATTENDED" | "ABSENT";
+            /**
+             * Format: int32
+             * @description 최대 인원
+             */
+            maxParticipants?: number;
+            /**
+             * Format: int32
+             * @description 현재 참여 인원
+             */
+            currentParticipants?: number;
+        };
+        MyAttendanceLogResponse: {
+            /**
+             * Format: int32
+             * @description 이번 달 총 출석 횟수
+             */
+            totalAttendanceCount?: number;
+            /**
+             * Format: int64
+             * @description 이번 달 획득한 누적 포인트
+             */
+            totalPoints?: number;
+            /** @description 일자별 활동 상세 리스트 */
+            attendanceLogs?: components["schemas"]["DailyAttendanceLog"][];
+        };
+        CommonResponseListMyAttendanceMonthlyListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["MyAttendanceMonthlyListResponse"][];
+        };
+        MyAttendanceMonthlyListResponse: {
+            /**
+             * Format: date
+             * @description 날짜
+             */
+            date?: string;
+            /** @description 정기런 존재 여부 */
+            hasRegular?: boolean;
+            /** @description 번개런 존재 여부 */
+            hasLightning?: boolean;
+        };
+        CommonResponseListLocationSearchResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["LocationSearchResponse"][];
+        };
+        LocationSearchResponse: {
+            /** @description 장소 명칭 */
+            placeName?: string;
+            /** @description 카테고리 */
+            category?: string;
+            /** @description 주소 */
+            address?: string;
+            /**
+             * Format: double
+             * @description 위도
+             */
+            latitude?: number;
+            /**
+             * Format: double
+             * @description 경도
+             */
+            longitude?: number;
+        };
+        CommonResponseCrewScheduleDetailResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewScheduleDetailResponse"];
+        };
+        CrewScheduleDetailResponse: {
+            /**
+             * Format: int64
+             * @description 일정 ID
+             */
+            scheduleId?: number;
+            /** @description 일정 제목 */
+            title?: string;
+            /**
+             * @description 러닝 타입
+             * @enum {string}
+             */
+            runType?: "REGULAR" | "LIGHTNING";
+            /**
+             * Format: date-time
+             * @description 모임 시간
+             */
+            meetingAt?: string;
+            locationInfo?: components["schemas"]["LocationInfoResponse"];
+            /** @description 일정 설명 */
+            description?: string;
+            /**
+             * Format: int32
+             * @description 목표 거리 (km)
+             */
+            distance?: number;
+            /**
+             * Format: int32
+             * @description 목표 페이스
+             */
+            pace?: number;
+            /**
+             * Format: int32
+             * @description 최대 인원
+             */
+            maxParticipants?: number;
+            /**
+             * Format: int32
+             * @description 현재 참여 인원
+             */
+            currentParticipants?: number;
+            /** @description 준비물 리스트 */
+            supplies?: string[];
+            /**
+             * Format: int64
+             * @description 생성자 ID
+             */
+            creatorId?: number;
+            /** @description 생성자 닉네임 */
+            creatorNickname?: string;
+            /** @description 생성자 프로필 이미지 */
+            creatorProfileImageUrl?: string;
+            /**
+             * @description 생성자 크루 내 역할
+             * @enum {string}
+             */
+            creatorRole?: "LEADER" | "MEMBER";
+            /** @description 내가 생성한 일정인지 여부 */
+            isMine?: boolean;
+            /** @description 내가 참여 중인 일정인지 여부 */
+            isParticipating?: boolean;
+            /** @description 출석 완료 여부 */
+            isCheckedIn?: boolean;
+            /** @description 수정 및 삭제 가능 여부 */
+            isModifiable?: boolean;
+            /** @description 참여 및 참여 취소 가능 여부 */
+            isParticipationModifiable?: boolean;
+            /** @description 참여 멤버 미리보기 리스트(최대 10명) */
+            participants?: components["schemas"]["ParticipantResponse"][];
+            /** @description 참여자 명단이 더 있는지 여부 (10명 초과 시 true) */
+            hasMoreParticipants?: boolean;
+            /**
+             * Format: date-time
+             * @description 생성 시간
+             */
+            createdAt?: string;
+            /**
+             * @description 일정 상태
+             * @enum {string}
+             */
+            status?: "ACTIVE" | "CANCELLED";
+        };
+        /** @description 장소 정보 */
+        LocationInfoResponse: {
+            /** @description 집합 장소명 */
+            placeName?: string;
+            /** @description 주소 */
+            address?: string;
+            /** @description 모이는 지점 */
+            meetingSpot?: string;
+            /**
+             * Format: double
+             * @description 위도
+             */
+            latitude?: number;
+            /**
+             * Format: double
+             * @description 경도
+             */
+            longitude?: number;
+        };
+        /** @description 참여 멤버 미리보기 리스트(최대 10명) */
+        ParticipantResponse: {
+            /**
+             * Format: int64
+             * @description 멤버 ID
+             */
+            memberId?: number;
+            /** @description 닉네임 */
+            nickname?: string;
+            /** @description 프로필 이미지 URL */
+            profileImageUrl?: string;
+            /**
+             * @description 크루 내 역할
+             * @enum {string}
+             */
+            role?: "LEADER" | "MEMBER";
+            /** @description 일정 생성자 여부 */
+            isCreator?: boolean;
+            /**
+             * Format: date-time
+             * @description 신청 시간
+             */
+            participatedAt?: string;
+        };
+        CommonResponseSliceResponseParticipantResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["SliceResponseParticipantResponse"];
+        };
+        SliceResponseParticipantResponse: {
+            /** @description 데이터 내용 */
+            content?: components["schemas"]["ParticipantResponse"][];
+            /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
+            hasNext?: boolean;
+            /**
+             * Format: int64
+             * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
+             */
+            lastId?: number;
+        };
+        CommonResponseListCrewScheduleMonthlyListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewScheduleMonthlyListResponse"][];
+        };
+        CrewScheduleMonthlyListResponse: {
+            /**
+             * Format: date
+             * @description 날짜
+             */
+            date?: string;
+            /** @description 정기런 존재 여부 */
+            hasRegular?: boolean;
+            /** @description 번개런 존재 여부 */
+            hasLightning?: boolean;
+        };
+        CommonResponseCrewMemberListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewMemberListResponse"];
+        };
+        /** @description 멤버 목록 */
+        CrewMemberDetailResponse: {
+            /**
+             * Format: int64
+             * @description 크루 멤버 ID
+             */
+            id?: number;
+            /**
+             * Format: int64
+             * @description 멤버 ID
+             */
+            memberId?: number;
+            /** @description 닉네임 */
+            nickname?: string;
+            /** @description 프로필 이미지 URL */
+            profileImageUrl?: string;
+            /**
+             * @description 크루 내 역할
+             * @enum {string}
+             */
+            role?: "LEADER" | "MEMBER";
+            /**
+             * Format: date-time
+             * @description 가입일
+             */
+            joinedDate?: string;
+        };
+        CrewMemberListResponse: {
+            /**
+             * Format: int64
+             * @description 전체 멤버 수
+             */
+            totalCount?: number;
+            /** @description 멤버 목록 */
+            content?: components["schemas"]["CrewMemberDetailResponse"][];
+            /** @description 남은 페이지가 있는지 여부 (false면 마지막 페이지) */
+            hasNext?: boolean;
+            /**
+             * Format: int64
+             * @description 마지막 데이터의 ID, 다음 페이지 호출 시 해당 id를 cursorId에 넣어서 호출
+             */
+            lastId?: number;
+        };
+        CommonResponseCrewJoinStatusResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewJoinStatusResponse"];
+        };
+        CrewJoinStatusResponse: {
+            /**
+             * Format: int64
+             * @description 크루 ID
+             */
+            crewId?: number;
+            /** @description 크루 이름 */
+            name?: string;
+            /** @description 크루 이미지 url */
+            crewImageUrl?: string;
+            /**
+             * @description 멤버 상태
+             * @enum {string}
+             */
+            status?: "REQUESTED" | "JOINED" | "REJECTED" | "EXITED" | "EXPELLED" | "CANCELLED";
+        };
+        CommonResponseListJoinRequestMemberResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["JoinRequestMemberResponse"][];
+        };
+        JoinRequestMemberResponse: {
+            /**
+             * Format: int64
+             * @description 멤버 ID
+             */
+            memberId?: number;
+            /** @description 닉네임 */
+            nickname?: string;
+            /** @description 프로필 이미지 URL */
+            profileImageUrl?: string;
+            /**
+             * Format: date-time
+             * @description 가입 신청 일시
+             */
+            requestedAt?: string;
+        };
+        CommonResponseCrewInfoResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewInfoResponse"];
+        };
+        CrewInfoResponse: {
+            /** @description 크루 이미지 URL */
+            crewImageUrl?: string;
+            /** @description 크루 이름 */
+            name?: string;
+            /** @description 크루 한줄 소개 */
+            description?: string;
+        };
+        CommonResponseListJoinedCrewResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["JoinedCrewResponse"][];
+        };
+        JoinedCrewResponse: {
+            /**
+             * Format: int64
+             * @description 크루 ID
+             */
+            crewId?: number;
+            /** @description 크루명 */
+            name?: string;
+            /** @description 크루 이미지 URL */
+            imageUrl?: string;
+            /** @description 크루 한줄 소개 */
+            description?: string;
+        };
+        CommonResponseCrewInvitationResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CrewInvitationResponse"];
+        };
+        CrewInvitationResponse: {
+            /**
+             * Format: int64
+             * @description 크루 ID
+             */
+            crewId?: number;
+            /** @description 크루 이름 */
+            name?: string;
+            /** @description 크루 카테고리 */
+            category?: string;
+            /**
+             * Format: int64
+             * @description 크루에 가입되어 있는 멤버 수
+             */
+            memberCount?: number;
+            /** @description 크루 이미지 url */
+            crewImageUrl?: string;
+            /** @description 크루 소개 */
+            description?: string;
+        };
+        CartItemListResponse: {
+            /**
+             * Format: int64
+             * @description 장바구니 항목 ID
+             */
+            id?: number;
+            /**
+             * Format: int64
+             * @description 브랜드 ID
+             */
+            brandId?: number;
+            /** @description 브랜드명 */
+            brandName?: string;
+            /**
+             * Format: int64
+             * @description 상품 ID
+             */
+            productId?: number;
+            /** @description 상품명 */
+            productName?: string;
+            /**
+             * Format: date
+             * @description 예상 발송 시작일
+             */
+            expectedShippingDate?: string;
+            /**
+             * Format: int64
+             * @description 상품 sku ID
+             */
+            productSkuId?: number;
+            /** @description 선택 옵션 정보 */
+            optionDescription?: string;
+            /** @description 상품 대표 이미지 URL */
+            productImageUrl?: string;
+            /**
+             * Format: int64
+             * @description 상품 정가
+             */
+            basePrice?: number;
+            /**
+             * Format: int64
+             * @description 상품 판매가
+             */
+            salePrice?: number;
+            /**
+             * Format: int32
+             * @description 장바구니에 담은 수량
+             */
+            quantity?: number;
+            /** @description 품절 여부 */
+            isOutOfStock?: boolean;
+            /**
+             * Format: int64
+             * @description 배송비
+             */
+            shippingFee?: number;
+        };
+        CommonResponseListCartItemListResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CartItemListResponse"][];
+        };
+        CartItemCountResponse: {
+            /**
+             * Format: int64
+             * @description 장바구니 아이템 종류 수
+             */
+            count?: number;
+        };
+        CommonResponseCartItemCountResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["CartItemCountResponse"];
+        };
+        CommonResponseListDeliveryAddressResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["DeliveryAddressResponse"][];
+        };
+        CartItemDeleteRequest: {
+            /** @description 삭제할 장바구니 ID 리스트 */
+            cartItemIds: number[];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  getScheduleDetail: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCrewScheduleDetailResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  updateSchedule: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateScheduleRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
+    getScheduleDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCrewScheduleDetailResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    updateSchedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateScheduleRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    cancelSchedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    updateDeliveryAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                addressId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDeliveryAddressRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    deleteDeliveryAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                addressId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    forceWithdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+        };
+    };
+    getOrders: {
+        parameters: {
+            query: {
+                query: components["schemas"]["CursorPageQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseSliceResponseOrderListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    createOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateOrderRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCreateOrderResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    agreeToTerms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AgreeToTermsRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    withdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    checkInSchedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description 일정 ID */
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckInRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    generatePresignedUrl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PresignedUrlRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponsePresignedUrlResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    createCrew: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCrewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCreateCrewResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCrewSchedules: {
+        parameters: {
+            query?: {
+                /** @description 조회 날짜 (yyyy-MM-dd) */
+                date?: string;
+                /** @description 조회 시작 날짜 (yyyy-MM-dd), endDate와 함께 사용 */
+                startDate?: string;
+                /** @description 조회 종료 날짜 (yyyy-MM-dd), startDate와 함께 사용 */
+                endDate?: string;
+                /** @description 조회 연월 (yyyy-MM) */
+                yearMonth?: string;
+                /** @description 러닝 타입 */
+                runType?: "REGULAR" | "LIGHTNING";
+            };
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListCrewScheduleListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    createSchedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateScheduleRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    participateSchedule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    cancelParticipation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    rejectJoinRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                targetMemberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    approveJoinRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                targetMemberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    regenerateInvitationCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseInvitationCodeResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    joinCrew: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinCrewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    addCartItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddToCartRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    deleteItems: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CartItemDeleteRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    socialLogin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: "KAKAO" | "APPLE";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialLoginRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseSocialLoginResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    appleLogin: {
+        parameters: {
+            query: {
+                code: string;
+                id_token: string;
+                user?: string;
+                state?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    reissue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseSocialLoginResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    receiveAppleNotification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppleNotificationRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getDeliveryAddresses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListDeliveryAddressResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    registerDeliveryAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterDeliveryAddressRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    cancelOrder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    updateMemberProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMemberProfileRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCrewInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCrewInfoResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    updateCrewProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCrewProfileRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    updateCartItemQuantity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cartItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCartItemQuantityRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getProducts: {
+        parameters: {
+            query: {
+                query: components["schemas"]["CursorPageQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseSliceResponseProductListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description 조회할 상품 ID */
+                productId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseProductDetailResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getOrderDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseOrderDetailResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCheckoutInfoDirect: {
+        parameters: {
+            query: {
+                skuId: number;
+                quantity: number;
+                deliveryAddressId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseOrderCheckoutResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCheckoutInfoFromCart: {
+        parameters: {
+            query: {
+                cartItemIds: number[];
+                deliveryAddressId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseOrderCheckoutResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getMyInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseMyInfoResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getMySchedules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListCrewScheduleListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getLinkedProviders: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseLinkedProviderResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getMyCrews: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListMyCrewResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCheckInStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCheckInStatusResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getMyAttendanceLogs: {
+        parameters: {
+            query?: {
+                /** @description 조회 연월 (yyyy-MM) */
+                yearMonth?: string;
+                /** @description 크루 ID (특정 크루 필터링, 미입력 시 전체) */
+                crewId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseMyAttendanceLogResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getMyAttendancesForCalendar: {
+        parameters: {
+            query?: {
+                /** @description 조회 연월 (yyyy-MM) */
+                yearMonth?: string;
+                /** @description 크루 ID (특정 크루 필터링, 미입력 시 전체) */
+                crewId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListMyAttendanceMonthlyListResponse"];
+                };
+            };
+        };
+    };
+    search: {
+        parameters: {
+            query: {
+                query: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListLocationSearchResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getScheduleParticipants: {
+        parameters: {
+            query: {
+                query: components["schemas"]["CursorPageQuery"];
+            };
+            header?: never;
+            path: {
+                crewId: number;
+                scheduleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseSliceResponseParticipantResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getMonthlySchedulesForCalendar: {
+        parameters: {
+            query?: {
+                /** @description 조회 시작 날짜 (yyyy-MM-dd), endDate와 함께 사용 */
+                startDate?: string;
+                /** @description 조회 종료 날짜 (yyyy-MM-dd), startDate와 함께 사용 */
+                endDate?: string;
+                /** @description 조회 연월 (yyyy-MM) */
+                yearMonth?: string;
+            };
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListCrewScheduleMonthlyListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCrewMembers: {
+        parameters: {
+            query: {
+                query: components["schemas"]["CursorPageQuery"];
+            };
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCrewMemberListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCrewJoinStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCrewJoinStatusResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getJoinRequests: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListJoinRequestMemberResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getJoinedCrews: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListJoinedCrewResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCrewByInvitation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invitationCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCrewInvitationResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCarts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseListCartItemListResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getCartItemCount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseCartItemCountResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    dissolveCrew: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    deleteCrewMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+                targetMemberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    exitCrew: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    cancelJoinRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                crewId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
         };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  cancelSchedule: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  updateDeliveryAddress: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        addressId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateDeliveryAddressRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  deleteDeliveryAddress: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        addressId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  forceWithdraw: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-    };
-  };
-  getOrders: {
-    parameters: {
-      query: {
-        query: components['schemas']['CursorPageQuery'];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseSliceResponseOrderListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  createOrder: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateOrderRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCreateOrderResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  agreeToTerms: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AgreeToTermsRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  withdraw: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  checkInSchedule: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description 일정 ID */
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CheckInRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  generatePresignedUrl: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['PresignedUrlRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponsePresignedUrlResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  createCrew: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateCrewRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCreateCrewResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCrewSchedules: {
-    parameters: {
-      query?: {
-        /** @description 조회 날짜 (yyyy-MM-dd) */
-        date?: string;
-        /** @description 조회 시작 날짜 (yyyy-MM-dd), endDate와 함께 사용 */
-        startDate?: string;
-        /** @description 조회 종료 날짜 (yyyy-MM-dd), startDate와 함께 사용 */
-        endDate?: string;
-        /** @description 조회 연월 (yyyy-MM) */
-        yearMonth?: string;
-        /** @description 러닝 타입 */
-        runType?: 'REGULAR' | 'LIGHTNING';
-      };
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListCrewScheduleListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  createSchedule: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateScheduleRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  participateSchedule: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  cancelParticipation: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  rejectJoinRequest: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        targetMemberId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  approveJoinRequest: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        targetMemberId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  regenerateInvitationCode: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseInvitationCodeResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  joinCrew: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['JoinCrewRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  addCartItem: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AddToCartRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  deleteItems: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CartItemDeleteRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  socialLogin: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        provider: 'KAKAO' | 'APPLE';
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SocialLoginRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseSocialLoginResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  appleLogin: {
-    parameters: {
-      query: {
-        code: string;
-        id_token: string;
-        user?: string;
-        state?: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  reissue: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseSocialLoginResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  logout: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  receiveAppleNotification: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['AppleNotificationRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getDeliveryAddresses: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListDeliveryAddressResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  registerDeliveryAddress: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RegisterDeliveryAddressRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  cancelOrder: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        orderNumber: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  updateMemberProfile: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateMemberProfileRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCrewInfo: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCrewInfoResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  updateCrewProfile: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateCrewProfileRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  updateCartItemQuantity: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        cartItemId: number;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateCartItemQuantityRequest'];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getProducts: {
-    parameters: {
-      query: {
-        query: components['schemas']['CursorPageQuery'];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseSliceResponseProductListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getProduct: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        /** @description 조회할 상품 ID */
-        productId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseProductDetailResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getOrderDetail: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        orderNumber: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseOrderDetailResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCheckoutInfoDirect: {
-    parameters: {
-      query: {
-        skuId: number;
-        quantity: number;
-        deliveryAddressId?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseOrderCheckoutResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCheckoutInfoFromCart: {
-    parameters: {
-      query: {
-        cartItemIds: number[];
-        deliveryAddressId?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseOrderCheckoutResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getMyInfo: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseMyInfoResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getMySchedules: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListCrewScheduleListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getLinkedProviders: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseLinkedProviderResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getMyCrews: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListMyCrewResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCheckInStatus: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCheckInStatusResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getMyAttendanceLogs: {
-    parameters: {
-      query?: {
-        /** @description 조회 연월 (yyyy-MM) */
-        yearMonth?: string;
-        /** @description 크루 ID (특정 크루 필터링, 미입력 시 전체) */
-        crewId?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseMyAttendanceLogResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getMyAttendancesForCalendar: {
-    parameters: {
-      query?: {
-        /** @description 조회 연월 (yyyy-MM) */
-        yearMonth?: string;
-        /** @description 크루 ID (특정 크루 필터링, 미입력 시 전체) */
-        crewId?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListMyAttendanceMonthlyListResponse'];
-        };
-      };
-    };
-  };
-  search: {
-    parameters: {
-      query: {
-        query: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListLocationSearchResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getScheduleParticipants: {
-    parameters: {
-      query: {
-        query: components['schemas']['CursorPageQuery'];
-      };
-      header?: never;
-      path: {
-        crewId: number;
-        scheduleId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseSliceResponseParticipantResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getMonthlySchedulesForCalendar: {
-    parameters: {
-      query?: {
-        /** @description 조회 시작 날짜 (yyyy-MM-dd), endDate와 함께 사용 */
-        startDate?: string;
-        /** @description 조회 종료 날짜 (yyyy-MM-dd), startDate와 함께 사용 */
-        endDate?: string;
-        /** @description 조회 연월 (yyyy-MM) */
-        yearMonth?: string;
-      };
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListCrewScheduleMonthlyListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCrewMembers: {
-    parameters: {
-      query: {
-        query: components['schemas']['CursorPageQuery'];
-      };
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCrewMemberListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCrewJoinStatus: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCrewJoinStatusResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getJoinRequests: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListJoinRequestMemberResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getJoinedCrews: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListJoinedCrewResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCrewByInvitation: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        invitationCode: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCrewInvitationResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCarts: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseListCartItemListResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  getCartItemCount: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseCartItemCountResponse'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  dissolveCrew: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  deleteCrewMember: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-        targetMemberId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  exitCrew: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-    };
-  };
-  cancelJoinRequest: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        crewId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          '*/*': components['schemas']['CommonResponseVoid'];
-        };
-      };
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      405: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': unknown;
-        };
-      };
     };
-  };
 }

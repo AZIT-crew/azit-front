@@ -195,7 +195,7 @@ const featureSlicePlugin = {
 };
 
 const eslintConfig = [
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'src/shared/api/apiTypes.ts']),
   ...reactConfig,
   {
     plugins: {

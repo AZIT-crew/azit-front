@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { userQueries } from '@/entities/User/api/queries';
 import { RoundProfileImage } from '@/entities/User/ui/RoundProfileImage';
 
+import { BusinessError } from '@/shared/api/apiHandler';
 import { postPresignedUrl, updateS3Upload } from '@/shared/api/handlers';
 import { DEFAULT_PROFILE_IMAGE_BASE_URL } from '@/shared/constants/url';
 import { bridge } from '@/shared/lib/bridge';
@@ -51,6 +52,15 @@ export function UserProfileEditPage() {
       });
       toastSuccess('프로필이 수정되었습니다.');
       pop('Mypage');
+    },
+    onError: (error) => {
+      if (error instanceof BusinessError) {
+        setNicknameError(error.message);
+        return;
+      }
+      toastError(
+        error instanceof Error ? error.message : '요청에 실패했습니다.'
+      );
     },
   });
 

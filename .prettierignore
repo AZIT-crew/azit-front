@@ -20,3 +20,6 @@ pnpm-lock.yaml
 turbo/*
 # TypeScript declaration files
 *.d.ts
+
+# Auto-generated files (openapi-typescript)
+apps/web/src/shared/api/apiTypes.ts
