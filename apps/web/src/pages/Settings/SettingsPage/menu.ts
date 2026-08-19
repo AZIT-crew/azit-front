@@ -7,7 +7,6 @@ const LOCATION_PERMISSION_LABEL: Record<string, string> = {
 };
 
 interface SettingsMenuOptions {
-  loginProvider: string;
   appVersion: string;
   onLogout: () => void;
   onNavigateLoginInfo: () => void;
@@ -20,7 +19,6 @@ interface SettingsMenuOptions {
 }
 
 export const getSettingsMenu = ({
-  loginProvider,
   appVersion,
   onLogout,
   onNavigateLoginInfo,
@@ -39,7 +37,6 @@ export const getSettingsMenu = ({
         id: 'login-info',
         label: '로그인 정보',
         type: 'navigation',
-        value: loginProvider,
         onNavigate: onNavigateLoginInfo,
       },
     ],

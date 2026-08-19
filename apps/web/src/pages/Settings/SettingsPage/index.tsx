@@ -21,17 +21,11 @@ import { toastError } from '@/shared/ui/toast';
 import * as styles from './index.css';
 import { getSettingsMenu } from './menu';
 
-const PROVIDER_LABEL: Record<string, string> = {
-  KAKAO: '카카오 연동',
-  APPLE: '애플 연동',
-};
-
 export function SettingsPage() {
   const { push } = useFlow();
   const { logout } = useAuthStore();
   const { handleWithdraw } = useWithdraw();
   const queryClient = useQueryClient();
-  const { data: providers } = useQuery(userQueries.myProvidersQuery());
   const { data: optionalTerms } = useQuery(userQueries.optionalTermsQuery());
   const [appVersion, setAppVersion] = useState<string>('');
   const [showLeaderError, setShowLeaderError] = useState(false);
@@ -68,20 +62,11 @@ export function SettingsPage() {
       .catch(() => {});
   }, []);
 
-  const loginProvider =
-    providers
-      ?.filter((p) => p.isLinked)
-      .map((p) =>
-        p.provider ? (PROVIDER_LABEL[p.provider] ?? p.provider) : ''
-      )
-      .join(', ') || '-';
-
   const marketingConsentDescription = optionalTerms?.marketing.changedAt
     ? `[AZIT] 마케팅 정보 수신 ${optionalTerms.marketing.agreed ? '동의' : '거부'} ${optionalTerms.marketing.changedAt.slice(0, 10)}`
     : undefined;
 
   const menu = getSettingsMenu({
-    loginProvider,
     appVersion: appVersion ? `최신 버전(${appVersion})` : '',
     onLogout: logout,
     onNavigateLoginInfo: () =>
