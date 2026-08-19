@@ -140,7 +140,7 @@ export interface paths {
          *
          *     **[참고사항]** <br>
          *     * 주문 시점에 각 SKU의 재고가 즉시 차감됩니다.
-         *     * 보유 포인트 잔액과 최소 사용 단위(1,000P)를 검증합니다. (INVALID_POINT_USAGE)
+         *     * 보유 포인트 잔액(EXCEED_AVAILABLE_POINTS), 최소 사용 금액 1,000P(BELOW_MIN_POINT_USAGE), 사용 단위 100P(INVALID_POINT_UNIT)를 검증합니다.
          *     * 결제 수단 (MVP): 현재 '무통장 입금(BANK_TRANSFER)'만 지원합니다. 그 외 수단은 에러를 반환합니다. (PAYMENT_METHOD_NOT_SUPPORTED)
          *     * 무통장 입금으로 주문 시, 입금자명은 필수입니다. (INVALID_ORDER_REQUEST)
          *     * 주문이 성공하면 선택한 장바구니 아이템들은 자동으로 삭제됩니다.
@@ -162,12 +162,17 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * 약관 동의
-         * @description 소셜 로그인 직후 '약관 동의 대기(PENDING_TERMS)' 상태인 회원이 필수 서비스 약관에 동의하는 단계입니다. <br><br>
+         * 약관 동의 (가입 완료 단계)
+         * @description 소셜 로그인 직후 '약관 동의 대기(PENDING_TERMS)' 상태인 회원이 약관에 동의하고 가입을 완료하는 단계입니다. <br><br>
+         *     * 필수 약관 동의 시점(essentialTermsAgreedAt)을 호출 시점으로 기록하고 회원 상태를 ACTIVE로 전환합니다. <br>
+         *     * 요청에 담긴 6종 약관 전체에 대해 동의 상태와 이력을 저장합니다. <br><br>
          *
          *     **[제약 사항]** <br>
-         *     * '약관 동의 대기(PENDING_TERMS)' 상태의 회원만 호출 가능합니다. (INVALID_MEMBER_STATUS)
-         *     * 필수 약관 중 하나라도 누락될 경우 가입이 진행되지 않습니다. (REQUIRED_TERMS_NOT_AGREED)
+         *     * 필수 약관 중 하나라도 누락될 경우 가입이 진행되지 않습니다. (REQUIRED_TERMS_NOT_AGREED) <br><br>
+         *
+         *     **[주의]** <br>
+         *     * 이 API는 가입 완료 전용입니다. 호출할 때마다 필수 약관 동의 시점이 갱신되고 회원 상태가 ACTIVE로 덮어써지므로,
+         *       마케팅 정보 수신 동의 같은 선택 약관 토글에는 사용하지 말고 전용 API(PATCH /api/v1/members/me/terms/optional)를 사용하세요.
          */
         post: operations["agreeToTerms"];
         delete?: never;
@@ -187,10 +192,12 @@ export interface paths {
         put?: never;
         /**
          * 회원 탈퇴
-         * @description 서비스 이용을 중단하고 회원의 소셜 연동 해제 및 탈퇴 처리를 진행합니다. <br><br>
+         * @description 서비스 이용을 중단하고 탈퇴 처리를 진행합니다. <br><br>
          *
          *     **[참고 사항]** <br>
-         *     * 리더로 소속된 크루가 있을 경우 서비스 탈퇴가 불가합니다. 리더 권한 위임 또는 크루 해산이 필요합니다. (CANNOT_SERVICE_WITHDRAW_AS_LEADER)
+         *     * 리더로 소속된 크루가 있을 경우 서비스 탈퇴가 불가합니다. 리더 권한 위임 또는 크루 해산이 필요합니다. (CANNOT_SERVICE_WITHDRAW_AS_LEADER) <br>
+         *     * 탈퇴 시점에는 상태만 변경되며, 소셜 연동 해제와 개인정보 파기는 유예기간(30일) 만료 후 배치에서 수행됩니다. <br>
+         *     * 유예기간 내에 동일 소셜 계정으로 재로그인하면 계정이 복구됩니다. 유예기간이 지나면 복구할 수 없습니다. (WITHDRAWAL_GRACE_PERIOD_EXPIRED)
          */
         post: operations["withdraw"];
         delete?: never;
@@ -545,10 +552,84 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * 애플 소셜 로그인 (백엔드 전용)
-         * @description 애플 서버로부터 직접 리다이렉트되는 콜백 엔드포인트입니다. 클라이언트가 아닌 서버 간 통신을 통해 로그인을 처리합니다. <br><br>
+         * 애플 로그인·연동 콜백 (백엔드 전용)
+         * @description 애플 서버로부터 직접 리다이렉트되는 콜백 엔드포인트입니다. 클라이언트가 아닌 서버 간 통신을 통해 처리합니다. <br><br>
+         *
+         *     **[state 값에 따른 분기]** <br>
+         *     * 연동 세션 발급 API로 받은 state인 경우: 해당 회원에 애플 계정을 추가 연동한 뒤, 세션에 등록된 프론트 주소로 리다이렉트합니다.
+         *       결과는 쿼리 파라미터로 전달됩니다. (성공: `?result=success`, 실패: `?result=fail&error=에러코드`) <br>
+         *     * 그 외의 경우: 기존과 동일하게 로그인으로 처리하고 state에 담긴 프론트 주소로 리다이렉트합니다.
+         *       허용되지 않은 주소이면 INVALID_REDIRECT_URL로 차단됩니다. <br>
          */
         post: operations["appleLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/social-accounts/{provider}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 소셜 계정 연동 (애플 제외)
+         * @description 로그인 중인 계정에 다른 소셜 플랫폼 계정을 추가로 연동합니다. <br><br>
+         *
+         *     **[요청 값]** <br>
+         *     * 카카오(웹 OAuth): authorizationCode <br>
+         *     * 카카오(네이티브 SDK): accessToken <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 애플은 인가 코드가 서버로 직접 전달되므로 이 API로 연동할 수 없습니다. '애플 연동 세션 발급' API를 사용해야 합니다. (APPLE_LINK_REQUIRES_LINK_SESSION) <br>
+         *     * 해당 소셜 계정이 이미 다른 회원에게 연동되어 있으면 연동이 차단됩니다. (SOCIAL_ACCOUNT_ALREADY_LINKED) <br>
+         *     * 이미 같은 플랫폼을 연동한 경우 추가로 연동할 수 없습니다. (ALREADY_LINKED_PROVIDER)
+         */
+        post: operations["linkSocialAccount"];
+        /**
+         * 소셜 계정 연동 해제
+         * @description 연동된 소셜 계정을 해제합니다. 해제 후 해당 플랫폼으로는 로그인할 수 없습니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 계정 탈퇴가 아니므로 프로필·활동 데이터는 삭제되지 않고 계정에 그대로 유지됩니다. <br>
+         *     * 해제 후에도 동일 플랫폼으로 재연동할 수 있습니다. <br>
+         *     * 연동된 소셜 계정이 1개뿐이면 계정에 접근할 수 없게 되므로 해제할 수 없습니다. (CANNOT_UNLINK_LAST_PROVIDER)
+         */
+        delete: operations["unlinkSocialAccount"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/social-accounts/apple/link-session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 애플 연동 세션 발급
+         * @description 애플 계정 추가 연동을 시작하기 위한 일회용 state를 발급합니다. <br><br>
+         *
+         *     **[사용 방법]** <br>
+         *     1. 이 API를 호출해 state를 발급받습니다. (유효 시간 5분, 1회만 사용 가능) <br>
+         *     2. 애플 인증 URL의 state 파라미터에 발급받은 값을 그대로 넣어 웹뷰로 엽니다.
+         *        redirect_uri는 로그인과 동일한 서버 주소를 사용합니다. <br>
+         *     3. 인증이 끝나면 애플이 서버 콜백을 호출해 연동을 처리하고, redirectUrl로 결과와 함께 리다이렉트합니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * redirectUrl은 서버에 등록된 허용 origin이어야 합니다. (INVALID_REDIRECT_URL) <br>
+         *     * 이미 애플을 연동한 회원은 세션 발급 단계에서 차단됩니다. (ALREADY_LINKED_PROVIDER)
+         */
+        post: operations["createAppleLinkSession"];
         delete?: never;
         options?: never;
         head?: never;
@@ -613,8 +694,8 @@ export interface paths {
          * @description Apple 서버가 사용자 상태 변경 알림(계정 연동 해제 등)을 보낼 때 이를 수신하여 서버 데이터를 동기화합니다. <br><br>
          *
          *     **[수신 케이스]** <br>
-         *     * CONSENT_REVOKED: 사용자가 Apple 설정에서 앱 연동을 해제한 경우 탈퇴 처리를 진행합니다. <br>
-         *     * ACCOUNT_DELETE: Apple 계정이 삭제된 경우 탈퇴 처리를 진행합니다.
+         *     * CONSENT_REVOKED: 사용자가 Apple 설정에서 앱 연동을 해제한 경우 애플 연동만 해제합니다. 마지막 남은 연동이었다면 탈퇴 처리합니다. <br>
+         *     * ACCOUNT_DELETE: Apple 계정이 삭제된 경우 CONSENT_REVOKED와 동일하게 처리합니다. (다른 소셜이 연동되어 있으면 계정은 유지)
          *     * EMAIL_ENABLED: 사용자가 Apple 설정에서 이메일 공유를 활성화한 경우(숨기기 해제) 해당 플래그를 Y로 설정합니다.
          *     * EMAIL_DISABLED: 사용자가 Apple 설정에서 이메일 공유를 비활성화한 경우(숨기기 설정) 해당 플래그를 N으로 설정합니다.
          */
@@ -681,6 +762,44 @@ export interface paths {
          *     3. 사용했던 포인트를 사용자 계정으로 전액 환불합니다.
          */
         patch: operations["cancelOrder"];
+        trace?: never;
+    };
+    "/api/v1/members/me/terms/optional": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 선택 약관 동의 조회
+         * @description 알림 설정 화면의 선택 약관 토글 상태를 조회합니다. <br><br>
+         *     * 각 항목의 agreed는 토글 on/off, changedAt은 동의 여부를 마지막으로 변경한 일시(yyyy-MM-dd HH:mm:ss)입니다. 변경 이력이 없으면 null 입니다. <br><br>
+         */
+        get: operations["getOptionalTerms"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 선택 약관 동의 변경
+         * @description 알림 설정 화면에서 선택 약관(마케팅 정보 수신 / 전체 알림) 토글을 켜거나 끕니다. <br><br>
+         *
+         *     **[요청 방식]** <br>
+         *     * 부분 갱신입니다. 변경할 항목만 담아 보내고, 건드리지 않을 항목은 null로 두거나 생략하세요. <br>
+         *     * 예) 마케팅만 끄기: { "marketingAgreed": false } <br><br>
+         *
+         *     **[처리 내용]** <br>
+         *     * 동의 시 최신 약관 버전에 대한 동의가 저장되고, 이미 동의한 상태라면 동의 시점이 갱신됩니다. <br>
+         *     * 동의/거부와 관계없이 변경 이력이 저장됩니다. <br>
+         *     * 같은 값으로 다시 호출해도 오류 없이 변경 시점만 갱신됩니다. <br><br>
+         *
+         *     **[참고 사항]** <br>
+         *     * 두 항목이 모두 null이면 변경할 대상이 없으므로 거부됩니다. (INVALID_INPUT_VALUE) <br>
+         *     * 이 API는 선택 약관 전용입니다. 필수 약관과 가입 완료 처리는 POST /api/v1/members/terms 를 사용하세요.
+         */
+        patch: operations["updateOptionalTerms"];
         trace?: never;
     };
     "/api/v1/members/me/profile": {
@@ -987,16 +1106,12 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 연동된 소셜 로그인 조회
-         * @description 로그인한 사용자가 연동한 소셜 로그인 목록을 반환합니다. <br><br>
-         *
-         *     **[응답값]** <br>
-         *     * KAKAO: 카카오 연동 <br>
-         *     * APPLE: 애플 연동 <br><br>
+         * 소셜 로그인 연동 상태 조회
+         * @description 로그인 정보 화면에 필요한 소셜 플랫폼별 연동 상태를 반환합니다. <br><br>
          *
          *     **[참고 사항]** <br>
-         *     * 현재는 계정당 하나의 소셜 로그인만 지원합니다. <br>
-         *     * 추후 계정 연동 기능 도입 시 복수의 소셜 로그인이 반환될 수 있습니다.
+         *     * 연동된 소셜이 1개뿐이면 해제 시 계정에 접근할 수 없게 되므로 isUnlinkable=false로 내려갑니다.
+         *       클라이언트는 이 값으로 '연동 해제' 버튼을 비활성화해야 합니다.
          */
         get: operations["getLinkedProviders"];
         put?: never;
@@ -1835,6 +1950,36 @@ export interface components {
             /** @description 필수 약관 재동의 필요 여부 */
             needsTermsUpdate?: boolean;
         };
+        LinkSocialAccountRequest: {
+            /** @description 소셜 서비스로부터 발급받은 인가 코드 */
+            authorizationCode?: string;
+            /** @description 카카오 네이티브 SDK로부터 발급받은 액세스 토큰 (카카오 네이티브 SDK) */
+            accessToken?: string;
+            /**
+             * @deprecated
+             * @description 사용하지 않습니다. 애플 연동은 연동 세션 발급 API를 통해 진행합니다.
+             */
+            idToken?: string;
+        };
+        CreateAppleLinkSessionRequest: {
+            /**
+             * @description 연동 완료 후 돌아갈 프론트 주소 (허용된 origin만 가능)
+             * @example https://azitcrew.com/settings/accounts
+             */
+            redirectUrl: string;
+        };
+        AppleLinkSessionResponse: {
+            /**
+             * @description 애플 인증 요청의 state 파라미터에 그대로 넣어야 하는 값
+             * @example 9f1c0b7c4e0a4d8fae2f0f1b6f3f7a12
+             */
+            state?: string;
+        };
+        CommonResponseAppleLinkSessionResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["AppleLinkSessionResponse"];
+        };
         AppleNotificationRequest: {
             /** @description Apple에서 전달한 페이로드 */
             payload: string;
@@ -1852,6 +1997,31 @@ export interface components {
             detailAddress: string;
             /** @description 기본 배송지 여부 */
             isDefault: boolean;
+        };
+        UpdateOptionalTermsRequest: {
+            /** @description 마케팅 정보 수신 동의 여부 (null이면 변경하지 않음) */
+            marketingAgreed?: boolean | null;
+            /** @description 알림 수신 동의 여부 (null이면 변경하지 않음) */
+            notificationAgreed?: boolean | null;
+        };
+        CommonResponseOptionalTermsResponse: {
+            code?: string;
+            message?: string;
+            result?: components["schemas"]["OptionalTermsResponse"];
+        };
+        /** @description 알림 수신 동의 */
+        OptionalTermsItem: {
+            /** @description 동의 여부 (토글 on/off) */
+            agreed: boolean;
+            /**
+             * Format: date-time
+             * @description 동의 여부를 마지막으로 변경한 일시 (변경 이력이 없으면 null)
+             */
+            changedAt: string | null;
+        };
+        OptionalTermsResponse: {
+            marketing: components["schemas"]["OptionalTermsItem"];
+            notification: components["schemas"]["OptionalTermsItem"];
         };
         UpdateMemberProfileRequest: {
             /** @description 변경할 닉네임 (최대 10자, 특수문자 불가) */
@@ -2358,9 +2528,30 @@ export interface components {
             message?: string;
             result?: components["schemas"]["LinkedProviderResponse"];
         };
+        /** @description 소셜 플랫폼별 연동 상태 */
+        LinkedProviderItem: {
+            /**
+             * @description 소셜 플랫폼
+             * @enum {string}
+             */
+            provider?: "KAKAO" | "APPLE";
+            /** @description 플랫폼 표시명 */
+            providerName?: string;
+            /** @description 연동 여부 */
+            isLinked?: boolean;
+            /** @description 이메일 (미연동이거나 이메일 미제공 시 null) */
+            email?: string;
+            /**
+             * Format: date
+             * @description 연동 일자 (미연동 시 null)
+             */
+            linkedAt?: string;
+            /** @description 연동 해제 가능 여부. 연동된 소셜이 1개뿐이면 false */
+            isUnlinkable?: boolean;
+        };
         LinkedProviderResponse: {
-            /** @description 연동된 소셜 로그인 목록 */
-            providers?: ("KAKAO" | "APPLE")[];
+            /** @description 소셜 플랫폼별 연동 상태 */
+            providers?: components["schemas"]["LinkedProviderItem"][];
         };
         CommonResponseListMyCrewResponse: {
             code?: string;
@@ -3579,6 +3770,14 @@ export interface operations {
                     "application/json": unknown;
                 };
             };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
             405: {
                 headers: {
                     [name: string]: unknown;
@@ -4630,6 +4829,206 @@ export interface operations {
             };
         };
     };
+    linkSocialAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: "KAKAO" | "APPLE";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkSocialAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    unlinkSocialAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: "KAKAO" | "APPLE";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    createAppleLinkSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAppleLinkSessionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseAppleLinkSessionResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
     reissue: {
         parameters: {
             query?: never;
@@ -4964,6 +5363,146 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["CommonResponseVoid"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    getOptionalTerms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseOptionalTermsResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    updateOptionalTerms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOptionalTermsRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CommonResponseOptionalTermsResponse"];
                 };
             };
             400: {
@@ -5815,14 +6354,6 @@ export interface operations {
                 };
             };
             403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            404: {
                 headers: {
                     [name: string]: unknown;
                 };

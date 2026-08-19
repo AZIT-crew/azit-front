@@ -48,10 +48,6 @@ const OrderHistory = lazyImport(
   () => import('@/pages/CommerceOrder/CommerceOrderHistoryPage'),
   'CommerceOrderHistoryPage'
 );
-const NotificationSettingsPage = lazyImport(
-  () => import('@/pages/Settings/SettingsNotificationPage'),
-  'SettingsNotificationPage'
-);
 const CrewBannedStatusPage = lazyImport(
   () => import('@/pages/Crew/CrewBannedStatusPage'),
   'CrewBannedStatusPage'
@@ -252,12 +248,6 @@ export const routes = [
     name: 'OrderHistory',
     path: '/order-history',
     element: OrderHistory,
-    withAuth: true,
-  },
-  {
-    name: 'NotificationSettingsPage',
-    path: '/mypage-notification',
-    element: NotificationSettingsPage,
     withAuth: true,
   },
   {

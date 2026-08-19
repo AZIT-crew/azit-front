@@ -9,6 +9,7 @@ import type {
   MyAttendanceResponse,
   MyCrewResponse,
   MyInfoResponse,
+  OptionalTermsResponse,
 } from './user.model';
 
 export type MyInfoResult = Required<MyInfoResponse>;
@@ -36,6 +37,9 @@ export type SocialProvider = NonNullable<
   LinkedProviderResponse['providers']
 >[number];
 export type LinkedProvidersApiResponse = ApiResponse<LinkedProviderResponse>;
+
+export type OptionalTermsResult = Required<OptionalTermsResponse>;
+export type OptionalTermsApiResponse = ApiResponse<OptionalTermsResult>;
 
 export type AttendanceRecord = Omit<
   NonNullable<MyAttendanceResponse['attendanceLogs']>[number],
