@@ -15,7 +15,7 @@ interface SettingsMenuOptions {
   allNotificationEnabled: boolean;
   onToggleAllNotification: (checked: boolean) => void;
   marketingConsentEnabled: boolean;
-  marketingConsentDescription: string;
+  marketingConsentDescription?: string;
   onToggleMarketingConsent: (checked: boolean) => void;
 }
 

@@ -14,6 +14,7 @@ export const END_POINT = {
     MY_ATTENDANCE: 'members/me/attendances',
     MY_ATTENDANCE_CALENDAR: 'members/me/attendances/calendar',
     MY_PROVIDERS: 'members/me/providers',
+    OPTIONAL_TERMS: 'members/me/terms/optional',
   },
   ONBOARDING: {
     CREATE_CREW: 'crews',
