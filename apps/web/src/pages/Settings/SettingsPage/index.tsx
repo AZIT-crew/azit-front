@@ -69,7 +69,12 @@ export function SettingsPage() {
   }, []);
 
   const loginProvider =
-    providers?.map((p) => PROVIDER_LABEL[p] ?? p).join(', ') ?? '-';
+    providers
+      ?.filter((p) => p.isLinked)
+      .map((p) =>
+        p.provider ? (PROVIDER_LABEL[p.provider] ?? p.provider) : ''
+      )
+      .join(', ') || '-';
 
   const marketingConsentDescription = optionalTerms?.marketing.changedAt
     ? `[AZIT] 마케팅 정보 수신 ${optionalTerms.marketing.agreed ? '동의' : '거부'} ${optionalTerms.marketing.changedAt.slice(0, 10)}`
