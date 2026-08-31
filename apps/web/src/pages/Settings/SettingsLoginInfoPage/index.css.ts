@@ -86,6 +86,12 @@ const actionButtonBase = style([
     cursor: 'pointer',
     whiteSpace: 'nowrap',
     flexShrink: 0,
+    selectors: {
+      '&:disabled': {
+        cursor: 'not-allowed',
+        opacity: 0.5,
+      },
+    },
   },
 ]);
 

@@ -10,6 +10,9 @@ export type MyCrewResponse = components['schemas']['MyCrewResponse'];
 export type JoinedCrewResponse = components['schemas']['JoinedCrewResponse'];
 export type LinkedProviderResponse =
   components['schemas']['LinkedProviderResponse'];
+export type LinkedProviderItem = Required<
+  components['schemas']['LinkedProviderItem']
+>;
 export type OptionalTermsResponse =
   components['schemas']['OptionalTermsResponse'];
 export type UpdateOptionalTermsRequest =

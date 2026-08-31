@@ -11,6 +11,10 @@ import { LoginRedirectPage } from '@/pages/Login/LoginRedirectPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { SchedulePage } from '@/pages/Schedule/SchedulePage';
 
+const AppleLinkRedirectPage = lazyImport(
+  () => import('@/pages/Login/AppleLinkRedirectPage'),
+  'AppleLinkRedirectPage'
+);
 const CommerceStoreDetailPage = lazyImport(
   () => import('@/pages/CommerceStore/CommerceStoreDetailPage'),
   'CommerceStoreDetailPage'
@@ -164,6 +168,12 @@ export const routes = [
     name: 'LoginRedirectPage',
     path: '/auth/kakao/callback',
     element: LoginRedirectPage,
+    withAuth: false,
+  },
+  {
+    name: 'AppleLinkRedirectPage',
+    path: '/auth/apple/link-callback',
+    element: AppleLinkRedirectPage,
     withAuth: false,
   },
   {

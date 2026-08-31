@@ -19,6 +19,8 @@ const getAttendanceFreshnessOptions = (yearMonth?: string) =>
         refetchOnMount: true,
       } as const);
 
+import { deleteUnlinkSocialAccount } from '@/shared/auth/api/deleteUnlinkSocialAccount';
+
 import { getJoinedCrews } from './getJoinedCrews';
 import { getMyAttendance } from './getMyAttendance';
 import { getMyAttendanceCalendar } from './getMyAttendanceCalendar';
@@ -63,7 +65,6 @@ export const userQueries = {
     queryOptions({
       queryKey: userQueries.myProvidersKey(),
       queryFn: () => getMyProviders(),
-      staleTime: Infinity,
       select: (data) => data.result?.providers ?? [],
     }),
   getMyAttendanceCalendarQuery: (request?: MyAttendanceCalendarRequest) =>
@@ -93,5 +94,8 @@ export const userQueries = {
     }),
   updateOptionalTerms: mutationOptions({
     mutationFn: updateOptionalTerms,
+  }),
+  unlinkSocialAccount: mutationOptions({
+    mutationFn: deleteUnlinkSocialAccount,
   }),
 };
