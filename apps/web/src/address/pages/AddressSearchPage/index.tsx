@@ -3,10 +3,10 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 
 import { useFlow } from '@/app/routes/stackflow';
 
-import type { KakaoPostcodeResult } from '@/features/Address/model/useKakaoPostcode';
-import { KakaoPostcode } from '@/features/Address/ui';
+import { useAddressSelectionStore } from '@/address/model/addressSelection';
+import type { KakaoPostcodeResult } from '@/address/model/useKakaoPostcode';
+import { KakaoPostcode } from '@/address/ui';
 
-import { useAddressSelectionStore } from '@/shared/store/addressSelection';
 import { BackButton } from '@/shared/ui/button';
 import { AppLayout } from '@/shared/ui/layout';
 

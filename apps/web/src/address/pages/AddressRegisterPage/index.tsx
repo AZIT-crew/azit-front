@@ -5,9 +5,9 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 
 import { useFlow } from '@/app/routes/stackflow';
 
-import { useCreateAddress } from '@/features/Address/api/queries';
-import { useAddressForm } from '@/features/Address/model/useAddressForm';
-import { AddressForm } from '@/features/Address/ui';
+import { useCreateAddress } from '@/address/api/queries';
+import { useAddressForm } from '@/address/model/useAddressForm';
+import { AddressForm } from '@/address/ui';
 
 import { BackButton } from '@/shared/ui/button';
 import { AppLayout } from '@/shared/ui/layout';

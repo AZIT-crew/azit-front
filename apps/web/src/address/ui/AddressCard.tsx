@@ -1,8 +1,7 @@
 import { Chip } from '@azit/design-system/chip';
 
-import * as styles from '@/features/Address/styles/AddressCard.css';
-
-import type { DeliveryAddressResult } from '@/entities/Address/model';
+import type { DeliveryAddressResult } from '@/address/model';
+import * as styles from '@/address/styles/AddressCard.css';
 
 interface AddressCardProps {
   address: DeliveryAddressResult;

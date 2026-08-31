@@ -86,19 +86,19 @@ const AttendancePage = lazyImport(
   'CrewAttendancePage'
 );
 const AddressSettingPage = lazyImport(
-  () => import('@/pages/Address/AddressSettingPage'),
+  () => import('@/address/pages/AddressSettingPage'),
   'AddressSettingPage'
 );
 const AddressRegisterPage = lazyImport(
-  () => import('@/pages/Address/AddressRegisterPage'),
+  () => import('@/address/pages/AddressRegisterPage'),
   'AddressRegisterPage'
 );
 const AddressSearchPage = lazyImport(
-  () => import('@/pages/Address/AddressSearchPage'),
+  () => import('@/address/pages/AddressSearchPage'),
   'AddressSearchPage'
 );
 const AddressEditPage = lazyImport(
-  () => import('@/pages/Address/AddressEditPage'),
+  () => import('@/address/pages/AddressEditPage'),
   'AddressEditPage'
 );
 const SettingsTermDetailPage = lazyImport(

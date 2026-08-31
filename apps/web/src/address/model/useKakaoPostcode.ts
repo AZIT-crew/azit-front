@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { loadKakaoPostcodeScript } from '@/shared/lib/kakaoPostcode';
+import { loadKakaoPostcodeScript } from './loadKakaoPostcodeScript';
 
 export interface KakaoPostcodeResult {
   zonecode: string;

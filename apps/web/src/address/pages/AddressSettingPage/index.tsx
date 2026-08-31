@@ -13,8 +13,8 @@ import {
   addressQueries,
   useDeleteAddress,
   useUpdateAddress,
-} from '@/features/Address/api/queries';
-import { AddressCard, AddressEmpty } from '@/features/Address/ui';
+} from '@/address/api/queries';
+import { AddressCard, AddressEmpty } from '@/address/ui';
 
 import { BackButton } from '@/shared/ui/button';
 import { AppLayout } from '@/shared/ui/layout';

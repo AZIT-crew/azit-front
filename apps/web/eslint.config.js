@@ -217,6 +217,7 @@ const eslintConfig = [
             { pattern: '@/widgets/**', group: 'external', position: 'after' },
             { pattern: '@/features/**', group: 'external', position: 'after' },
             { pattern: '@/entities/**', group: 'external', position: 'after' },
+            { pattern: '@/address/**', group: 'external', position: 'after' },
             { pattern: '@/shared/**', group: 'external', position: 'after' },
           ],
           alphabetize: {

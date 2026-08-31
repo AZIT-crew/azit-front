@@ -1,6 +1,6 @@
 import { Button } from '@azit/design-system/button';
 
-import * as styles from '@/features/Address/styles/AddressEmpty.css';
+import * as styles from '@/address/styles/AddressEmpty.css';
 
 interface AddressEmptyStateProps {
   handleRegister: () => void;

@@ -4,13 +4,13 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { getDeliveryAddresses } from '@/entities/Address/api/getDeliveryAddresses';
 import type {
   RegisterDeliveryAddressRequest,
   UpdateDeliveryAddressRequest,
-} from '@/entities/Address/model';
+} from '@/address/model';
 
 import { deleteDeliveryAddress } from './deleteDeliveryAddress';
+import { getDeliveryAddresses } from './getDeliveryAddresses';
 import { postDeliveryAddress } from './postDeliveryAddress';
 import { updateDeliveryAddress } from './updateDeliveryAddress';
 
