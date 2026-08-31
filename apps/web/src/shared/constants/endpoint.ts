@@ -3,6 +3,9 @@ import type { AuthProvider } from '@/shared/api/models/auth';
 export const END_POINT = {
   AUTH: {
     SOCIAL_LOGIN: (provider: AuthProvider) => `auth/social-login/${provider}`,
+    SOCIAL_ACCOUNT: (provider: AuthProvider) =>
+      `auth/social-accounts/${provider}`,
+    APPLE_LINK_SESSION: 'auth/social-accounts/apple/link-session',
     REISSUE_TOKEN: 'auth/reissue',
     LOGOUT: 'auth/logout',
     WITHDRAW: 'members/me/withdraw',

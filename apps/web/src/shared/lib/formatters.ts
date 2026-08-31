@@ -52,3 +52,11 @@ export const formatDate = (date: Date, format: string) => {
 export const normalizeStr = (str: string) => {
   return str.replace(/\s+/g, '');
 };
+
+/** 이메일 아이디 부분 앞 2자만 노출하고 나머지는 마스킹 (예: azitcrew@kakao.com → az******@kakao.com) */
+export const maskEmail = (email: string) => {
+  const [id, domain] = email.split('@');
+  if (!id || !domain) return email;
+  if (id.length <= 2) return `${id}**@${domain}`;
+  return `${id.slice(0, 2)}${'*'.repeat(id.length - 2)}@${domain}`;
+};

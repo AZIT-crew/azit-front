@@ -4,6 +4,7 @@ import { KAKAO_AUTHORIZE_URL } from '@/shared/constants/url';
 
 interface KakaoLoginOptions {
   redirectUri?: string;
+  state?: string;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }
@@ -15,7 +16,12 @@ interface KakaoLoginReturn {
 export const useKakaoLogin = (
   options: KakaoLoginOptions = {}
 ): KakaoLoginReturn => {
-  const { redirectUri = KAKAO_AUTHORIZE_URL, onSuccess, onError } = options;
+  const {
+    redirectUri = KAKAO_AUTHORIZE_URL,
+    state,
+    onSuccess,
+    onError,
+  } = options;
 
   const handleKakaoLogin = useCallback(() => {
     try {
@@ -35,6 +41,7 @@ export const useKakaoLogin = (
 
       window.Kakao.Auth.authorize({
         redirectUri: redirectUri as string,
+        ...(state ? { state } : {}),
       });
 
       onSuccess?.();
@@ -43,7 +50,7 @@ export const useKakaoLogin = (
       console.error(errorMessage, error);
       onError?.(error instanceof Error ? error : new Error(errorMessage));
     }
-  }, [redirectUri, onSuccess, onError]);
+  }, [redirectUri, state, onSuccess, onError]);
 
   return { handleKakaoLogin };
 };

@@ -5,7 +5,7 @@ import type {
   CrewMemberDetailResponse,
   CrewMemberListResponse,
   JoinedCrewResponse,
-  LinkedProviderResponse,
+  LinkedProviderItem,
   MyAttendanceResponse,
   MyCrewResponse,
   MyInfoResponse,
@@ -33,10 +33,11 @@ export type CrewMemberDetailResult = Required<CrewMemberDetailResponse>;
 export type MemberRole = CrewMemberDetailResult['role'];
 export type MemberItem = CrewMemberDetailResult;
 
-export type SocialProvider = NonNullable<
-  LinkedProviderResponse['providers']
->[number];
-export type LinkedProvidersApiResponse = ApiResponse<LinkedProviderResponse>;
+export type SocialProvider = LinkedProviderItem['provider'];
+export interface LinkedProvidersResult {
+  providers: LinkedProviderItem[];
+}
+export type LinkedProvidersApiResponse = ApiResponse<LinkedProvidersResult>;
 
 export type OptionalTermsResult = Required<OptionalTermsResponse>;
 export type OptionalTermsApiResponse = ApiResponse<OptionalTermsResult>;

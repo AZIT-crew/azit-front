@@ -1,16 +1,27 @@
 import { vars } from '@azit/design-system';
 import { Button } from '@azit/design-system/button';
 import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useFlow } from '@/app/routes/stackflow';
 
+import { userQueries } from '@/entities/User/api/queries';
+
 import { useKakaoCode } from '@/shared/auth/model/useKakaoCode';
+import { toastError } from '@/shared/ui/toast';
 
 import * as styles from './index.css';
 
 export function LoginRedirectPage() {
-  const { isLoading, error, invalidAccess } = useKakaoCode();
   const { replace } = useFlow();
+  const queryClient = useQueryClient();
+  const { isLoading, error, invalidAccess } = useKakaoCode({
+    onLinkSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: userQueries.myProvidersKey(),
+      }),
+    onLinkError: (message) => toastError(message),
+  });
 
   const handleRetry = () => {
     replace('LoginPage', {});

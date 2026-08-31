@@ -21,3 +21,12 @@ export type ReissueTokenResult = Required<
 export type TermAgreeRequest = Required<
   components['schemas']['AgreeToTermsRequest']
 >;
+
+export type LinkSocialAccountRequest =
+  components['schemas']['LinkSocialAccountRequest'];
+export type CreateAppleLinkSessionRequest = Required<
+  components['schemas']['CreateAppleLinkSessionRequest']
+>;
+export type AppleLinkSessionResult = Required<
+  components['schemas']['AppleLinkSessionResponse']
+>;

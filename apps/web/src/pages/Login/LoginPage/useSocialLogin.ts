@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import type { AuthProvider } from '@/shared/api/models/auth';
 import { useKakaoLogin } from '@/shared/auth/model/useKakaoLogin';
 import { AUTH_PROVIDER } from '@/shared/constants/auth';
-import { APPLE_AUTHORIZE_URL } from '@/shared/constants/url';
+import { buildAppleAuthorizeUrl } from '@/shared/lib/appleAuth';
 
 export const useSocialLogin = () => {
   const { handleKakaoLogin } = useKakaoLogin({
@@ -33,7 +33,7 @@ export const useSocialLogin = () => {
   const loginWithApple = () => {
     if (isDisabledRef.current) return;
     preventMultipleClicks(2000);
-    window.location.href = `${APPLE_AUTHORIZE_URL}&state=${window.location.origin}`;
+    window.location.href = buildAppleAuthorizeUrl(window.location.origin);
   };
 
   const loginWith = async (provider: AuthProvider) => {
