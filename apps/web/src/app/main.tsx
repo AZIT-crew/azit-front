@@ -29,7 +29,7 @@ async function enableMocking() {
   const isMockEnv = import.meta.env.DEV || hostname === 'dev.azitcrew.com';
   if (!isMockEnv) return;
   const { worker } = await import('./mocks/browser');
-  return worker.start({ onUnhandledRequest: 'bypass' });
+  return worker.start();
 }
 
 enableMocking().then(() => {

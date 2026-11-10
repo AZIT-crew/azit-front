@@ -23,3 +23,6 @@ turbo/*
 
 # Auto-generated files (openapi-typescript)
 apps/web/src/shared/api/apiTypes.ts
+
+# MSW auto-generated service worker
+apps/web/public/mockServiceWorker.js
