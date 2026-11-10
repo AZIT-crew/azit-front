@@ -4,7 +4,9 @@ const MOCK_AUTH_STATUS_KEY = '__mock_auth_status__';
 type MockAuthStatus = 'ACTIVE' | 'PENDING_TERMS' | 'LOGGED_OUT';
 
 function getMockAuthStatus(): MockAuthStatus {
-  return (localStorage.getItem(MOCK_AUTH_STATUS_KEY) as MockAuthStatus) ?? 'ACTIVE';
+  return (
+    (localStorage.getItem(MOCK_AUTH_STATUS_KEY) as MockAuthStatus) ?? 'ACTIVE'
+  );
 }
 
 export const authHandlers = [
@@ -25,7 +27,7 @@ export const authHandlers = [
     if (status === 'LOGGED_OUT') {
       return HttpResponse.json(
         { code: 'UNAUTHORIZED', message: '인증이 필요합니다.' },
-        { status: 401 },
+        { status: 401 }
       );
     }
     return HttpResponse.json({

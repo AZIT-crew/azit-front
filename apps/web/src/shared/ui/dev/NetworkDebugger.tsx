@@ -48,15 +48,25 @@ function DevLoginPanel() {
     <div className={styles.loginPanel}>
       <div className={styles.loginStatusRow}>
         <span className={styles.loginStatusLabel}>현재 상태</span>
-        <span className={accessToken ? styles.loginStatusActive : styles.loginStatusInactive}>
+        <span
+          className={
+            accessToken ? styles.loginStatusActive : styles.loginStatusInactive
+          }
+        >
           {accessToken ? '로그인됨' : '로그아웃됨'}
         </span>
       </div>
       <div className={styles.loginBtnGroup}>
-        <button className={styles.loginBtn} onClick={() => triggerReauth('ACTIVE')}>
+        <button
+          className={styles.loginBtn}
+          onClick={() => triggerReauth('ACTIVE')}
+        >
           Mock 로그인 (ACTIVE)
         </button>
-        <button className={styles.loginBtn} onClick={() => triggerReauth('PENDING_TERMS')}>
+        <button
+          className={styles.loginBtn}
+          onClick={() => triggerReauth('PENDING_TERMS')}
+        >
           Mock 로그인 (약관 미동의)
         </button>
         <button
