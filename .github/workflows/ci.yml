@@ -2,6 +2,13 @@ name: CI
 
 on:
   workflow_call:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - 'tooling/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
