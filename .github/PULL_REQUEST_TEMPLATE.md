@@ -1,3 +1,7 @@
+<!-- 타이틀 형식: type(scope): 내용 -->
+<!-- type: feat | fix | docs | style | refactor | perf | test | chore -->
+<!-- 예시: feat(web): 로그인 페이지를 추가해요 -->
+
 ## 🛠️ 변경 사항
 
 > 실제로 어떤 작업을 했는지 구체적으로 작성해주세요.
