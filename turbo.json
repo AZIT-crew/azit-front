@@ -16,6 +16,10 @@
       "dependsOn": ["^typecheck"],
       "inputs": ["$TURBO_DEFAULT$"]
     },
+    "test": {
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true
