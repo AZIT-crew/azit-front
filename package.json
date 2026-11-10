@@ -13,6 +13,7 @@
     "lint": "turbo run lint --filter=!apk-center",
     "prettier": "prettier --cache --check \"**/*.{js,jsx,ts,tsx,json,md,yaml,yml}\"",
     "typecheck": "turbo run typecheck",
+    "test": "turbo run test --filter=!apk-center",
     "commitlint": "commitlint"
   },
   "devDependencies": {

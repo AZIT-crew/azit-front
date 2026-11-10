@@ -44,27 +44,9 @@ export const END_POINT = {
       `crews/${crewId}/invitation-code`,
     UPDATE_INFO: (crewId: number) => `crews/${crewId}/info`,
   },
-  STORE: {
-    PRODUCTS: 'products',
-    PRODUCT_DETAIL: (productId: number) => `products/${productId}`,
-  },
-  CART: {
-    PRODUCTS: 'carts',
-    PRODUCTS_ITEM: 'carts/items',
-    PRODUCTS_ITEM_QUANTITY: (cartItemId: number) => `carts/items/${cartItemId}`,
-    COUNT: 'carts/count',
-  },
   ADDRESS: {
     LIST: 'addresses',
     DETAIL: (addressId: number) => `addresses/${addressId}`,
-  },
-  ORDER: {
-    CHECKOUT_DIRECT: 'orders/checkout/direct',
-    CHECKOUT_CART: 'orders/checkout/cart',
-    CREATE: 'orders',
-    DETAIL: (orderNumber: string) => `orders/${orderNumber}`,
-    CANCEL: (orderNumber: string) => `orders/${orderNumber}/cancel`,
-    HISTORY: 'orders',
   },
   IMAGES: {
     PRESIGNED_URL: 'images/presigned-url',

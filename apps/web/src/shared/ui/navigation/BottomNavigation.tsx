@@ -1,7 +1,6 @@
 import {
   CalendarIcon,
   HomeIcon,
-  ShoppingBagIcon,
   UserIcon,
   type IconProps,
 } from '@azit/design-system/icon';
@@ -12,7 +11,7 @@ import type { ActivityName } from '@/app/routes/types';
 
 import * as styles from '@/shared/ui/navigation/BottomNavigation.css';
 
-type NavigationState = 'home' | 'schedule' | 'store' | 'mypage';
+type NavigationState = 'home' | 'schedule' | 'mypage';
 
 interface BottomNavigationProps {
   activeTab: NavigationState;
@@ -66,12 +65,6 @@ export function BottomNavigation({ activeTab }: BottomNavigationProps) {
           label="일정"
           isActive={activeTab === 'schedule'}
           onClick={() => handleClick('SchedulePage')}
-        />
-        <MenuItem
-          icon={ShoppingBagIcon}
-          label="스토어"
-          isActive={activeTab === 'store'}
-          onClick={() => handleClick('CommerceStorePage')}
         />
         <MenuItem
           icon={UserIcon}
