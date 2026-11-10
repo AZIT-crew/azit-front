@@ -2,9 +2,12 @@ import clsx from 'clsx';
 import { useSyncExternalStore, useState, useCallback } from 'react';
 
 import { networkLog, type NetworkLogEntry } from '@/shared/lib/networkLog';
+import { useAuthStore } from '@/shared/store/auth';
 import { BottomSheet } from '@/shared/ui/bottom-sheet';
 
 import * as styles from './NetworkDebugger.css';
+
+const MOCK_AUTH_STATUS_KEY = '__mock_auth_status__';
 
 function isDevEnvironment() {
   const { hostname } = window.location;
@@ -31,6 +34,41 @@ function getStatusText(entry: NetworkLogEntry) {
 }
 
 type Tab = 'headers' | 'body';
+type PanelTab = 'network' | 'login';
+
+function DevLoginPanel() {
+  const { accessToken, setIsInitialized } = useAuthStore();
+
+  const triggerReauth = (status: string) => {
+    localStorage.setItem(MOCK_AUTH_STATUS_KEY, status);
+    setIsInitialized(false);
+  };
+
+  return (
+    <div className={styles.loginPanel}>
+      <div className={styles.loginStatusRow}>
+        <span className={styles.loginStatusLabel}>현재 상태</span>
+        <span className={accessToken ? styles.loginStatusActive : styles.loginStatusInactive}>
+          {accessToken ? '로그인됨' : '로그아웃됨'}
+        </span>
+      </div>
+      <div className={styles.loginBtnGroup}>
+        <button className={styles.loginBtn} onClick={() => triggerReauth('ACTIVE')}>
+          Mock 로그인 (ACTIVE)
+        </button>
+        <button className={styles.loginBtn} onClick={() => triggerReauth('PENDING_TERMS')}>
+          Mock 로그인 (약관 미동의)
+        </button>
+        <button
+          className={clsx(styles.loginBtn, styles.logoutBtn)}
+          onClick={() => triggerReauth('LOGGED_OUT')}
+        >
+          로그아웃
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function HeadersTable({ headers }: { headers: Record<string, string> }) {
   const entries = Object.entries(headers);
@@ -172,6 +210,7 @@ function LogItem({ entry }: { entry: NetworkLogEntry }) {
 
 export function NetworkDebugger() {
   const [open, setOpen] = useState(false);
+  const [panelTab, setPanelTab] = useState<PanelTab>('network');
   const logs = useSyncExternalStore(
     networkLog.subscribe,
     networkLog.getSnapshot
@@ -189,25 +228,51 @@ export function NetworkDebugger() {
       <button
         className={styles.fab}
         onClick={() => setOpen(true)}
-        title="Network Debugger"
+        title="Dev Tools"
       >
         <span className={styles.fabIcon}>🔧</span>
       </button>
 
       <BottomSheet isOpen={open} onClose={() => setOpen(false)}>
         <div className={styles.sheetHeader}>
-          <span className={styles.sheetTitle}>Network ({logs.length})</span>
-          <button className={styles.clearBtn} onClick={handleClear}>
-            Clear
-          </button>
-        </div>
-        <div className={styles.logList}>
-          {logs.length === 0 ? (
-            <div className={styles.emptyState}>요청 없음</div>
-          ) : (
-            logs.map((entry) => <LogItem key={entry.id} entry={entry} />)
+          <div className={styles.panelTabs}>
+            <button
+              className={clsx(
+                styles.panelTab,
+                panelTab === 'network' && styles.panelTabActive
+              )}
+              onClick={() => setPanelTab('network')}
+            >
+              Network {panelTab === 'network' && `(${logs.length})`}
+            </button>
+            <button
+              className={clsx(
+                styles.panelTab,
+                panelTab === 'login' && styles.panelTabActive
+              )}
+              onClick={() => setPanelTab('login')}
+            >
+              Login
+            </button>
+          </div>
+          {panelTab === 'network' && (
+            <button className={styles.clearBtn} onClick={handleClear}>
+              Clear
+            </button>
           )}
         </div>
+
+        {panelTab === 'network' && (
+          <div className={styles.logList}>
+            {logs.length === 0 ? (
+              <div className={styles.emptyState}>요청 없음</div>
+            ) : (
+              logs.map((entry) => <LogItem key={entry.id} entry={entry} />)
+            )}
+          </div>
+        )}
+
+        {panelTab === 'login' && <DevLoginPanel />}
       </BottomSheet>
     </>
   );

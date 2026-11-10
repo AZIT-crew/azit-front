@@ -324,3 +324,94 @@ export const bodyPre = style({
 export const errorText = style({
   color: vars.colors.error,
 });
+
+export const panelTabs = style({
+  display: 'flex',
+  gap: '2px',
+  backgroundColor: vars.colors.gray10,
+  borderRadius: '6px',
+  padding: '2px',
+});
+
+export const panelTab = style({
+  flex: 1,
+  padding: '4px 8px',
+  textAlign: 'center',
+  fontSize: '12px',
+  fontWeight: '600',
+  color: vars.colors.gray50,
+  cursor: 'pointer',
+  borderRadius: '4px',
+  border: 'none',
+  backgroundColor: 'transparent',
+  whiteSpace: 'nowrap',
+});
+
+export const panelTabActive = style({
+  backgroundColor: vars.colors.white,
+  color: vars.colors.gray80,
+  boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+});
+
+export const loginPanel = style({
+  padding: '12px 4px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+});
+
+export const loginStatusRow = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  padding: '10px 12px',
+  backgroundColor: vars.colors.gray10,
+  borderRadius: '8px',
+});
+
+export const loginStatusLabel = style({
+  fontSize: '12px',
+  color: vars.colors.gray50,
+  fontWeight: '600',
+});
+
+export const loginStatusActive = style({
+  fontSize: '12px',
+  fontWeight: '700',
+  color: '#16a34a',
+});
+
+export const loginStatusInactive = style({
+  fontSize: '12px',
+  fontWeight: '700',
+  color: vars.colors.gray40,
+});
+
+export const loginBtnGroup = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+});
+
+export const loginBtn = style({
+  width: '100%',
+  padding: '10px 12px',
+  fontSize: '13px',
+  fontWeight: '600',
+  color: vars.colors.white,
+  backgroundColor: vars.colors.blue100,
+  border: 'none',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  textAlign: 'center',
+  selectors: {
+    '&:active': {
+      opacity: 0.85,
+    },
+  },
+});
+
+export const logoutBtn = style({
+  backgroundColor: vars.colors.gray30,
+  color: vars.colors.gray70,
+});
