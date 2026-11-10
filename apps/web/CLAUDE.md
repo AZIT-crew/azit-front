@@ -2,8 +2,8 @@
 
 ## 프로젝트 개요
 
-AZIT는 크루(팀) 기반 일정 관리 + 커머스 통합 플랫폼이다.  
-주요 도메인: 스케줄, 크루, 커머스(스토어·장바구니·주문), 주소, 마이페이지, 알림, 설정
+AZIT는 크루(팀) 기반 일정 관리 플랫폼이다.  
+주요 도메인: 스케줄, 크루, 주소, 마이페이지, 알림, 설정
 
 **모노레포 위치:** `apps/web` (루트: `AZIT_Front`)
 
@@ -51,9 +51,6 @@ src/
 | 디렉토리         | 도메인        |
 | ---------------- | ------------- |
 | `Address/`       | 주소록        |
-| `CommerceCart/`  | 장바구니      |
-| `CommerceOrder/` | 주문          |
-| `CommerceStore/` | 상품/스토어   |
 | `Crew/`          | 크루(팀) 관리 |
 | `Schedule/`      | 일정/이벤트   |
 | `location/`      | 지오로케이션  |
@@ -66,9 +63,6 @@ src/
 ```
 pages/
 ├── Address/          # AddressSettingPage, AddressRegisterPage, AddressSearchPage, AddressEditPage
-├── CommerceCart/     # CommerceCartPage
-├── CommerceOrder/    # CommerceOrderPage, CommerceOrderDetailPage, CommerceOrderCompletePage, CommerceOrderHistoryPage
-├── CommerceStore/    # CommerceStorePage, CommerceStoreDetailPage
 ├── Crew/             # CrewPage, CrewInfoEditPage, CrewMemberManagePage, CrewMemberViewPage, CrewAttendancePage, CrewBannedStatusPage
 ├── Onboarding/       # OnboardingPage, OnboardingTermAgreePage, OnboardingCompletePage
 ├── Schedule/         # SchedulePage, ScheduleDetailPage, ScheduleCreatePage, ScheduleEditPage, ScheduleMembersPage, ScheduleLocationPage
@@ -84,7 +78,7 @@ pages/
 
 ### features/ (kebab-case)
 
-`auth`, `address`, `cart`, `order`, `store`, `term-agree`  
+`auth`, `address`, `term-agree`  
 `crew-create`, `crew-join`, `crew-join-status`, `crew-confirm-status`, `crew-manage`  
 `schedule`, `schedule-check-in`, `schedule-create`, `schedule-edit`, `schedule-manage`, `schedule-participate`
 
@@ -133,9 +127,9 @@ shared/queries/           # TanStack Query 커스텀 훅 (도메인별 파일)
 | 컴포넌트 파일   | PascalCase             | `ScheduleListItem.tsx`           |
 | 스타일 파일     | PascalCase + `.css.ts` | `ScheduleListItem.css.ts`        |
 | 유틸/훅 파일    | camelCase              | `useStack.ts`, `hangul.ts`       |
-| 엔티티 디렉토리 | PascalCase             | `CommerceCart/`, `Crew/`         |
+| 엔티티 디렉토리 | PascalCase             | `Address/`, `Crew/`              |
 | 피처 디렉토리   | kebab-case             | `schedule-create/`, `crew-join/` |
-| 페이지 컴포넌트 | 도메인 + `Page` suffix | `CommerceOrderDetailPage`        |
+| 페이지 컴포넌트 | 도메인 + `Page` suffix | `ScheduleDetailPage`             |
 | 쿼리 훅         | `use` + 도메인 + 동작  | `useScheduleDetail`              |
 
 ---
@@ -173,5 +167,5 @@ pnpm generate:api-types  # OpenAPI → apiTypes.ts 재생성
 
 - `shared/api/apiTypes.ts`는 자동 생성 파일 — 직접 수정 금지
 - 엔티티 import 경로는 PascalCase 디렉토리명 정확히 사용 (`@/entities/Crew/...`, `@/entities/Schedule/...`)
-- 페이지 import 경로는 도메인 그룹 포함 (`@/pages/CommerceOrder/CommerceOrderDetailPage`)
+- 페이지 import 경로는 도메인 그룹 포함 (`@/pages/Schedule/ScheduleDetailPage`)
 - `tsconfig.app.json` 경로 별칭: `@/*` → `src/*`

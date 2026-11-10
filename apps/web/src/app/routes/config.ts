@@ -4,7 +4,6 @@ import { lazyImport } from '@/app/routes/utils';
 /**
  * 네비게이션 1탭 페이지는 Eager 로딩을 적용해요.
  */
-import { CommerceStorePage } from '@/pages/CommerceStore/CommerceStorePage';
 import { HomePage } from '@/pages/Home/HomePage';
 import { LoginPage } from '@/pages/Login/LoginPage';
 import { LoginRedirectPage } from '@/pages/Login/LoginRedirectPage';
@@ -14,14 +13,6 @@ import { SchedulePage } from '@/pages/Schedule/SchedulePage';
 const AppleLinkRedirectPage = lazyImport(
   () => import('@/pages/Login/AppleLinkRedirectPage'),
   'AppleLinkRedirectPage'
-);
-const CommerceStoreDetailPage = lazyImport(
-  () => import('@/pages/CommerceStore/CommerceStoreDetailPage'),
-  'CommerceStoreDetailPage'
-);
-const CommerceCartPage = lazyImport(
-  () => import('@/pages/CommerceCart/CommerceCartPage'),
-  'CommerceCartPage'
 );
 const OnboardingTermAgreePage = lazyImport(
   () => import('@/pages/Onboarding/OnboardingTermAgreePage'),
@@ -35,23 +26,7 @@ const OnboardingCompletePage = lazyImport(
   () => import('@/pages/Onboarding/OnboardingCompletePage'),
   'OnboardingCompletePage'
 );
-const CommerceOrderPage = lazyImport(
-  () => import('@/pages/CommerceOrder/CommerceOrderPage'),
-  'CommerceOrderPage'
-);
-const CommerceOrderCompletePage = lazyImport(
-  () => import('@/pages/CommerceOrder/CommerceOrderCompletePage'),
-  'CommerceOrderCompletePage'
-);
-const CommerceOrderDetailPage = lazyImport(
-  () => import('@/pages/CommerceOrder/CommerceOrderDetailPage'),
-  'CommerceOrderDetailPage'
-);
 const UserPage = lazyImport(() => import('@/pages/User/UserPage'), 'UserPage');
-const OrderHistory = lazyImport(
-  () => import('@/pages/CommerceOrder/CommerceOrderHistoryPage'),
-  'CommerceOrderHistoryPage'
-);
 const CrewBannedStatusPage = lazyImport(
   () => import('@/pages/Crew/CrewBannedStatusPage'),
   'CrewBannedStatusPage'
@@ -207,57 +182,15 @@ export const routes = [
     withAuth: true,
   },
   {
-    name: 'CommerceStorePage',
-    path: '/store',
-    element: CommerceStorePage,
-    withAuth: false,
-  },
-  {
-    name: 'CommerceStoreDetailPage',
-    path: '/store/:id',
-    element: CommerceStoreDetailPage,
-    withAuth: true,
-  },
-  {
-    name: 'CommerceCartPage',
-    path: '/cart',
-    element: CommerceCartPage,
-    withAuth: false,
-  },
-  {
     name: 'NotFoundPage',
     path: '/404',
     element: NotFoundPage,
     withAuth: false,
   },
   {
-    name: 'CommerceOrderPage',
-    path: '/order',
-    element: CommerceOrderPage,
-    withAuth: true,
-  },
-  {
-    name: 'CommerceOrderCompletePage',
-    path: '/order-complete',
-    element: CommerceOrderCompletePage,
-    withAuth: true,
-  },
-  {
-    name: 'CommerceOrderDetailPage',
-    path: '/order/:id',
-    element: CommerceOrderDetailPage,
-    withAuth: true,
-  },
-  {
     name: 'Mypage',
     path: '/mypage',
     element: UserPage,
-    withAuth: true,
-  },
-  {
-    name: 'OrderHistory',
-    path: '/order-history',
-    element: OrderHistory,
     withAuth: true,
   },
   {
