@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm run generate:api-types && vite",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -54,10 +54,16 @@
     "dotenv-cli": "catalog:",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^27.4.0",
+    "msw": "^3.0.4",
     "openapi-typescript": "^7.10.1",
     "type-fest": "^5.4.4",
     "typescript": "catalog:",
     "vite": "^7.2.4",
     "vitest": "^4.0.16"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

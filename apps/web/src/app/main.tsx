@@ -24,24 +24,34 @@ if (hostname === 'localhost' || hostname.includes('dev')) {
   patchFetch();
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <GlobalErrorBoundary>
-      <ReactQueryProvider>
-        <KakaoDeeplinkProvider>
-          <Suspense fallback={<PageLoader />}>
-            <Stack />
-          </Suspense>
-          <Toaster
-            position="bottom-center"
-            toastOptions={{
-              duration: 2500,
-              className: 'azit-toast',
-            }}
-          />
-        </KakaoDeeplinkProvider>
-      </ReactQueryProvider>
-    </GlobalErrorBoundary>
-    <NetworkDebugger />
-  </StrictMode>
-);
+async function enableMocking() {
+  const { hostname } = window.location;
+  const isMockEnv = import.meta.env.DEV || hostname === 'dev.azitcrew.com';
+  if (!isMockEnv) return;
+  const { worker } = await import('./mocks/browser');
+  return worker.start({ onUnhandledRequest: 'bypass' });
+}
+
+enableMocking().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <GlobalErrorBoundary>
+        <ReactQueryProvider>
+          <KakaoDeeplinkProvider>
+            <Suspense fallback={<PageLoader />}>
+              <Stack />
+            </Suspense>
+            <Toaster
+              position="bottom-center"
+              toastOptions={{
+                duration: 2500,
+                className: 'azit-toast',
+              }}
+            />
+          </KakaoDeeplinkProvider>
+        </ReactQueryProvider>
+      </GlobalErrorBoundary>
+      <NetworkDebugger />
+    </StrictMode>
+  );
+});
