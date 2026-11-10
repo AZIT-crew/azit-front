@@ -29,24 +29,6 @@ function useMypageMenu(): MenuGroup[] {
 
   return [
     {
-      id: 'shopping',
-      title: '쇼핑 관리',
-      items: [
-        {
-          id: 'order-history',
-          label: '주문 내역',
-          type: 'navigation',
-          onNavigate: () => push('OrderHistory', {}, { animate: true }),
-        },
-        {
-          id: 'address',
-          label: '배송지 설정',
-          type: 'navigation',
-          onNavigate: () => push('AddressSettingPage', {}, { animate: true }),
-        },
-      ],
-    },
-    {
       id: 'customer-support',
       title: '고객 지원',
       items: [
