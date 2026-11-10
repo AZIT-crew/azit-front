@@ -1,5 +1,5 @@
 import { vars, typography } from '@azit/design-system';
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
 
 export const disabledCardContainer = style({
   display: 'flex',
@@ -74,6 +74,16 @@ export const rippleContainer = style({
   overflow: 'hidden',
 });
 
+const rippleOuterPulse = keyframes({
+  '0%, 100%': { transform: 'scale(1)', opacity: 0.1 },
+  '50%': { transform: 'scale(1.1)', opacity: 0.05 },
+});
+
+const rippleMiddlePulse = keyframes({
+  '0%, 100%': { transform: 'scale(0.9)', opacity: 0.3 },
+  '50%': { transform: 'scale(1)', opacity: 0.15 },
+});
+
 const rippleCircleBase = style({
   position: 'absolute',
   width: '200px',
@@ -82,8 +92,22 @@ const rippleCircleBase = style({
   pointerEvents: 'none',
 });
 
-export const rippleCircleOuter = style([
+const rippleOuterBase = style([
   rippleCircleBase,
+  {
+    animation: `${rippleOuterPulse} 2s ease-in-out infinite`,
+  },
+]);
+
+const rippleMiddleBase = style([
+  rippleCircleBase,
+  {
+    animation: `${rippleMiddlePulse} 2s ease-in-out 0.3s infinite`,
+  },
+]);
+
+export const rippleCircleOuter = style([
+  rippleOuterBase,
   {
     backgroundColor: vars.colors.blue60,
     opacity: 0.1,
@@ -91,7 +115,7 @@ export const rippleCircleOuter = style([
 ]);
 
 export const rippleCircleOuterDisabled = style([
-  rippleCircleBase,
+  rippleOuterBase,
   {
     backgroundColor: vars.colors.gray40,
     opacity: 0.1,
@@ -99,7 +123,7 @@ export const rippleCircleOuterDisabled = style([
 ]);
 
 export const rippleCircleOuterLightning = style([
-  rippleCircleBase,
+  rippleOuterBase,
   {
     backgroundColor: vars.colors.grad_secondary,
     opacity: 1,
@@ -107,7 +131,7 @@ export const rippleCircleOuterLightning = style([
 ]);
 
 export const rippleCircleMiddle = style([
-  rippleCircleBase,
+  rippleMiddleBase,
   {
     backgroundColor: vars.colors.blue60,
     opacity: 0.3,
@@ -115,7 +139,7 @@ export const rippleCircleMiddle = style([
 ]);
 
 export const rippleCircleMiddleDisabled = style([
-  rippleCircleBase,
+  rippleMiddleBase,
   {
     backgroundColor: vars.colors.gray40,
     opacity: 0.3,
@@ -123,7 +147,7 @@ export const rippleCircleMiddleDisabled = style([
 ]);
 
 export const rippleCircleMiddleLightning = style([
-  rippleCircleBase,
+  rippleMiddleBase,
   {
     backgroundColor: vars.colors.secondary,
     opacity: 1,

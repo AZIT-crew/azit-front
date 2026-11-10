@@ -1,8 +1,50 @@
-import { animate, type AnimationSequence } from 'motion';
 import { useRef, useCallback } from 'react';
 
 const DISMISS_DISTANCE_PX = 100;
 const DISMISS_VELOCITY_PX_S = 500;
+const EASING = 'cubic-bezier(0.32, 0.72, 0, 1)';
+
+interface TransitionStep {
+  element: HTMLElement;
+  keyframe: Keyframe;
+  durationMs: number;
+}
+
+/**
+ * Web Animations API로 여러 요소를 동시에 전환한다.
+ * stop()은 현재 값을 인라인 스타일로 확정한 뒤 애니메이션을 취소한다.
+ */
+function runTransitions(steps: TransitionStep[]) {
+  const animations = steps.map(({ element, keyframe, durationMs }) =>
+    element.animate([keyframe], {
+      duration: durationMs,
+      easing: EASING,
+      fill: 'forwards',
+    })
+  );
+
+  let stopped = false;
+
+  return {
+    stop: () => {
+      stopped = true;
+      animations.forEach((animation) => {
+        try {
+          animation.commitStyles();
+        } catch {
+          // 요소가 detach된 경우 무시
+        }
+        animation.cancel();
+      });
+    },
+    cancel: () => animations.forEach((animation) => animation.cancel()),
+    /** 끝까지 재생되면 true, stop()으로 중단되면 false */
+    finished: Promise.all(animations.map((a) => a.finished)).then(
+      () => !stopped,
+      () => false
+    ),
+  };
+}
 
 interface UseBottomSheetDragOptions {
   drawerRef: React.RefObject<HTMLDivElement | null>;
@@ -96,33 +138,42 @@ export function useBottomSheetDrag({
         isDismissingByDragRef.current = true;
         const drawerHeight = drawer.offsetHeight;
 
-        const sequence: AnimationSequence = [
-          [
-            drawer,
-            { transform: `translateY(${drawerHeight}px)` },
-            { duration: 0.25, ease: [0.32, 0.72, 0, 1] },
-          ],
+        const steps: TransitionStep[] = [
+          {
+            element: drawer,
+            keyframe: { transform: `translateY(${drawerHeight}px)` },
+            durationMs: 250,
+          },
         ];
         if (overlay) {
-          sequence.push([overlay, { opacity: 0 }, { duration: 0.25, at: '<' }]);
+          steps.push({
+            element: overlay,
+            keyframe: { opacity: 0 },
+            durationMs: 250,
+          });
         }
-        const controls = animate(sequence);
+        const controls = runTransitions(steps);
         inProgressAnimationRef.current = controls;
 
-        controls.then(() => {
+        controls.finished.then((completed) => {
+          if (!completed) return;
           inProgressAnimationRef.current = null;
           document.body.style.overflow = '';
           onDismiss();
         });
       } else {
-        const controls = animate(
-          drawer,
-          { transform: 'translateY(0px)' },
-          { duration: 0.3, ease: [0.32, 0.72, 0, 1] }
-        );
+        const controls = runTransitions([
+          {
+            element: drawer,
+            keyframe: { transform: 'translateY(0px)' },
+            durationMs: 300,
+          },
+        ]);
         inProgressAnimationRef.current = controls;
 
-        controls.then(() => {
+        controls.finished.then((completed) => {
+          if (!completed) return;
+          controls.cancel();
           inProgressAnimationRef.current = null;
           drawer.style.transform = '';
           drawer.style.transition = '';
