@@ -1,6 +1,5 @@
 import { vars } from '@azit/design-system';
 import { CheckCircleBrokenIcon, MarkerPinIcon } from '@azit/design-system/icon';
-import { motion } from 'motion/react';
 
 import * as styles from '@/widgets/ScheduleAttendance/styles/ScheduleAttendanceSection.css';
 import { ScheduleAttendanceSkeleton } from '@/widgets/ScheduleAttendance/ui/ScheduleAttendanceSkeleton';
@@ -87,38 +86,19 @@ function ScheduleActivatedSection({
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.buttonWrapper}>
         <div className={styles.rippleContainer}>
-          <motion.div
+          <div
             className={
               isLightningRun
                 ? styles.rippleCircleOuterLightning
                 : styles.rippleCircleOuter
             }
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.05, 0.1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
           />
-          <motion.div
+          <div
             className={
               isLightningRun
                 ? styles.rippleCircleMiddleLightning
                 : styles.rippleCircleMiddle
             }
-            animate={{
-              scale: [0.9, 1.0, 0.9],
-              opacity: [0.3, 0.15, 0.3],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: 0.3,
-              ease: 'easeInOut',
-            }}
           />
           <div
             className={
@@ -178,31 +158,8 @@ function ScheduleDisabledSection({ title }: { title: string }) {
           </div>
         </div> */}
         <div className={styles.rippleContainer}>
-          <motion.div
-            className={styles.rippleCircleOuterDisabled}
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.05, 0.1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-          <motion.div
-            className={styles.rippleCircleMiddleDisabled}
-            animate={{
-              scale: [0.9, 1.0, 0.9],
-              opacity: [0.3, 0.15, 0.3],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              delay: 0.3,
-              ease: 'easeInOut',
-            }}
-          />
+          <div className={styles.rippleCircleOuterDisabled} />
+          <div className={styles.rippleCircleMiddleDisabled} />
           <div className={styles.buttonOuter}>
             <button className={styles.buttonDisabled} type="button">
               <div className={styles.buttonContent}>
