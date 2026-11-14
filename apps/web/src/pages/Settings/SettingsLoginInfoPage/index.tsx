@@ -40,6 +40,10 @@ function SettingsLoginInfoPageContent() {
 
   const { handleKakaoLogin } = useKakaoLogin({
     state: KAKAO_LINK_ACCOUNT_STATE,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: userQueries.myProvidersKey(),
+      }),
     onError: () => toastError('카카오 연동에 실패했습니다.'),
   });
 

@@ -1,6 +1,13 @@
 import { useCallback } from 'react';
 
+import { useFlow } from '@/app/routes/stackflow';
+
+import { postLinkSocialAccount } from '@/shared/auth/api/postLinkSocialAccount';
+import { postSocialLogin } from '@/shared/auth/api/postSocialLogin';
+import { KAKAO_LINK_ACCOUNT_STATE } from '@/shared/constants/auth';
 import { KAKAO_AUTHORIZE_URL } from '@/shared/constants/url';
+import { bridge } from '@/shared/lib/bridge';
+import { useAuthStore } from '@/shared/store/auth';
 
 interface KakaoLoginOptions {
   redirectUri?: string;
@@ -23,7 +30,56 @@ export const useKakaoLogin = (
     onError,
   } = options;
 
+  const { replace } = useFlow();
+  const { setAccessToken } = useAuthStore();
+
   const handleKakaoLogin = useCallback(() => {
+    if (bridge.isNativeMethodAvailable('socialLogin')) {
+      void (async () => {
+        try {
+          const result = await bridge.socialLogin('kakao');
+
+          if (!result.success) {
+            onError?.(new Error(result.message));
+            return;
+          }
+
+          if (state === KAKAO_LINK_ACCOUNT_STATE) {
+            await postLinkSocialAccount('KAKAO', {
+              accessToken: result.accessToken,
+            });
+            onSuccess?.();
+            return;
+          }
+
+          const response = await postSocialLogin('KAKAO', {
+            accessToken: result.accessToken,
+          });
+          const { accessToken, status } = response.result;
+          setAccessToken(accessToken);
+
+          switch (status) {
+            case 'PENDING_TERMS':
+              replace('OnboardingTermAgreePage', {}, { animate: false });
+              break;
+            case 'PENDING_ONBOARDING':
+              replace('OnboardingPage', {}, { animate: false });
+              break;
+            case 'ACTIVE':
+              replace('HomePage', {}, { animate: false });
+              break;
+          }
+
+          onSuccess?.();
+        } catch (error) {
+          const errorMessage = '카카오 로그인 중 에러가 발생했습니다.';
+          console.error(errorMessage, error);
+          onError?.(error instanceof Error ? error : new Error(errorMessage));
+        }
+      })();
+      return;
+    }
+
     try {
       if (!window.Kakao || !window.Kakao.isInitialized()) {
         const error = new Error('Kakao SDK가 초기화되지 않았습니다.');
@@ -50,7 +106,7 @@ export const useKakaoLogin = (
       console.error(errorMessage, error);
       onError?.(error instanceof Error ? error : new Error(errorMessage));
     }
-  }, [redirectUri, state, onSuccess, onError]);
+  }, [redirectUri, state, onSuccess, onError, replace, setAccessToken]);
 
   return { handleKakaoLogin };
 };
